@@ -1,2 +1,6 @@
 *.fastq
 *.fq
+clone_filtered
+lead_trimmed
+parsed
+cleaned
