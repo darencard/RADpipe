@@ -28,7 +28,7 @@ parser.add_option("-2", action="store", type = "string", dest = "read2", help = 
 parser.add_option("--renz1", action="store", type = "string", dest = "renz1", help = "restriction enzyme 1 (common cutter)")
 parser.add_option("--renz2", action="store", type = "string", dest = "renz2", help = "restriction enzyme 2 (rare cutter)")
 parser.add_option("--bar_loc", action="store", type = "string", dest = "bar_loc", help = "location of barcode & index")
-parser.add_option("-r", action="store", type = "string", dest = "run", help = "processes to run (1-X)")
+parser.add_option("-x", action="store", type = "string", dest = "run", help = "processes to run (1-X)")
 
 options, args = parser.parse_args()
 
@@ -36,7 +36,7 @@ options, args = parser.parse_args()
 ###           Setup the environment           ###
 #################################################
 
-Print "Setting up the command environment"
+print "Setting up the command environment"
 def setup():
 ### Create output directories ###
 	os.system("mkdir clone_filtered")
@@ -55,7 +55,7 @@ def setup():
 ###             Clone filter reads            ###
 #################################################
 
-Print "Filtering PCR duplicates"
+print "Filtering PCR duplicates"
 def clone_filter():
 	if options.paired == True:
 	#	print "True"
@@ -65,7 +65,7 @@ def clone_filter():
 
 
 ### Trim first 8bp of each read ###
-Print "Trimming away leading 8bp unique molecular identifiers"
+print "Trimming away leading 8bp unique molecular identifiers"
 def lead_trim():
 	if options.paired == True:
 		r1nm, r1ext = os.path.splitext(options.read1)
@@ -74,43 +74,44 @@ def lead_trim():
 		os.system("fastx_trimmer -Q 33 -f 9 -i ./clone_filtered/"+r2nm+".fil.fq_2 -o ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
 	else:
 		r1nm, r1ext = os.path.splitext(options.read1)
-		os.system("fastx_trimmer -Q 33 -f 9 -i ./clone_filtered/"+r1nm+".fil.fq_1 -o ./lead_trimmed/"+r1nm+".clone.trim.fastq")
+		os.system("fastx_trimmer -Q 33 -f 9 -i ./clone_filtered/"+r1nm+".fil.fq_1 -o ./lead_trimmed/"+r1nm+".1.clone.trim.fastq")
 			
 #################################################
 ###               Parse samples               ###
 #################################################
-Print "Parsing reads by sample"			
-def sample_sheet_parse():
+print "Parsing reads by sample"			
+def parse_sample_sheet():
 ### Parse the sample sheet to create barcodes file ###
     barcodes = open("barcodes.txt", "w")
     for foo in open(options.sheet).read().splitlines():
         bar = foo.split()
 #      	print bar[0], bar[1], bar[2], bar[3], bar[4]
         out = bar[3] + "\t" + bar[4] + "\n"
+#	print out
         barcodes.write(out)
     barcodes.close()
 
 ### process_radtags subroutine ###
-def parse_samples():
+def sample_parser():
 	if options.rescue == True:
 		if options.clean == True:
 			print "Quality-trimming reads using Stacks"
 			if options.paired == True:
 				r1nm, r1ext = os.path.splitext(options.read1)
 				r2nm, r2ext = os.path.splitext(options.read2)
-				os.system("process_radtags -r -c -q -b barcodes.txt -o ./parsed --inline_index --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -1 ./lead_trimmed/"+r1nm+".clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".clone.trim.fastq")
+				os.system("process_radtags -r -c -q -b barcodes.txt -o ./parsed --inline_index --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -1 ./lead_trimmed/"+r1nm+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
 			else:
 				r1nm, r1ext = os.path.splitext(options.read1)
-				os.system("process_radtags -r -c -q -b barcodes.txt -o ./parsed --inline_null --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -f ./lead_trimmed/"+r1nm+".clone.trim.fastq")
+				os.system("process_radtags -r -c -q -b barcodes.txt -o ./parsed --inline_null --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -f ./lead_trimmed/"+r1nm+".1.clone.trim.fastq")
 		else:
 			print "Quality-trimming reads using Trimmomatic"
 			if options.paired == True:
                                 r1nm, r1ext = os.path.splitext(options.read1)
                                 r2nm, r2ext = os.path.splitext(options.read2)
-                                os.system("process_radtags -r -b barcodes.txt -o ./parsed --inline_index --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -1 ./le$
+                                os.system("process_radtags -r -b barcodes.txt -o ./parsed --inline_index --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -1 ./lead_trimmed/"+r1nm+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
                         else:
                                 r1nm, r1ext = os.path.splitext(options.read1)
-                                os.system("process_radtags -r -b barcodes.txt -o ./parsed --inline_null --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -f ./lea$
+                                os.system("process_radtags -r -b barcodes.txt -o ./parsed --inline_null --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -f ./lead_trimmed/"+r1nm+".1.clone.trim.fastq")
 
 	else:
                 if options.clean == True:
@@ -118,19 +119,19 @@ def parse_samples():
                         if options.paired == True:
                                 r1nm, r1ext = os.path.splitext(options.read1)
                                 r2nm, r2ext = os.path.splitext(options.read2)
-                                os.system("process_radtags -c -q -b barcodes.txt -o ./parsed --inline_index --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -1 ./lead_trimme$
+                                os.system("process_radtags -c -q -b barcodes.txt -o ./parsed --inline_index --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -1 ./lead_trimmed/"+r1nm+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
                         else:
                                 r1nm, r1ext = os.path.splitext(options.read1)
-                                os.system("process_radtags -c -q -b barcodes.txt -o ./parsed --inline_null --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -f ./lead_trimmed$
+                                os.system("process_radtags -c -q -b barcodes.txt -o ./parsed --inline_null --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -f ./lead_trimmed/"+r1nm+".1.clone.trim.fastq")
                 else:
                         print "Quality-trimming reads using Trimmomatic"
 			if options.paired == True:
                                 r1nm, r1ext = os.path.splitext(options.read1)
                                 r2nm, r2ext = os.path.splitext(options.read2)
-                                os.system("process_radtags -b barcodes.txt -o ./parsed --inline_index --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -1 ./le$
+                                os.system("process_radtags -b barcodes.txt -o ./parsed --inline_index --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -1 ./lead_trimmed/"+r1nm+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
                         else:
                                 r1nm, r1ext = os.path.splitext(options.read1)
-                                os.system("process_radtags -b barcodes.txt -o ./parsed --inline_null --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -f ./lea$
+                                os.system("process_radtags -b barcodes.txt -o ./parsed --inline_null --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -f ./lead_trimmed/"+r1nm+".1.clone.trim.fastq")
 
 
 ### file renaming subroutine ###
@@ -161,7 +162,7 @@ def sample_rename():
 #################################################
 
 def quality_trim():
-	if options.quality = True:
+	if options.quality == True:
 		for foo in open(options.sheet).read().splitlines():
         		bar = foo.split()
 #			print bar
@@ -190,18 +191,19 @@ def quality_trim():
 #################################################	
 
 def main():
-	if "1" in option.run
+	if "1" in options.run:
 		setup()
-	if "2" in option.run
+	if "2" in options.run:
 		clone_filter()
-	if "3" in option.run
+	if "3" in options.run:
 		lead_trim()
-	if "4" in option.run
+	if "4" in options.run:
 		parse_sample_sheet()
 		sample_parser()
 		sample_rename()	
-	if "5" in option.run
+	if "5" in options.run:
 		quality_trim()
 #	if "6" in option.run
 #		finalize()
 
+main()
