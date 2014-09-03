@@ -108,19 +108,19 @@ def sample_parser():
 			if options.paired == True:
 				r1nm, r1ext = os.path.splitext(options.read1)
 				r2nm, r2ext = os.path.splitext(options.read2)
-				os.system("process_radtags -r -c -q -b barcodes.txt -o ./parsed --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
+				os.system("process_radtags -r -c -q -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
 			else:
 				r1nm, r1ext = os.path.splitext(options.read1)
-				os.system("process_radtags -r -c -q -b barcodes.txt -o ./parsed --inline_null --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -f ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq")
+				os.system("process_radtags -r -c -q -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_null --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -f ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq")
                         print "\n***Quality-trimming reads using Stacks***\n"
 		else:
 			if options.paired == True:
                                 r1nm, r1ext = os.path.splitext(options.read1)
                                 r2nm, r2ext = os.path.splitext(options.read2)
-                                os.system("process_radtags -r -b barcodes.txt -o ./parsed --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
+                                os.system("process_radtags -r -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
                         else:
                                 r1nm, r1ext = os.path.splitext(options.read1)
-                                os.system("process_radtags -r -b barcodes.txt -o ./parsed --inline_null --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -f ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq")
+                                os.system("process_radtags -r -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_null --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -f ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq")
                         print "\n***Quality-trimming reads using Trimmomatic***\n"
 
 	else:
@@ -132,19 +132,19 @@ def sample_parser():
                         if options.paired == True:
                                 r1nm, r1ext = os.path.splitext(options.read1)
                                 r2nm, r2ext = os.path.splitext(options.read2)
-                                os.system("process_radtags -c -q -b barcodes.txt -o ./parsed --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
+                                os.system("process_radtags -c -q -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
                         else:
                                 r1nm, r1ext = os.path.splitext(options.read1)
-                                os.system("process_radtags -c -q -b barcodes.txt -o ./parsed --inline_null --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -f ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq")
+                                os.system("process_radtags -c -q -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_null --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -f ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq")
                         print "\n***Quality-trimming reads using Stacks***\n"
                 else:
 			if options.paired == True:
                                 r1nm, r1ext = os.path.splitext(options.read1)
                                 r2nm, r2ext = os.path.splitext(options.read2)
-                                os.system("process_radtags -b barcodes.txt -o ./parsed --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
+                                os.system("process_radtags -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
                         else:
                                 r1nm, r1ext = os.path.splitext(options.read1)
-                                os.system("process_radtags -b barcodes.txt -o ./parsed --inline_null --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -f ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq")
+                                os.system("process_radtags -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_null --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -f ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq")
                         print "\n***Quality-trimming reads using Trimmomatic***\n"
 
 ### file renaming subroutine ###
@@ -152,17 +152,21 @@ def sample_rename():
 	for foo in open(options.sheet).read().splitlines():
         	bar = foo.split()
 		if options.paired == True:
-			parsep1_rename = "mv ./parsed/sample_"+bar[3]+"-"+bar[4]+".1.fq ./parsed/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".1.fq"
-			parsep2_rename = "mv ./parsed/sample_"+bar[3]+"-"+bar[4]+".2.fq ./parsed/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".2.fq"
-			remp1_rename = "mv ./parsed/sample_"+bar[3]+"-"+bar[4]+".rem.1.fq ./parsed/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".rem.1.fq"
-			remp2_rename = "mv ./parsed/sample_"+bar[3]+"-"+bar[4]+".rem.2.fq ./parsed/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".rem.2.fq"
+			r1nm, r1ext = os.path.splitext(options.read1)
+			r2nm, r2ext = os.path.splitext(options.read2)
+			parsep1_rename = "mv ./parsed/"+str(r1nm)+"sample_"+bar[3]+"-"+bar[4]+".1.fq ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".1.fq"
+			parsep2_rename = "mv ./parsed/"+str(r1nm)+"/sample_"+bar[3]+"-"+bar[4]+".2.fq ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".2.fq"
+			remp1_rename = "mv ./parsed/"+str(r1nm)+"/sample_"+bar[3]+"-"+bar[4]+".rem.1.fq ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".rem.1.fq"
+			remp2_rename = "mv ./parsed/"+str(r1nm)+"/sample_"+bar[3]+"-"+bar[4]+".rem.2.fq ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".rem.2.fq"
 			os.system(parsep1_rename)
 			os.system(parsep2_rename)
 			os.system(remp1_rename)
 			os.system(remp2_rename)
 ### Place restriction site trimming routine here ###
 		else:
-			parse_single = "mv ./parsed/sample_"+bar[3]+".fq ./parsed/"+bar[0]+"_"+bar[3]+".1.fq"
+			r1nm, r1ext = os.path.splitext(options.read1)
+			r2nm, r2ext = os.path.splitext(options.read2)
+			parse_single = "mv ./parsed/"+str(r1nm)+"/sample_"+bar[3]+".fq ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+".1.fq"
 			os.system(parse_single)
 ### Place restriction site trimming routine here ###
 
@@ -182,12 +186,12 @@ def quality_trim():
 ### Put command to trim away restriction site here and below else for Trimmomatic option ###
 				handle = bar[0]+"_"+bar[3]+"-"+bar[4]
 #                       	print handle
-				PEclean = "$jar/trimmomatic-0.32.jar PE -threads "+threads+" -trimlog ./cleaned/"+handle+".qtrim.log ./parsed/"+handle+".1.fq ./parsed/"+handle+".2.fq ./cleaned/"+handle+".P1.qtrim ./cleaned/"+handle+".S1.qtrim ./cleaned/"+handle+".P2.qtrim ./cleaned/"+handle+".S2.qtrim LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:36 TOPHRED33"
+				PEclean = "$jar/trimmomatic-0.32.jar PE -threads "+threads+" -trimlog ./cleaned/"+handle+".qtrim.log ./parsed/"+str(r1nm)+"/"+handle+".1.fq ./parsed/"+handle+".2.fq ./cleaned/"+handle+".P1.qtrim ./cleaned/"+handle+".S1.qtrim ./cleaned/"+handle+".P2.qtrim ./cleaned/"+handle+".S2.qtrim LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:36 TOPHRED33"
 				os.system(str(PEclean))
 			else:
                         	handle = bar[0]+"_"+bar[3]
 #                       	print handle
-				SEclean = "$jar/trimmomatic-0.32.jar SE -threads "+threads+" -trimlog ./cleaned/"+handle+".qtrim.log ./parsed/"+handle+".1.fq ./cleaned"+handle+".S1.qtrim LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:36 TOPHRED33"
+				SEclean = "$jar/trimmomatic-0.32.jar SE -threads "+threads+" -trimlog ./cleaned/"+handle+".qtrim.log ./parsed/"+str(r1nm)+"/"+handle+".1.fq ./cleaned"+handle+".S1.qtrim LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:36 TOPHRED33"
 				os.system(str(SEclean))
 
 
