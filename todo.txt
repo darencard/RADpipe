@@ -3,3 +3,4 @@
 3. Save output/logs properly (clone_filter, maybe others)
 4. Merge all quality-trimmed reads into single file for use in generating pseudo-reference contigs
 5. Incorporate adapter list/trimming into Trimmomatic and Stacks
+6. Change script structure to have SE and PE subroutines, and also Trimmomatic and Stacks cleaning subroutines
