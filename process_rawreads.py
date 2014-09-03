@@ -108,19 +108,19 @@ def sample_parser():
 			if options.paired == True:
 				r1nm, r1ext = os.path.splitext(options.read1)
 				r2nm, r2ext = os.path.splitext(options.read2)
-				os.system("process_radtags -r -c -q -b barcodes.txt -o ./parsed --inline_index --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -1 ./lead_trimmed/"+r1nm+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
+				os.system("process_radtags -r -c -q -b barcodes.txt -o ./parsed --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
 			else:
 				r1nm, r1ext = os.path.splitext(options.read1)
-				os.system("process_radtags -r -c -q -b barcodes.txt -o ./parsed --inline_null --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -f ./lead_trimmed/"+r1nm+".1.clone.trim.fastq")
+				os.system("process_radtags -r -c -q -b barcodes.txt -o ./parsed --inline_null --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -f ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq")
                         print "\n***Quality-trimming reads using Stacks***\n"
 		else:
 			if options.paired == True:
                                 r1nm, r1ext = os.path.splitext(options.read1)
                                 r2nm, r2ext = os.path.splitext(options.read2)
-                                os.system("process_radtags -r -b barcodes.txt -o ./parsed --inline_index --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -1 ./lead_trimmed/"+r1nm+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
+                                os.system("process_radtags -r -b barcodes.txt -o ./parsed --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
                         else:
                                 r1nm, r1ext = os.path.splitext(options.read1)
-                                os.system("process_radtags -r -b barcodes.txt -o ./parsed --inline_null --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -f ./lead_trimmed/"+r1nm+".1.clone.trim.fastq")
+                                os.system("process_radtags -r -b barcodes.txt -o ./parsed --inline_null --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -f ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq")
                         print "\n***Quality-trimming reads using Trimmomatic***\n"
 
 	else:
@@ -132,19 +132,19 @@ def sample_parser():
                         if options.paired == True:
                                 r1nm, r1ext = os.path.splitext(options.read1)
                                 r2nm, r2ext = os.path.splitext(options.read2)
-                                os.system("process_radtags -c -q -b barcodes.txt -o ./parsed --inline_index --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -1 ./lead_trimmed/"+r1nm+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
+                                os.system("process_radtags -c -q -b barcodes.txt -o ./parsed --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
                         else:
                                 r1nm, r1ext = os.path.splitext(options.read1)
-                                os.system("process_radtags -c -q -b barcodes.txt -o ./parsed --inline_null --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -f ./lead_trimmed/"+r1nm+".1.clone.trim.fastq")
+                                os.system("process_radtags -c -q -b barcodes.txt -o ./parsed --inline_null --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -f ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq")
                         print "\n***Quality-trimming reads using Stacks***\n"
                 else:
 			if options.paired == True:
                                 r1nm, r1ext = os.path.splitext(options.read1)
                                 r2nm, r2ext = os.path.splitext(options.read2)
-                                os.system("process_radtags -b barcodes.txt -o ./parsed --inline_index --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -1 ./lead_trimmed/"+r1nm+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
+                                os.system("process_radtags -b barcodes.txt -o ./parsed --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
                         else:
                                 r1nm, r1ext = os.path.splitext(options.read1)
-                                os.system("process_radtags -b barcodes.txt -o ./parsed --inline_null --renz_1 "+options.renz1+" --renz_2 "+options.renz2+" -f ./lead_trimmed/"+r1nm+".1.clone.trim.fastq")
+                                os.system("process_radtags -b barcodes.txt -o ./parsed --inline_null --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -f ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq")
                         print "\n***Quality-trimming reads using Trimmomatic***\n"
 
 ### file renaming subroutine ###
