@@ -43,6 +43,7 @@ def setup():
 	os.system("mkdir lead_trimmed")
 	os.system("mkdir parsed")
 	os.system("mkdir cleaned")
+	os.system("mkdir ./parsed/"+r1nm)
 
 
 #################################################
@@ -154,7 +155,7 @@ def sample_rename():
 		if options.paired == True:
 			r1nm, r1ext = os.path.splitext(options.read1)
 			r2nm, r2ext = os.path.splitext(options.read2)
-			parsep1_rename = "mv ./parsed/"+str(r1nm)+"sample_"+bar[3]+"-"+bar[4]+".1.fq ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".1.fq"
+			parsep1_rename = "mv ./parsed/"+str(r1nm)+"/sample_"+bar[3]+"-"+bar[4]+".1.fq ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".1.fq"
 			parsep2_rename = "mv ./parsed/"+str(r1nm)+"/sample_"+bar[3]+"-"+bar[4]+".2.fq ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".2.fq"
 			remp1_rename = "mv ./parsed/"+str(r1nm)+"/sample_"+bar[3]+"-"+bar[4]+".rem.1.fq ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".rem.1.fq"
 			remp2_rename = "mv ./parsed/"+str(r1nm)+"/sample_"+bar[3]+"-"+bar[4]+".rem.2.fq ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".rem.2.fq"
@@ -186,12 +187,12 @@ def quality_trim():
 ### Put command to trim away restriction site here and below else for Trimmomatic option ###
 				handle = bar[0]+"_"+bar[3]+"-"+bar[4]
 #                       	print handle
-				PEclean = "$jar/trimmomatic-0.32.jar PE -threads "+threads+" -trimlog ./cleaned/"+handle+".qtrim.log ./parsed/"+str(r1nm)+"/"+handle+".1.fq ./parsed/"+handle+".2.fq ./cleaned/"+handle+".P1.qtrim ./cleaned/"+handle+".S1.qtrim ./cleaned/"+handle+".P2.qtrim ./cleaned/"+handle+".S2.qtrim LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:36 TOPHRED33"
+				PEclean = "$jar/trimmomatic-0.32.jar PE -threads "+threads+" -trimlog ./cleaned/"+handle+".qtrim.log ./parsed/"+str(r1nm)+"/"+handle+".1.fq ./parsed/"+str(r1nm)+"/"+handle+".2.fq ./cleaned/"+handle+".P1.qtrim ./cleaned/"+handle+".S1.qtrim ./cleaned/"+handle+".P2.qtrim ./cleaned/"+handle+".S2.qtrim LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:36 TOPHRED33"
 				os.system(str(PEclean))
 			else:
                         	handle = bar[0]+"_"+bar[3]
 #                       	print handle
-				SEclean = "$jar/trimmomatic-0.32.jar SE -threads "+threads+" -trimlog ./cleaned/"+handle+".qtrim.log ./parsed/"+str(r1nm)+"/"+handle+".1.fq ./cleaned"+handle+".S1.qtrim LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:36 TOPHRED33"
+				SEclean = "$jar/trimmomatic-0.32.jar SE -threads "+threads+" -trimlog ./cleaned/"+handle+".qtrim.log ./parsed/"+str(r1nm)+"/"+handle+".1.fq ./cleaned"+str(r1nm)+"/"+handle+".S1.qtrim LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:36 TOPHRED33"
 				os.system(str(SEclean))
 
 
