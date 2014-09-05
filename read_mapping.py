@@ -187,19 +187,19 @@ def bam_process():
 		
 def main():
 	os.system("mkdir mapping")
-	if options.single == True:
-		single()
+#	if options.single == True:
+#		single()
 #		index_ref()
-		SE_map()
-		sam2bam()
-		bam_process()
-	else:		
-		PE_dict()
-		SE_dict()
+#		SE_map()
+#		sam2bam()
+#		bam_process()
+#	else:		
+	PE_dict()
+	SE_dict()
 #		index_ref()
-		PE_map()
-		SE_map()
-		sam2bam()
-		bam_process()
+	PE_map()
+	SE_map()
+	sam2bam()
+	bam_process()
 		
 main()
