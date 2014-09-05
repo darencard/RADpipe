@@ -93,7 +93,7 @@ def SE_dict():
 			print foo[0]
 			file = foo[0]+".SE.qtrim"
 			value = SE_dict[key]
-			os.system("cat "+key+" "+value+" > "+file)
+			os.system("cat ./"options.directory+"/"+key+" "+value+" > "+file)
 		
 		
 def single():
@@ -133,7 +133,7 @@ def PE_map():
 		print foo[0]
 		file = foo[0]+".PE.sam"
 		value = PE_dict[key]
-		os.system("bwa mem "+options.reference+" "+key+" "+value+" > "+file)
+		os.system("bwa mem "+options.reference+" ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./mapping/"+file)
 
 
 	
@@ -145,7 +145,7 @@ def SE_map():
 				if name[1] == "SE":
 					input = str(name[0])+"."+str(name[1])+"."+str(name[2])
 					output = name[0]+".SE.sam"
-					os.system("bwa mem "+options.reference+" "+input+" > "+output)
+					os.system("bwa mem "+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output)
 
 def sam2bam():
 	for root,dirs,files in os.walk(options.directory):
@@ -154,7 +154,7 @@ def sam2bam():
 				name = file.split(os.extsep)
 				input = name[0]+"."+name[1]+".sam"
 				output = name[0]+"."+name[1]+".bam"
-				os.system("samtools view -bS "+input+" > "+output)
+				os.system("samtools view -bS ./mapping/"+input+" > ./mapping/"+output)
 				
 
 def bam_process():
@@ -167,10 +167,10 @@ def bam_process():
 				SEin = name[0]+".SE.bam"
 				Merge_out = name[0]+".merge.bam"
 				Sort_out = name[0]+".merge.sort.bam"
-				os.system("samtools merge "+Merge_out+" "+PEin+" "+SEin)
-				os.system("samtools sort "+Merge_out+" "+Sort_out)
-				os.system("samtools index "+Sort_out)
-				os.system("rm -f *.sam")
+				os.system("samtools merge ./mapping/"+Merge_out+" ./mapping/"+PEin+" ./mapping/"+SEin)
+				os.system("samtools sort ./mapping/"+Merge_out+" ./mapping/"+Sort_out)
+				os.system("samtools index ./mapping/"+Sort_out)
+#				os.system("rm -f ./mapping/*.sam")
 
 		
 def main():
