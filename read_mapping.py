@@ -73,7 +73,7 @@ def PE_dict():
 					if key not in PE_dict.keys():
 						PE_dict[key] = value
 		print PE_dict
-	return PE_dict
+		return PE_dict
 		
 
 def SE_dict():
@@ -104,7 +104,7 @@ def SE_dict():
 				file = foo[0]+".SE.qtrim"
 				value = SE_dict[key]
 				os.system("cat ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./"+options.directory+"/"+file)
-	return SE_dict
+		return SE_dict
 		
 		
 #def single():
@@ -160,7 +160,7 @@ def SE_map(SE_dict):
 					os.system("bwa mem "+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output)
 
 def sam2bam():
-	for root,dirs,files in os.walk(options.directory):
+	for root,dirs,files in os.walk(mapping):
 		for file in files:
 			if file.endswith(".sam"):
 				name = file.split(os.extsep)
@@ -170,7 +170,7 @@ def sam2bam():
 				
 
 def bam_process():
-	for root,dirs,files in os.walk(options.directory):
+	for root,dirs,files in os.walk(mapping):
 		for file in files:
 			if file.endswith(".bam"):
 				name = file.split(os.extsep)
@@ -194,11 +194,11 @@ def main():
 #		sam2bam()
 #		bam_process()
 #	else:		
-	PE_dict()
-	SE_dict()
+#	PE_dict()
+#	SE_dict()
 #		index_ref()
-	PE_map(PE_dict())
-	SE_map(SE_dict())
+#	PE_map(PE_dict())
+#	SE_map(SE_dict())
 	sam2bam()
 	bam_process()
 		
