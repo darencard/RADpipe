@@ -73,7 +73,7 @@ def PE_dict():
 					if key not in PE_dict.keys():
 						PE_dict[key] = value
 		print PE_dict
-return PE_dict
+	return PE_dict
 		
 
 def SE_dict():
@@ -104,7 +104,7 @@ def SE_dict():
 				file = foo[0]+".SE.qtrim"
 				value = SE_dict[key]
 				os.system("cat ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./"+options.directory+"/"+file)
-return SE_dict
+	return SE_dict
 		
 		
 #def single():
