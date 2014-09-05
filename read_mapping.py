@@ -46,7 +46,6 @@ parser = optparse.OptionParser(usage=usage)
 parser.add_option("--reference", action = "store", type = "string", dest = "reference", help = "the reference genome you will be mapping to")
 parser.add_option("--read_dir", action = "store", type = "string", dest = "directory", help = "the directory containing your reads")
 parser.add_option("--threads", action = "store", type = "string", dest = "threads", help = "number of threads/cores to use [1]", default = "1")
-#parser.add_option("--single-end", action = "store_true", dest = "single", help = "pass this flag if you are working with only single-end data", default = "False")
 parser.add_option("--ext", action = "store", dest = "ext", help = "the file extension of the read files")
 
 options, args = parser.parse_args()
@@ -108,33 +107,7 @@ def make_SE_dict(SE_dict):
 				print foo[0]
 				file = foo[0]+".SE.qtrim"
 				value = SE_dict[key]
-				os.system("cat ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./"+options.directory+"/"+file)
-		
-		
-#def single():
-#
-#	single = {}
-#	
-#	for root,dirs,files in os.walk(options.directory):
-#		for file in files:
-#			if file.endswith(".qtrim"):
-#				print file
-#				name = file.split(os.extsep)
-#				print name
-#				if name[1] == "SE":
-#					root = name[0]
-#					print root
-#					read = name[1]
-#					print name
-#					ext = name[2]
-#					print ext
-#					key = str(root)+"."+str(read)+"."+str(ext)
-#					value = 1
-#					if key not in single.keys():
-#						single[key] = value
-#		print single
-#		return single
-	
+				os.system("cat ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./"+options.directory+"/"+file)	
 		
 				
 def index_ref():
@@ -191,11 +164,11 @@ def bam_process():
 		
 def main():
 #	os.system("mkdir mapping")	
-	make_PE_dict()
-	make_SE_dict()
+	make_PE_dict(PE_dict)
+	make_SE_dict(SE_dict)
 #	index_ref()
-	PE_map()
-	SE_map()
+	PE_map(PE_dict)
+	SE_map(SE_dict)
 	sam2bam()
 	bam_process()
 		
