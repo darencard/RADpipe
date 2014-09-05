@@ -190,8 +190,8 @@ def main():
 	make_PE_dict()
 	make_SE_dict()
 	index_ref()
-	PE_map(make_PE_dict())
-	SE_map(make_SE_dict())
+	PE_map(PE_dict)
+	SE_map(SE_dict)
 	sam2bam()
 	bam_process()
 		
