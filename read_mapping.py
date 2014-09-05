@@ -85,9 +85,15 @@ def SE_dict():
 					print ext
 					key = str(root)+"."+str(read)+"."+str(ext)
 					value = str(root)+".S2."+str(ext)
-					if key not in PE_dict.keys():
-						PE_dict[key] = value
-		print PE_dict
+					if key not in SE_dict.keys():
+						SE_dict[key] = value
+		print SE_dict
+		for key in SE_dict.keys():
+			foo = key.split(".")
+			print foo[0]
+			file = foo[0]+".SE.qtrim"
+			value = SE_dict[key]
+			os.system("cat "+key+" "+value+" > "+file)
 		
 		
 def single():
@@ -112,17 +118,7 @@ def single():
 					if key not in PE_dict.keys():
 						single[key] = value
 		print single
-
-
-		
-def cat_SE():
-	for key in SE_dict.keys():
-		foo = key.split(".")
-		print foo[0]
-		file = foo[0]+".SE.qtrim"
-		value = SE_dict[key]
-		os.system("cat "+key+" "+value+" > "+file)
-		
+	
 		
 				
 def index_ref():
@@ -180,19 +176,19 @@ def bam_process():
 def main():
 	os.system("mkdir mapping")
 	if options.single == True:
-		single
-		index_ref
-		SE_map
-		sam2bam
-		bam_process
+		single()
+		index_ref()
+		SE_map()
+		sam2bam()
+		bam_process()
 	else:		
-		PE_dict
-		SE_dict
-		cat_SE
-		index_ref
-		PE_map
-		SE_map
-		sam2bam
-		bam_process
+		PE_dict()
+		SE_dict()
+#		cat_SE()
+		index_ref()
+		PE_map()
+		SE_map()
+		sam2bam()
+		bam_process()
 		
-main
+main()
