@@ -139,7 +139,7 @@ def index_ref():
 	
 	
 	
-def PE_map():
+def PE_map(PE_dict):
 	for key in PE_dict.keys():
 		foo = key.split(".")
 		print foo[0]
@@ -149,7 +149,7 @@ def PE_map():
 
 
 	
-def SE_map():
+def SE_map(SE_dict):
 	for root,dirs,files in os.walk(options.directory):
 		for file in files:
 			if file.endswith(".SE.qtrim"):
