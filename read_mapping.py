@@ -51,9 +51,11 @@ parser.add_option("--ext", action = "store", dest = "ext", help = "the file exte
 
 options, args = parser.parse_args()
 
+PE_dict = {}
+
 def PE_dict():
 
-	PE_dict = {}
+
 	
 	for root,dirs,files in os.walk(options.directory):
 		for file in files:
@@ -74,11 +76,12 @@ def PE_dict():
 						PE_dict[key] = value
 		print PE_dict
 		return PE_dict
-		
+
+SE_dict = {}		
 
 def SE_dict():
 
-	SE_dict = {}
+
 	
 	for root,dirs,files in os.walk(options.directory):
 		for file in files:
