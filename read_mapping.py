@@ -72,8 +72,8 @@ def make_PE_dict():
 					value = str(root)+".P2."+str(ext)
 					if key not in PE_dict.keys():
 						PE_dict[key] = value
-		print PE_dict
-		return PE_dict
+			print PE_dict
+			return PE_dict
 		
 
 def make_SE_dict():
