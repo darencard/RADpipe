@@ -118,6 +118,7 @@ def index_ref():
 	
 def PE_map(PE_dict):
 	for key in PE_dict.keys():
+		print key
 		foo = key.split(".")
 		print foo[0]
 		file = foo[0]+".PE.sam"
