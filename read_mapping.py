@@ -93,7 +93,7 @@ def SE_dict():
 			print foo[0]
 			file = foo[0]+".SE.qtrim"
 			value = SE_dict[key]
-			os.system("cat ./"options.directory+"/"+key+" "+value+" > "+file)
+			os.system("cat ./"options.directory+"/"+key+" ./"options.directory+"/"+value+" > ./"options.directory+"/"+file)
 		
 		
 def single():
