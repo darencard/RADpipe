@@ -178,7 +178,7 @@ def bam_process():
 				PEin = name[0]+".PE.bam"
 				SEin = name[0]+".SE.bam"
 				Merge_out = name[0]+".merge.bam"
-				Sort_out = name[0]+".merge.sort.bam"
+				Sort_out = name[0]+".merge.sort"
 				os.system("samtools merge ./mapping/"+Merge_out+" ./mapping/"+PEin+" ./mapping/"+SEin)
 				os.system("samtools sort ./mapping/"+Merge_out+" ./mapping/"+Sort_out)
 				os.system("samtools index ./mapping/"+Sort_out)
@@ -186,19 +186,12 @@ def bam_process():
 
 		
 def main():
-	os.system("mkdir mapping")
-#	if options.single == True:
-#		single()
-#		index_ref()
-#		SE_map()
-#		sam2bam()
-#		bam_process()
-#	else:		
-#	PE_dict()
-#	SE_dict()
-#		index_ref()
-#	PE_map(PE_dict())
-#	SE_map(SE_dict())
+	os.system("mkdir mapping")	
+	PE_dict()
+	SE_dict()
+		index_ref()
+	PE_map(PE_dict())
+	SE_map(SE_dict())
 	sam2bam()
 	bam_process()
 		
