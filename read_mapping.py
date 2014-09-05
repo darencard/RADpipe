@@ -51,9 +51,12 @@ parser.add_option("--ext", action = "store", dest = "ext", help = "the file exte
 
 options, args = parser.parse_args()
 
-def make_PE_dict():
+PE_dict = {}
+SE_dict = {}
 
-	PE_dict = {}
+def make_PE_dict(PE_dict):
+
+#	PE_dict = {}
 	
 	for root,dirs,files in os.walk(options.directory):
 		for file in files:
@@ -76,9 +79,9 @@ def make_PE_dict():
 			return PE_dict
 		
 
-def make_SE_dict():
+def make_SE_dict(SE_dict):
 
-	SE_dict = {}
+#	SE_dict = {}
 	
 	for root,dirs,files in os.walk(options.directory):
 		for file in files:
@@ -187,10 +190,10 @@ def bam_process():
 
 		
 def main():
-	os.system("mkdir mapping")	
+#	os.system("mkdir mapping")	
 	make_PE_dict()
 	make_SE_dict()
-	index_ref()
+#	index_ref()
 	PE_map()
 	SE_map()
 	sam2bam()
