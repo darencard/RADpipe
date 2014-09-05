@@ -6,14 +6,19 @@ import optparse
 import os
 
 usage_line = """
-annotate_fasta.py
+read_mapping.py
 
-Version 1.0 (28 August, 2014)
+Version 1.0 (5 September, 2014)
 License: GNU GPLv2
 To report bugs or errors, please contact Daren Card (dcard@uta.edu).
 This script is provided as-is, with no support and no guarantee of proper or desirable functioning.
 
-Script that annotates assembly contigs (fasta format) using a pre-made dictionary that is based \
+Script that takes read files (paired or unpaired) and maps them to a reference sequence (genome) using bwa. \
+Input is a reference sequence in fasta format and the directory containing the read files to be mapped. \
+Naming conventions for read files are as follows:														\
+1. The file extension (normally .fastq) must match that passed to the command with the '--ext' flag.	\
+2. Prior to the extension, there must be
+
 upon reciprocal best blast and one-way blast results using an well-annotated genome (e.g., Ensembl), which \
 indicates homology. The 'make_annotation_dictionary.py' script must be run first to build the annotation \
 dictionary. Input is an assembly in fasta format and the output dictionary from the 'make_annotation_dictionary.py' \
@@ -37,7 +42,7 @@ parser.add_option("--single-end", action = "store_true", dest = "single", help =
 
 options, args = parser.parse_args()
 
-def make_PE_dict():
+def PE_dict():
 
 	PE_dict = {}
 	
@@ -45,9 +50,9 @@ def make_PE_dict():
 		for file in files:
 			if file.endswith(".qtrim"):
 				print file
-				name = file.split(os.extseq)
-				if name[1] == "P1":
+				name = file.split(os.extsep)
 				print name
+				if name[1] == "P1":
 					root = name[0]
 					print root
 					read = name[1]
@@ -61,7 +66,7 @@ def make_PE_dict():
 		print PE_dict
 		
 
-def make_SE_dict():
+def SE_dict():
 
 	SE_dict = {}
 	
@@ -69,9 +74,9 @@ def make_SE_dict():
 		for file in files:
 			if file.endswith(".qtrim"):
 				print file
-				name = file.split(os.extseq)
-				if name[1] == "S1":
+				name = file.split(os.extsep)
 				print name
+				if name[1] == "S1":
 					root = name[0]
 					print root
 					read = name[1]
@@ -93,9 +98,9 @@ def single():
 		for file in files:
 			if file.endswith(".qtrim"):
 				print file
-				name = file.split(os.extseq)
-				if name[1] == "SE":
+				name = file.split(os.extsep)
 				print name
+				if name[1] == "SE":
 					root = name[0]
 					print root
 					read = name[1]
@@ -138,29 +143,29 @@ def PE_map():
 	
 def SE_map():
 	for root,dirs,files in os.walk(options.directory):
-	for file in files:
-		if file.endswith(".SE.qtrim"):
-				name = file.split(os.extseq)
+		for file in files:
+			if file.endswith(".SE.qtrim"):
+				name = file.split(os.extsep)
 				if name[1] == "SE":
-					in = str(name[0])+"."+str(name[1])+"."+str(name[2])
-					out = name[0]+".SE.sam"
-					os.system("bwa mem "+options.reference+" "+in+" > "+out)
+					input = str(name[0])+"."+str(name[1])+"."+str(name[2])
+					output = name[0]+".SE.sam"
+					os.system("bwa mem "+options.reference+" "+input+" > "+output)
 
 def sam2bam():
 	for root,dirs,files in os.walk(options.directory):
-	for file in files:
-		if file.endswith(".sam"):
-				name = file.split(os.extseq)
-				in = name[0]+"."+name[1]+".sam"
-				out = name[0]+"."+name[1]+".bam"
-				os.system("samtools view -bS "+in+" > "+out)
+		for file in files:
+			if file.endswith(".sam"):
+				name = file.split(os.extsep)
+				input = name[0]+"."+name[1]+".sam"
+				output = name[0]+"."+name[1]+".bam"
+				os.system("samtools view -bS "+input+" > "+output)
 				
 
 def bam_process():
 	for root,dirs,files in os.walk(options.directory):
-	for file in files:
-		if file.endswith(".bam"):
-				name = file.split(os.extseq)
+		for file in files:
+			if file.endswith(".bam"):
+				name = file.split(os.extsep)
 				sample = name[0]
 				PEin = name[0]+".PE.bam"
 				SEin = name[0]+".SE.bam"
@@ -188,4 +193,6 @@ def main():
 		PE_map
 		SE_map
 		sam2bam
-#		bam_process
+		bam_process
+		
+main
