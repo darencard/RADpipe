@@ -51,7 +51,7 @@ parser.add_option("--ext", action = "store", dest = "ext", help = "the file exte
 
 options, args = parser.parse_args()
 
-def PE_dict():
+def make_PE_dict():
 
 	PE_dict = {}
 	
@@ -76,7 +76,7 @@ def PE_dict():
 		return PE_dict
 		
 
-def SE_dict():
+def make_SE_dict():
 
 	SE_dict = {}
 	
@@ -187,11 +187,11 @@ def bam_process():
 		
 def main():
 	os.system("mkdir mapping")	
-	PE_dict()
-	SE_dict()
-		index_ref()
-	PE_map(PE_dict())
-	SE_map(SE_dict())
+	make_PE_dict()
+	make_SE_dict()
+	index_ref()
+	PE_map(make_PE_dict())
+	SE_map(make_SE_dict())
 	sam2bam()
 	bam_process()
 		
