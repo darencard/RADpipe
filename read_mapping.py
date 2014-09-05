@@ -75,7 +75,7 @@ def make_PE_dict(PE_dict):
 					if key not in PE_dict.keys():
 						PE_dict[key] = value
 			print PE_dict
-			return PE_dict
+#			return PE_dict
 		
 
 def make_SE_dict(SE_dict):
@@ -100,7 +100,7 @@ def make_SE_dict(SE_dict):
 					if key not in SE_dict.keys():
 						SE_dict[key] = value
 			print SE_dict
-			return SE_dict
+#			return SE_dict
 			
 			for key in SE_dict.keys():
 				foo = key.split(".")
