@@ -51,11 +51,9 @@ parser.add_option("--ext", action = "store", dest = "ext", help = "the file exte
 
 options, args = parser.parse_args()
 
-PE_dict = {}
-
 def PE_dict():
 
-
+	PE_dict = {}
 	
 	for root,dirs,files in os.walk(options.directory):
 		for file in files:
@@ -75,13 +73,12 @@ def PE_dict():
 					if key not in PE_dict.keys():
 						PE_dict[key] = value
 		print PE_dict
-		return PE_dict
-
-SE_dict = {}		
+return PE_dict
+		
 
 def SE_dict():
 
-
+	SE_dict = {}
 	
 	for root,dirs,files in os.walk(options.directory):
 		for file in files:
@@ -101,13 +98,13 @@ def SE_dict():
 					if key not in SE_dict.keys():
 						SE_dict[key] = value
 			print SE_dict
-			return SE_dict
 			for key in SE_dict.keys():
 				foo = key.split(".")
 				print foo[0]
 				file = foo[0]+".SE.qtrim"
 				value = SE_dict[key]
 				os.system("cat ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./"+options.directory+"/"+file)
+return SE_dict
 		
 		
 #def single():
