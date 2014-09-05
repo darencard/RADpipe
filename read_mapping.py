@@ -98,13 +98,14 @@ def make_SE_dict():
 					if key not in SE_dict.keys():
 						SE_dict[key] = value
 			print SE_dict
+			return SE_dict
+			
 			for key in SE_dict.keys():
 				foo = key.split(".")
 				print foo[0]
 				file = foo[0]+".SE.qtrim"
 				value = SE_dict[key]
 				os.system("cat ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./"+options.directory+"/"+file)
-		return SE_dict
 		
 		
 #def single():
