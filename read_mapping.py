@@ -100,7 +100,7 @@ def make_SE_dict(SE_dict):
 					value = "SE"
 					if key not in SE_dict.keys():
 						SE_dict[key] = value
-			print SE_dict
+		print SE_dict
 			
 			
 def cat_SE(SE_dict):
@@ -138,8 +138,12 @@ def SE_map(SE_dict):
 				if name[1] == "SE":
 					input = str(name[0])+"."+str(name[1])+"."+str(name[2])
 					output = name[0]+".SE.sam"
-					print "bwa mem "+str(options.threads)+" "+str(options.bwa)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output
-					os.system("bwa mem -t"+str(options.threads)+" "+str(options.bwa)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output)
+					if options.bwa == "None":
+						params = ""
+					else:
+						params = options.bwa
+					print "bwa mem "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output
+					os.system("bwa mem -t"+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output)
 
 def sam2bam():
 	for root,dirs,files in os.walk("mapping"):
