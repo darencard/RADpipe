@@ -142,20 +142,17 @@ def PE_map():
 	
 def SE_map():
 	SE_dict = make_SE_dict()
-	for root,dirs,files in os.walk(options.directory):
+	for key in SE_dict.keys():
 		print "Mapping SE reads"
-	for file in files:
-		if file.endswith(".SE."+options.ext):
-			name = file.split(os.extsep)
-			if name[1] == "SE":
-				input = str(name[0])+"."+str(name[1])+"."+str(name[2])
-				output = name[0]+".SE.sam"
-				if options.bwa == None:
-					params = ""
-				else:
-					params = options.bwa
-				print "bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output
-				os.system("bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output)
+		foo = key.split(".")
+		print foo[0]
+		file = foo[0]+".SE.sam"
+		if options.bwa == None:
+			params = ""
+		else:
+			params = options.bwa
+		print "bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output
+		os.system("bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output)
 
 def sam2bam():
 	for root,dirs,files in os.walk("mapping"):
@@ -173,7 +170,7 @@ def PE_bam_process():
 	for root,dirs,files in os.walk("mapping"):
 		print "Processing PE BAMs"
 	for file in files:
-		if file.endswith(".bam"):
+		if file.endswith(".PE.bam"):
 			name = file.split(os.extsep)
 			sample = name[0]
 			PEin = name[0]+".PE.bam"
@@ -192,7 +189,7 @@ def SE_bam_process():
 	for root,dirs,files in os.walk("mapping"):
 		print "Processing SE BAMs"
 	for file in files:
-		if file.endswith(".bam"):
+		if file.endswith(".SE.bam"):
 			name = file.split(os.extsep)
 			sample = name[0]
 			SEin = name[0]+".SE.bam"
@@ -209,21 +206,24 @@ def main():
 	for root,dirs,files in os.walk(options.directory):
 		print "Running pipeline"
 		print files
+	counter = 0
 	for file in files:
-		if file.endswith("."+options.ext):
-			name = file.split(os.extsep)
-			if name[1] == "SE":
-#				make_SE_dict(SE_dict)
-				SE_map()
-				sam2bam()
-				SE_bam_process()
-			else:
-#				make_PE_dict(PE_dict)
-#				make_SE_dict(SE_dict)
-				PE_map()
-				SE_map()
-				sam2bam()
-				PE_bam_process()
+		if counter >= 1:
+			if file.endswith("."+options.ext):
+				name = file.split(os.extsep)
+				if name[1] == "SE":
+#					make_SE_dict(SE_dict)
+					SE_map()
+					sam2bam()
+					SE_bam_process()
+				else:
+#					make_PE_dict(PE_dict)
+#					make_SE_dict(SE_dict)
+					PE_map()
+					SE_map()
+					sam2bam()
+					PE_bam_process()
+				counter += 1
 	if options.sams == True:
 		print "SAM output will be saved"
 	else:
