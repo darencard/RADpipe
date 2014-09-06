@@ -221,7 +221,6 @@ def main():
 				SE_map()
 				sam2bam()
 				PE_bam_process()
-			counter += 1
 	if options.sams == True:
 		print "SAM output will be saved"
 	else:
