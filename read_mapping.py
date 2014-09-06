@@ -69,8 +69,8 @@ def make_PE_dict():
 			name = file.split(os.extsep)
 			if name[1] == "P1":
 				root = name[0]
-				root = name[1]
-				root = name[2]
+				read = name[1]
+				ext = name[2]
 				key = str(root)+"."+str(read)+"."+str(ext)
 				value = str(root)+".P2."+str(ext)
 				if key not in PE_dict.keys():
