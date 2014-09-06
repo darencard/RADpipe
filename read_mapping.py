@@ -119,7 +119,7 @@ def PE_map(PE_dict):
 		print foo[0]
 		file = foo[0]+".PE.sam"
 		value = PE_dict[key]
-		os.system("bwa mem -t "+options.threads+" "+options.bwa+" "+options.reference+" ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./mapping/"+file)
+		os.system("bwa mem -t "+str(options.threads)+" "+options.bwa+" "+options.reference+" ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./mapping/"+file)
 
 
 	
@@ -132,7 +132,7 @@ def SE_map(SE_dict):
 				if name[1] == "SE":
 					input = str(name[0])+"."+str(name[1])+"."+str(name[2])
 					output = name[0]+".SE.sam"
-					os.system("bwa mem "+options.threads+" "+options.bwa+" "+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output)
+					os.system("bwa mem "+str(options.threads)+" "+options.bwa+" "+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output)
 
 def sam2bam():
 	for root,dirs,files in os.walk("mapping"):
