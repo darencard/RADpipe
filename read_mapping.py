@@ -127,7 +127,7 @@ def index_ref():
 	
 	
 def PE_map():
-	make_PE_dict()
+	PE_dict = make_PE_dict()
 	for key in PE_dict.keys():
 		print "Mapping PE reads"
 		foo = key.split(".")
