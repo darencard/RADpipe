@@ -204,6 +204,7 @@ def main():
 #	os.system("mkdir mapping")
 #	index_ref()
 	for root,dirs,files in os.walk(options.directory):
+		print "Running pipeline"
 	for file in files:
 		if file.endswith("."+options.ext):
 			name = file.split(os.extsep)
