@@ -129,6 +129,7 @@ def PE_map(PE_dict):
 	
 def SE_map(SE_dict):
 	for root,dirs,files in os.walk(options.directory):
+		print "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 		for file in files:
 			if file.endswith(".SE.qtrim"):
 				name = file.split(os.extsep)
@@ -139,6 +140,7 @@ def SE_map(SE_dict):
 
 def sam2bam():
 	for root,dirs,files in os.walk("mapping"):
+		print "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 		for file in files:
 			if file.endswith(".sam"):
 				name = file.split(os.extsep)
@@ -149,6 +151,7 @@ def sam2bam():
 
 def bam_process():
 	for root,dirs,files in os.walk("mapping"):
+		print "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 		for file in files:
 			if file.endswith(".bam"):
 				name = file.split(os.extsep)
