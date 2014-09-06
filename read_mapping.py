@@ -21,7 +21,7 @@ Naming conventions for read files are as follows:														\
 	a. P1 and P2 for paired reads, with P1 designated for the single-end reads and P2 designated for the paired-end reads \
 	b. S1 and S2 for paired reads in which the pairs were broken during quality trimming, with S1 designated \
 	for the single-end broken reads and S2 designated for the paired-end broken reads.						\
-	c. S1 for non-paired, single-end reads																	\
+	c. SE for non-paired, single-end reads																	\
 3. A file root with the name of the sample																	\
 Example: ID1234_Loc1_ACTTAG-GTACAG.P1.fastq = single-end reads of paired reads of sample ID1234_Loc1_ACTTAG-GTACAG \
 Note: Reads that do not have this file name formatting will probably not be run correctly. 
@@ -54,9 +54,6 @@ PE_dict = {}
 SE_dict = {}
 
 def make_PE_dict(PE_dict):
-
-#	PE_dict = {}
-	
 	for root,dirs,files in os.walk(options.directory):
 		for file in files:
 			if file.endswith(".qtrim"):
@@ -79,41 +76,40 @@ def make_PE_dict(PE_dict):
 		
 
 def make_SE_dict(SE_dict):
-
-#	SE_dict = {}
-	
 	for root,dirs,files in os.walk(options.directory):
 		for file in files:
 			if file.endswith(".qtrim"):
-				print file
 				name = file.split(os.extsep)
-				print name
 				if name[1] == "S1":
 					root = name[0]
-					print root
 					read = name[1]
-					print name
 					ext = name[2]
-					print ext
 					key = str(root)+"."+str(read)+"."+str(ext)
 					value = str(root)+".S2."+str(ext)
 					if key not in SE_dict.keys():
 						SE_dict[key] = value
-			print SE_dict
-#			return SE_dict
+					cat_SE(SE_dict)
+				if name[1] == "SE":
+					root = name[0]
+					read = name[1]
+					ext = name[2]
+					key = str(root)+"."+str(read)+"."+str(ext)
+					value = "SE"
+					if key not in SE_dict.keys():
+						SE_dict[key] = value
 			
-			for key in SE_dict.keys():
-				foo = key.split(".")
-				print foo[0]
-				file = foo[0]+".SE.qtrim"
-				value = SE_dict[key]
-				os.system("cat ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./"+options.directory+"/"+file)	
+			
+def cat_SE(SE_dict):
+	for key in SE_dict.keys():
+		foo = key.split(".")
+		file = foo[0]+".SE.qtrim"
+		value = SE_dict[key]
+		print "cat ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./"+options.directory+"/"+file
+		os.system("cat ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./"+options.directory+"/"+file)	
 		
 				
 def index_ref():
-	os.system("bwa index "+options.reference)
-	
-	
+	os.system("bwa index "+options.reference)	
 	
 	
 def PE_map(PE_dict):
