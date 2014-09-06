@@ -14,8 +14,9 @@ To report bugs or errors, please contact Daren Card (dcard@uta.edu).
 This script is provided as-is, with no support and no guarantee of proper or desirable functioning.
 
 Script that takes read files (paired or unpaired) and maps them to a reference sequence (genome) using bwa. \
-Input is a reference sequence in fasta format and the directory containing the read files to be mapped. \
-Naming conventions for read files are as follows:														\
+Note that this script only uses the 'mem' bwa mapping algorithm and can't be used with other algorithms without \
+modification. Input is a reference sequence in fasta format and the directory containing the read files to be  \
+mapped. Naming conventions for read files are as follows:														\
 1. The file extension (normally .fastq) must match that passed to the command with the '--ext' flag.	\
 2. Prior to the extension, there must be an indication of the read type (single or paired) as follows: \
 	a. P1 and P2 for paired reads, with P1 designated for the single-end reads and P2 designated for the paired-end reads \
@@ -26,14 +27,14 @@ Naming conventions for read files are as follows:														\
 Example: ID1234_Loc1_ACTTAG-GTACAG.P1.fastq = single-end reads of paired reads of sample ID1234_Loc1_ACTTAG-GTACAG \
 Note: Reads that do not have this file name formatting will probably not be run correctly. 
 
-One can also pass the number of threads that can be used for mapping. The script will create an indexed reference, map \
-all reads from each sample to the reference to create a SAM mapping file, convert the SAM mapping file to a BAM mapping \
-file, merge BAM mapping files where necessary, and sort and index each sample BAM file. It will also remove the larger \
-SAM files to save on space unless the '--keep_sams' flag is passed. All mapping files are outputted to the 'mapping' \
-directory that is created in the working directory by the script.														\
+One can also pass the number of threads that can be used for mapping and any of the bwa mapping flags (as one text string). \
+The script will create an indexed reference, map all reads from each sample to the reference to create a SAM mapping file, \
+convert the SAM mapping file to a BAM mapping file, merge BAM mapping files where necessary, and sort and index each sample  \
+BAM file. It will also remove the larger SAM files to save on space unless the '--keep_sams' flag is passed. All mapping  \
+files are outputted to the 'mapping' directory that is created in the working directory by the script.						\								\
 
 python read_mapping.py --reference <reference.fasta> --read_dir <directory_of_reads> --ext <file_ext> [--threads <#threads> \
---keep_sams]							
+--bwa_opts <options_string> --keep_sams]							
 """
 
 #################################################
@@ -47,6 +48,8 @@ parser.add_option("--reference", action = "store", type = "string", dest = "refe
 parser.add_option("--read_dir", action = "store", type = "string", dest = "directory", help = "the directory containing your reads")
 parser.add_option("--threads", action = "store", type = "string", dest = "threads", help = "number of threads/cores to use [1]", default = "1")
 parser.add_option("--ext", action = "store", dest = "ext", help = "the file extension of the read files")
+parser.add_option("--bwa_opts", action = "store", dest = "bwa", help = "all additional bwa mapping options as a text string")
+parser.add_option("--keep_sams", action = "store_true", dest = "sams", help = "keep the SAM mapping files", default = "False")
 
 options, args = parser.parse_args()
 
@@ -56,10 +59,8 @@ SE_dict = {}
 def make_PE_dict(PE_dict):
 	for root,dirs,files in os.walk(options.directory):
 		for file in files:
-			if file.endswith(".qtrim"):
-				print file
+			if file.endswith("."+options.ext):
 				name = file.split(os.extsep)
-				print name
 				if name[1] == "P1":
 					root = name[0]
 					print root
@@ -72,13 +73,12 @@ def make_PE_dict(PE_dict):
 					if key not in PE_dict.keys():
 						PE_dict[key] = value
 			print PE_dict
-#			return PE_dict
 		
 
 def make_SE_dict(SE_dict):
 	for root,dirs,files in os.walk(options.directory):
 		for file in files:
-			if file.endswith(".qtrim"):
+			if file.endswith("."+options.ext):
 				name = file.split(os.extsep)
 				if name[1] == "S1":
 					root = name[0]
@@ -102,7 +102,7 @@ def make_SE_dict(SE_dict):
 def cat_SE(SE_dict):
 	for key in SE_dict.keys():
 		foo = key.split(".")
-		file = foo[0]+".SE.qtrim"
+		file = foo[0]+".SE."+options.ext
 		value = SE_dict[key]
 		print "cat ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./"+options.directory+"/"+file
 		os.system("cat ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./"+options.directory+"/"+file)	
@@ -119,7 +119,7 @@ def PE_map(PE_dict):
 		print foo[0]
 		file = foo[0]+".PE.sam"
 		value = PE_dict[key]
-		os.system("bwa mem "+options.reference+" ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./mapping/"+file)
+		os.system("bwa mem -t "+options.threads+" "+options.bwa+" "+options.reference+" ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./mapping/"+file)
 
 
 	
@@ -127,12 +127,12 @@ def SE_map(SE_dict):
 	for root,dirs,files in os.walk(options.directory):
 		print "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 		for file in files:
-			if file.endswith(".SE.qtrim"):
+			if file.endswith(".SE."+options.ext):
 				name = file.split(os.extsep)
 				if name[1] == "SE":
 					input = str(name[0])+"."+str(name[1])+"."+str(name[2])
 					output = name[0]+".SE.sam"
-					os.system("bwa mem "+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output)
+					os.system("bwa mem "+options.threads+" "+options.bwa+" "+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output)
 
 def sam2bam():
 	for root,dirs,files in os.walk("mapping"):
@@ -159,7 +159,6 @@ def PE_bam_process():
 				os.system("samtools merge -f ./mapping/"+Merge_out+" ./mapping/"+PEin+" ./mapping/"+SEin)
 				os.system("samtools sort ./mapping/"+Merge_out+" ./mapping/"+Sort_out)
 				os.system("samtools index ./mapping/"+Sort_out+".bam")
-#				os.system("rm -f ./mapping/*.sam")
 
 
 def SE_bam_process():
@@ -173,17 +172,30 @@ def SE_bam_process():
 				Sort_out = name[0]+".sort"
 				os.system("samtools sort ./mapping/"+SEin+" ./mapping/"+Sort_out)
 				os.system("samtools index ./mapping/"+Sort_out+".bam")
-#				os.system("rm -f ./mapping/*.sam")
 
 		
 def main():
-#	os.system("mkdir mapping")	
-	make_PE_dict(PE_dict)
-	make_SE_dict(SE_dict)
+#	os.system("mkdir mapping")
 #	index_ref()
-	PE_map(PE_dict)
-	SE_map(SE_dict)
-	sam2bam()
-	SE_bam_process()
+	for root,dirs,files in os.walk(options.directory):
+		for file in files:
+			if file.endswith("."+options.ext):
+				name = file.split(os.extsep)
+				if name[1] == "SE":
+					make_SE_dict(SE_dict)
+					SE_map(SE_dict)
+					sam2bam()
+					SE_bam_process()
+				else:
+					make_PE_dict(PE_dict)
+					make_SE_dict(SE_dict)
+					PE_map(PE_dict)
+					SE_map(SE_dict)
+					sam2bam()
+					PE_bam_process()
+	if options.sam == "True":
+		print "SAM output will be saved"
+	else:
+		os.system("rm -f ./mapping/*.sam")
 		
 main()
