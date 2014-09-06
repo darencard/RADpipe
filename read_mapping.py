@@ -144,7 +144,7 @@ def PE_map():
 
 	
 def SE_map():
-	make_SE_dict()
+	SE_dict = make_SE_dict()
 	for root,dirs,files in os.walk(options.directory):
 		print "Mapping SE reads"
 	for file in files:
