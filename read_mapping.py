@@ -215,14 +215,14 @@ def main():
 			name = file.split(os.extsep)
 			if name[1] == "SE":
 #				make_SE_dict(SE_dict)
-				SE_map(SE_dict)
+				SE_map()
 				sam2bam()
 				SE_bam_process()
 			else:
 #				make_PE_dict(PE_dict)
 #				make_SE_dict(SE_dict)
-				PE_map(PE_dict)
-				SE_map(SE_dict)
+				PE_map()
+				SE_map()
 				sam2bam()
 				PE_bam_process()
 	if options.sams == True:
