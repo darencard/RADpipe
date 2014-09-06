@@ -61,7 +61,7 @@ PE_dict = {}
 SE_dict = {}
 
 def make_PE_dict(PE_dict):
-	for root,dirs,files in os.walk(options.directory):
+	root,dirs,files in os.walk(options.directory):
 	print "making PE_dict"
 	for file in files:
 		if file.endswith("."+options.ext):
