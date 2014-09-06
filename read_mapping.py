@@ -162,7 +162,7 @@ def bam_process():
 				Sort_out = name[0]+".merge.sort"
 				os.system("samtools merge -f ./mapping/"+Merge_out+" ./mapping/"+PEin+" ./mapping/"+SEin)
 				os.system("samtools sort -f ./mapping/"+Merge_out+" ./mapping/"+Sort_out)
-				os.system("samtools index -f ./mapping/"+Sort_out)
+				os.system("samtools index ./mapping/"+Sort_out+".bam")
 #				os.system("rm -f ./mapping/*.sam")
 
 		
