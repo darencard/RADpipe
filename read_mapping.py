@@ -79,7 +79,7 @@ def make_PE_dict():
 				if key not in PE_dict.keys():
 					PE_dict[key] = value
 	print PE_dict
-	return PE_dict
+return PE_dict
 		
 
 def make_SE_dict():
