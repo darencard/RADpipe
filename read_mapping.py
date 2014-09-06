@@ -48,7 +48,7 @@ parser.add_option("--reference", action = "store", type = "string", dest = "refe
 parser.add_option("--read_dir", action = "store", type = "string", dest = "directory", help = "the directory containing your reads")
 parser.add_option("--threads", action = "store", type = "string", dest = "threads", help = "number of threads/cores to use [1]", default = "1")
 parser.add_option("--ext", action = "store", dest = "ext", help = "the file extension of the read files")
-parser.add_option("--bwa_opts", action = "store", dest = "bwa", help = "all additional bwa mapping options as a text string")
+parser.add_option("--bwa_opts", action = "store", dest = "bwa", help = "all additional bwa mapping options as a text string, in quotes")
 parser.add_option("--keep_sams", action = "store_true", dest = "sams", help = "keep the SAM mapping files", default = "False")
 
 options, args = parser.parse_args()
@@ -124,6 +124,10 @@ def PE_map(PE_dict):
 		print foo[0]
 		file = foo[0]+".PE.sam"
 		value = PE_dict[key]
+		if options.bwa == None:
+			params = ""
+		else:
+			params = options.bwa
 		print "bwa mem -t "+str(options.threads)+" "+str(options.bwa)+" ./"+options.reference+" ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./mapping/"+file
 		os.system("bwa mem -t "+str(options.threads)+" "+str(options.bwa)+" ./"+options.reference+" ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./mapping/"+file)
 
@@ -142,8 +146,8 @@ def SE_map(SE_dict):
 						params = ""
 					else:
 						params = options.bwa
-					print "bwa mem "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output
-					os.system("bwa mem -t"+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output)
+					print "bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output
+					os.system("bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output)
 
 def sam2bam():
 	for root,dirs,files in os.walk("mapping"):
@@ -210,7 +214,7 @@ def main():
 					SE_map(SE_dict)
 					sam2bam()
 					PE_bam_process()
-	if options.sams == "True":
+	if options.sams == True:
 		print "SAM output will be saved"
 	else:
 		os.system("rm -f ./mapping/*.sam")
