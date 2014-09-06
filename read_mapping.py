@@ -68,11 +68,8 @@ def make_PE_dict():
 		if file.endswith("."+options.ext):
 			name = file.split(os.extsep)
 			if name[1] == "P1":
-				root = name[0]
 				print root
-				read = name[1]
 				print name
-				ext = name[2]
 				print ext
 				key = str(root)+"."+str(read)+"."+str(ext)
 				value = str(root)+".P2."+str(ext)
@@ -98,8 +95,7 @@ def make_SE_dict():
 				value = str(root)+".S2."+str(ext)
 				if key not in SE_dict.keys():
 					SE_dict[key] = value
-				return SE_dict
-				cat_SE()
+				cat_SE(SE_dict)
 			if name[1] == "SE":
 				print "Making SE_dict"
 				root = name[0]
@@ -113,7 +109,7 @@ def make_SE_dict():
 	return SE_dict
 			
 			
-def cat_SE():
+def cat_SE(SE_dict):
 	print "Concatenating single-end reads"
 	for key in SE_dict.keys():
 		foo = key.split(".")
@@ -212,6 +208,7 @@ def main():
 #	index_ref()
 	for root,dirs,files in os.walk(options.directory):
 		print "Running pipeline"
+		print files
 	for file in files:
 		if file.endswith("."+options.ext):
 			name = file.split(os.extsep)
