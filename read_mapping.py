@@ -193,7 +193,7 @@ def main():
 					SE_map(SE_dict)
 					sam2bam()
 					PE_bam_process()
-	if options.sam == "True":
+	if options.sams == "True":
 		print "SAM output will be saved"
 	else:
 		os.system("rm -f ./mapping/*.sam")
