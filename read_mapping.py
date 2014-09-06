@@ -160,9 +160,9 @@ def bam_process():
 				SEin = name[0]+".SE.bam"
 				Merge_out = name[0]+".merge.bam"
 				Sort_out = name[0]+".merge.sort"
-				os.system("samtools merge ./mapping/"+Merge_out+" ./mapping/"+PEin+" ./mapping/"+SEin)
-				os.system("samtools sort ./mapping/"+Merge_out+" ./mapping/"+Sort_out)
-				os.system("samtools index ./mapping/"+Sort_out)
+				os.system("samtools merge -f ./mapping/"+Merge_out+" ./mapping/"+PEin+" ./mapping/"+SEin)
+				os.system("samtools sort -f ./mapping/"+Merge_out+" ./mapping/"+Sort_out)
+				os.system("samtools index -f ./mapping/"+Sort_out)
 #				os.system("rm -f ./mapping/*.sam")
 
 		
