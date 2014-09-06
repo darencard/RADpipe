@@ -135,8 +135,8 @@ def PE_map():
 			params = ""
 		else:
 			params = options.bwa
-		print "bwa mem -t "+str(options.threads)+" "+str(options.bwa)+" ./"+options.reference+" ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./mapping/"+file
-		os.system("bwa mem -t "+str(options.threads)+" "+str(options.bwa)+" ./"+options.reference+" ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./mapping/"+file)
+		print "bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./mapping/"+file
+		os.system("bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./mapping/"+file)
 
 
 	
