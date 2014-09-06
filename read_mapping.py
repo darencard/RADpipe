@@ -96,7 +96,7 @@ def make_SE_dict(SE_dict):
 				value = str(root)+".S2."+str(ext)
 				if key not in SE_dict.keys():
 					SE_dict[key] = value
-				cat_SE(SE_dict)
+				cat_SE()
 			if name[1] == "SE":
 				print "Making SE_dict"
 				root = name[0]
