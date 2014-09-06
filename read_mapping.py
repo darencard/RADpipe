@@ -151,8 +151,8 @@ def SE_map():
 			params = ""
 		else:
 			params = options.bwa
-		print "bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output
-		os.system("bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output)
+		print "bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+key+" > ./mapping/"+output
+		os.system("bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+key+" > ./mapping/"+output)
 
 def sam2bam():
 	for root,dirs,files in os.walk("mapping"):
