@@ -57,10 +57,11 @@ parser.add_option("--keep_sams", action = "store_true", dest = "sams", help = "k
 
 options, args = parser.parse_args()
 
-PE_dict = {}
-SE_dict = {}
 
-def make_PE_dict(PE_dict):
+
+
+def make_PE_dict():
+	PE_dict = {}
 	for root,dirs,files in os.walk(options.directory):
 		print "making PE_dict"
 	for file in files:
@@ -81,7 +82,8 @@ def make_PE_dict(PE_dict):
 		return PE_dict
 		
 
-def make_SE_dict(SE_dict):
+def make_SE_dict():
+	SE_dict = {}
 	for root,dirs,files in os.walk(options.directory):
 		print "Making SE_dict"
 	for file in files:
@@ -111,7 +113,7 @@ def make_SE_dict(SE_dict):
 			
 			
 def cat_SE():
-	make_SE_dict(SE_dict)
+	make_SE_dict()
 	print "Concatenating single-end reads"
 	for key in SE_dict.keys():
 		foo = key.split(".")
@@ -126,7 +128,7 @@ def index_ref():
 	
 	
 def PE_map():
-	make_PE_dict(PE_dict)
+	make_PE_dict()
 	for key in PE_dict.keys():
 		print "Mapping PE reads"
 		foo = key.split(".")
@@ -143,7 +145,7 @@ def PE_map():
 
 	
 def SE_map():
-	make_SE_dict(SE_dict)
+	make_SE_dict()
 	for root,dirs,files in os.walk(options.directory):
 		print "Mapping SE reads"
 	for file in files:
