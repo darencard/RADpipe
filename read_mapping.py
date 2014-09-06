@@ -110,7 +110,7 @@ def make_SE_dict(SE_dict):
 	return SE_dict
 			
 			
-def cat_SE(SE_dict):
+def cat_SE():
 	make_SE_dict(SE_dict)
 	print "Concatenating single-end reads"
 	for key in SE_dict.keys():
@@ -125,7 +125,7 @@ def index_ref():
 	os.system("bwa index "+options.reference)	
 	
 	
-def PE_map(PE_dict):
+def PE_map():
 	make_PE_dict(PE_dict)
 	for key in PE_dict.keys():
 		print "Mapping PE reads"
@@ -142,7 +142,7 @@ def PE_map(PE_dict):
 
 
 	
-def SE_map(SE_dict):
+def SE_map():
 	make_SE_dict(SE_dict)
 	for root,dirs,files in os.walk(options.directory):
 		print "Mapping SE reads"
