@@ -139,7 +139,7 @@ def SE_map(SE_dict):
 					input = str(name[0])+"."+str(name[1])+"."+str(name[2])
 					output = name[0]+".SE.sam"
 					print "bwa mem "+str(options.threads)+" "+str(options.bwa)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output
-					os.system("bwa mem "+str(options.threads)+" "+str(options.bwa)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output)
+					os.system("bwa mem -t"+str(options.threads)+" "+str(options.bwa)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output)
 
 def sam2bam():
 	for root,dirs,files in os.walk("mapping"):
