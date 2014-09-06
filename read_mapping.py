@@ -61,10 +61,10 @@ PE_dict = {}
 SE_dict = {}
 
 def make_PE_dict(PE_dict):
-	root,dirs,files in os.walk(options.directory)
-	print "making PE_dict"
-	for file in files:
-		if file.endswith("."+options.ext):
+	for root,dirs,files in os.walk(options.directory):
+		print "making PE_dict"
+#	for file in files:
+		if files.endswith("."+options.ext):
 			name = file.split(os.extsep)
 			if name[1] == "P1":
 				root = name[0]
@@ -81,10 +81,10 @@ def make_PE_dict(PE_dict):
 		
 
 def make_SE_dict(SE_dict):
-	root,dirs,files in os.walk(options.directory)
-	print "Making SE_dict"
-	for file in files:
-		if file.endswith("."+options.ext):
+	for root,dirs,files in os.walk(options.directory):
+		print "Making SE_dict"
+#	for file in files:
+		if files.endswith("."+options.ext):
 			name = file.split(os.extsep)
 			if name[1] == "S1":
 				print "Making SE_dict"
@@ -139,10 +139,10 @@ def PE_map(PE_dict):
 
 	
 def SE_map(SE_dict):
-	root,dirs,files in os.walk(options.directory)
-	print "Mapping SE reads"
-	for file in files:
-		if file.endswith(".SE."+options.ext):
+	for root,dirs,files in os.walk(options.directory):
+		print "Mapping SE reads"
+#	for file in files:
+		if files.endswith(".SE."+options.ext):
 			name = file.split(os.extsep)
 			if name[1] == "SE":
 				input = str(name[0])+"."+str(name[1])+"."+str(name[2])
@@ -155,10 +155,10 @@ def SE_map(SE_dict):
 				os.system("bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output)
 
 def sam2bam():
-	root,dirs,files in os.walk("mapping")
-	print "Converting to BAM"
-	for file in files:
-		if file.endswith(".sam"):
+	for root,dirs,files in os.walk("mapping"):
+		print "Converting to BAM"
+#	for file in files:
+		if files.endswith(".sam"):
 			name = file.split(os.extsep)
 			input = name[0]+"."+name[1]+".sam"
 			output = name[0]+"."+name[1]+".bam"
@@ -167,10 +167,10 @@ def sam2bam():
 				
 
 def PE_bam_process():
-	root,dirs,files in os.walk("mapping")
-	print "Processing PE BAMs"
-	for file in files:
-		if file.endswith(".bam"):
+	for root,dirs,files in os.walk("mapping"):
+		print "Processing PE BAMs"
+#	for file in files:
+		if files.endswith(".bam"):
 			name = file.split(os.extsep)
 			sample = name[0]
 			PEin = name[0]+".PE.bam"
@@ -186,10 +186,10 @@ def PE_bam_process():
 
 
 def SE_bam_process():
-	root,dirs,files in os.walk("mapping")
-	print "Processing SE BAMs"
-	for file in files:
-		if file.endswith(".bam"):
+	for root,dirs,files in os.walk("mapping"):
+		print "Processing SE BAMs"
+#	for file in files:
+		if files.endswith(".bam"):
 			name = file.split(os.extsep)
 			sample = name[0]
 			SEin = name[0]+".SE.bam"
@@ -203,11 +203,10 @@ def SE_bam_process():
 def main():
 #	os.system("mkdir mapping")
 #	index_ref()
-	root,dirs,files in os.walk(options.directory)
-	print files
-	print "Running pipeline"
-	for file in files:
-		if file.endswith("."+options.ext):
+	for root,dirs,files in os.walk(options.directory):
+		print "Running pipeline"
+#	for file in files:
+		if files.endswith("."+options.ext):
 			name = file.split(os.extsep)
 			if name[1] == "SE":
 				make_SE_dict(SE_dict)
