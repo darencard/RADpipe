@@ -206,24 +206,22 @@ def main():
 	for root,dirs,files in os.walk(options.directory):
 		print "Running pipeline"
 		print files
-	counter = 0
 	for file in files:
-		if counter >= 1:
-			if file.endswith("."+options.ext):
-				name = file.split(os.extsep)
-				if name[1] == "SE":
-#					make_SE_dict(SE_dict)
-					SE_map()
-					sam2bam()
-					SE_bam_process()
-				else:
-#					make_PE_dict(PE_dict)
-#					make_SE_dict(SE_dict)
-					PE_map()
-					SE_map()
-					sam2bam()
-					PE_bam_process()
-					counter += 1
+		if file.endswith("."+options.ext):
+			name = file.split(os.extsep)
+			if name[1] == "SE":
+#				make_SE_dict(SE_dict)
+				SE_map()
+				sam2bam()
+				SE_bam_process()
+			else:
+#				make_PE_dict(PE_dict)
+#				make_SE_dict(SE_dict)
+				PE_map()
+				SE_map()
+				sam2bam()
+				PE_bam_process()
+			counter += 1
 	if options.sams == True:
 		print "SAM output will be saved"
 	else:
