@@ -62,6 +62,7 @@ def make_PE_dict(PE_dict):
 			if file.endswith("."+options.ext):
 				name = file.split(os.extsep)
 				if name[1] == "P1":
+					print "making PE_dict"
 					root = name[0]
 					print root
 					read = name[1]
@@ -81,6 +82,7 @@ def make_SE_dict(SE_dict):
 			if file.endswith("."+options.ext):
 				name = file.split(os.extsep)
 				if name[1] == "S1":
+					print "Making SE_dict"
 					root = name[0]
 					read = name[1]
 					ext = name[2]
@@ -90,6 +92,7 @@ def make_SE_dict(SE_dict):
 						SE_dict[key] = value
 					cat_SE(SE_dict)
 				if name[1] == "SE":
+					print "Making SE_dict"
 					root = name[0]
 					read = name[1]
 					ext = name[2]
@@ -100,6 +103,7 @@ def make_SE_dict(SE_dict):
 			
 			
 def cat_SE(SE_dict):
+	print "Concatenating single-end reads"
 	for key in SE_dict.keys():
 		foo = key.split(".")
 		file = foo[0]+".SE."+options.ext
@@ -114,7 +118,7 @@ def index_ref():
 	
 def PE_map(PE_dict):
 	for key in PE_dict.keys():
-		print "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+		print "Mapping PE reads"
 		foo = key.split(".")
 		print foo[0]
 		file = foo[0]+".PE.sam"
@@ -125,7 +129,7 @@ def PE_map(PE_dict):
 	
 def SE_map(SE_dict):
 	for root,dirs,files in os.walk(options.directory):
-		print "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+		print "Mapping SE reads"
 		for file in files:
 			if file.endswith(".SE."+options.ext):
 				name = file.split(os.extsep)
@@ -136,7 +140,7 @@ def SE_map(SE_dict):
 
 def sam2bam():
 	for root,dirs,files in os.walk("mapping"):
-		print "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+		print "Converting to BAM"
 		for file in files:
 			if file.endswith(".sam"):
 				name = file.split(os.extsep)
@@ -147,7 +151,7 @@ def sam2bam():
 
 def PE_bam_process():
 	for root,dirs,files in os.walk("mapping"):
-		print "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+		print "Processing PE BAMs"
 		for file in files:
 			if file.endswith(".bam"):
 				name = file.split(os.extsep)
@@ -163,7 +167,7 @@ def PE_bam_process():
 
 def SE_bam_process():
 	for root,dirs,files in os.walk("mapping"):
-		print "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+		print "Processing SE BAMs"
 		for file in files:
 			if file.endswith(".bam"):
 				name = file.split(os.extsep)
