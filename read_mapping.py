@@ -100,6 +100,7 @@ def make_SE_dict(SE_dict):
 					value = "SE"
 					if key not in SE_dict.keys():
 						SE_dict[key] = value
+			print SE_dict
 			
 			
 def cat_SE(SE_dict):
@@ -123,6 +124,7 @@ def PE_map(PE_dict):
 		print foo[0]
 		file = foo[0]+".PE.sam"
 		value = PE_dict[key]
+		print "bwa mem -t "+str(options.threads)+" "+str(options.bwa)+" ./"+options.reference+" ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./mapping/"+file
 		os.system("bwa mem -t "+str(options.threads)+" "+str(options.bwa)+" ./"+options.reference+" ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./mapping/"+file)
 
 
@@ -136,6 +138,7 @@ def SE_map(SE_dict):
 				if name[1] == "SE":
 					input = str(name[0])+"."+str(name[1])+"."+str(name[2])
 					output = name[0]+".SE.sam"
+					print "bwa mem "+str(options.threads)+" "+str(options.bwa)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output
 					os.system("bwa mem "+str(options.threads)+" "+str(options.bwa)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+output)
 
 def sam2bam():
@@ -146,6 +149,7 @@ def sam2bam():
 				name = file.split(os.extsep)
 				input = name[0]+"."+name[1]+".sam"
 				output = name[0]+"."+name[1]+".bam"
+				print "samtools view -bS ./mapping/"+input+" > ./mapping/"+output
 				os.system("samtools view -bS ./mapping/"+input+" > ./mapping/"+output)
 				
 
@@ -160,8 +164,11 @@ def PE_bam_process():
 				SEin = name[0]+".SE.bam"
 				Merge_out = name[0]+".merge.bam"
 				Sort_out = name[0]+".merge.sort"
+				print "samtools merge -f ./mapping/"+Merge_out+" ./mapping/"+PEin+" ./mapping/"+SEin
 				os.system("samtools merge -f ./mapping/"+Merge_out+" ./mapping/"+PEin+" ./mapping/"+SEin)
+				print "samtools sort ./mapping/"+Merge_out+" ./mapping/"+Sort_out
 				os.system("samtools sort ./mapping/"+Merge_out+" ./mapping/"+Sort_out)
+				print "samtools index ./mapping/"+Sort_out+".bam"
 				os.system("samtools index ./mapping/"+Sort_out+".bam")
 
 
@@ -174,7 +181,9 @@ def SE_bam_process():
 				sample = name[0]
 				SEin = name[0]+".SE.bam"
 				Sort_out = name[0]+".sort"
+				print "samtools sort ./mapping/"+SEin+" ./mapping/"+Sort_out
 				os.system("samtools sort ./mapping/"+SEin+" ./mapping/"+Sort_out)
+				print "samtools index ./mapping/"+Sort_out+".bam"
 				os.system("samtools index ./mapping/"+Sort_out+".bam")
 
 		
