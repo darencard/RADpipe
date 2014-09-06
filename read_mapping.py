@@ -145,7 +145,7 @@ def sam2bam():
 				os.system("samtools view -bS ./mapping/"+input+" > ./mapping/"+output)
 				
 
-def bam_process():
+def PE_bam_process():
 	for root,dirs,files in os.walk("mapping"):
 		print "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 		for file in files:
@@ -161,6 +161,20 @@ def bam_process():
 				os.system("samtools index ./mapping/"+Sort_out+".bam")
 #				os.system("rm -f ./mapping/*.sam")
 
+
+def SE_bam_process():
+	for root,dirs,files in os.walk("mapping"):
+		print "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+		for file in files:
+			if file.endswith(".bam"):
+				name = file.split(os.extsep)
+				sample = name[0]
+				SEin = name[0]+".SE.bam"
+				Sort_out = name[0]+".sort"
+				os.system("samtools sort ./mapping/"+SEin+" ./mapping/"+Sort_out)
+				os.system("samtools index ./mapping/"+Sort_out+".bam")
+#				os.system("rm -f ./mapping/*.sam")
+
 		
 def main():
 #	os.system("mkdir mapping")	
@@ -170,6 +184,6 @@ def main():
 	PE_map(PE_dict)
 	SE_map(SE_dict)
 	sam2bam()
-	bam_process()
+	SE_bam_process()
 		
 main()
