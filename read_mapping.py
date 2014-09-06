@@ -138,7 +138,7 @@ def SE_map(SE_dict):
 				if name[1] == "SE":
 					input = str(name[0])+"."+str(name[1])+"."+str(name[2])
 					output = name[0]+".SE.sam"
-					if options.bwa == "None":
+					if options.bwa == None:
 						params = ""
 					else:
 						params = options.bwa
