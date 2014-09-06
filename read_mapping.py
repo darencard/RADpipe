@@ -79,7 +79,7 @@ def make_PE_dict():
 				if key not in PE_dict.keys():
 					PE_dict[key] = value
 	print PE_dict
-return PE_dict
+	return PE_dict
 		
 
 def make_SE_dict():
@@ -113,7 +113,6 @@ def make_SE_dict():
 			
 			
 def cat_SE():
-	make_SE_dict()
 	print "Concatenating single-end reads"
 	for key in SE_dict.keys():
 		foo = key.split(".")
