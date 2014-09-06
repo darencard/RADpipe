@@ -68,9 +68,9 @@ def make_PE_dict():
 		if file.endswith("."+options.ext):
 			name = file.split(os.extsep)
 			if name[1] == "P1":
-				print root
-				print name
-				print ext
+				root = name[0]
+				root = name[1]
+				root = name[2]
 				key = str(root)+"."+str(read)+"."+str(ext)
 				value = str(root)+".P2."+str(ext)
 				if key not in PE_dict.keys():
