@@ -62,11 +62,11 @@ SE_dict = {}
 
 def make_PE_dict(PE_dict):
 	for root,dirs,files in os.walk(options.directory):
+		print "making PE_dict"
 	for file in files:
 		if file.endswith("."+options.ext):
 			name = file.split(os.extsep)
 			if name[1] == "P1":
-				print "making PE_dict"
 				root = name[0]
 				print root
 				read = name[1]
@@ -82,6 +82,7 @@ def make_PE_dict(PE_dict):
 
 def make_SE_dict(SE_dict):
 	for root,dirs,files in os.walk(options.directory):
+		print "Making SE_dict"
 	for file in files:
 		if file.endswith("."+options.ext):
 			name = file.split(os.extsep)
@@ -203,6 +204,7 @@ def main():
 #	os.system("mkdir mapping")
 #	index_ref()
 	for root,dirs,files in os.walk(options.directory):
+		print "Running pipeline"
 	for file in files:
 		if file.endswith("."+options.ext):
 			name = file.split(os.extsep)
