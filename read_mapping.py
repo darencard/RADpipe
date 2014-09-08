@@ -111,9 +111,8 @@ def cat_SE(SE_dict):
 def SE_map(name):	
 	SE_dict = make_SE_dict(name)										# Run 'make_SE_dict' and pass name, return SE_dict
 	for key in SE_dict.keys():											# for each SE_dict key
-		print "\n***Mapping single-end reads***\n"
 		foo = key.split(".")											# split by '.'
-		print foo[0]
+		print "\n***Mapping single-end reads from "+foo[0]+"***\n"
 		input = foo[0]+".SE."+options.ext								# input SE file for mapping
 		file = foo[0]+".SE.sam"											# output SE file from mapping (.sam)
 		if options.bwa == None:											# If no additional bwa options passed
@@ -149,9 +148,9 @@ def make_PE_dict(name):
 def PE_map(name):											
 	PE_dict = make_PE_dict(name)										# Run 'make_PE_dict' and pass name, return PE_dict
 	for key in PE_dict.keys():											# For each set of paired reads
-		print "\n***Mapping paired-end reads***\n"
 		foo = key.split(".")											# Split file name by '.'
 		print foo[0]
+		print "\n***Mapping paired-end reads from "+foo[0]+"***\n"
 		file = foo[0]+".PE.sam"											# Make output file name
 		value = PE_dict[key]											# Look up P2 reads name
 		if options.bwa == None:											# If no additional bwa options passed
