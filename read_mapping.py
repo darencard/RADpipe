@@ -221,6 +221,7 @@ def main():
 					names[name] = 1
 			print names
 		for name in names.keys():	
+			print "running"
 			if options.single == True:
 				SE_map(name)
 				SE_bam_process(name)
