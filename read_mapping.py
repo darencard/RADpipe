@@ -158,45 +158,45 @@ def SE_map(file):
 def sam2bam(file):
 #	for root,dirs,files in os.walk("mapping"):
 #		print "Converting to BAM"
-#	for file in files:
-	if file.endswith(".sam"):
-		name = file.split(os.extsep)
-		input = name[0]+"."+name[1]+".sam"
-		output = name[0]+"."+name[1]+".bam"
-		print "samtools view -bS ./mapping/"+input+" > ./mapping/"+output
-		os.system("samtools view -bS ./mapping/"+input+" > ./mapping/"+output)
+	for file in files:
+		if file.endswith(".sam"):
+			name = file.split(os.extsep)
+			input = name[0]+"."+name[1]+".sam"
+			output = name[0]+"."+name[1]+".bam"
+			print "samtools view -bS ./mapping/"+input+" > ./mapping/"+output
+			os.system("samtools view -bS ./mapping/"+input+" > ./mapping/"+output)
 			
 def PE_bam_process(file):
 #	for root,dirs,files in os.walk("mapping"):
 #		print "Processing PE BAMs"
-#	for file in files:
-	if file.endswith(".PE.bam"):
-		name = file.split(os.extsep)
-		sample = name[0]
-		PEin = name[0]+".PE.bam"
-		SEin = name[0]+".SE.bam"
-		Merge_out = name[0]+".merge.bam"
-		Sort_out = name[0]+".merge.sort"
-		print "samtools merge -f ./mapping/"+Merge_out+" ./mapping/"+PEin+" ./mapping/"+SEin
-		os.system("samtools merge -f ./mapping/"+Merge_out+" ./mapping/"+PEin+" ./mapping/"+SEin)
-		print "samtools sort ./mapping/"+Merge_out+" ./mapping/"+Sort_out
-		os.system("samtools sort ./mapping/"+Merge_out+" ./mapping/"+Sort_out)
-		print "samtools index ./mapping/"+Sort_out+".bam"
-		os.system("samtools index ./mapping/"+Sort_out+".bam")
+	for file in files:
+		if file.endswith(".PE.bam"):
+			name = file.split(os.extsep)
+			sample = name[0]
+			PEin = name[0]+".PE.bam"
+			SEin = name[0]+".SE.bam"
+			Merge_out = name[0]+".merge.bam"
+			Sort_out = name[0]+".merge.sort"
+			print "samtools merge -f ./mapping/"+Merge_out+" ./mapping/"+PEin+" ./mapping/"+SEin
+			os.system("samtools merge -f ./mapping/"+Merge_out+" ./mapping/"+PEin+" ./mapping/"+SEin)
+			print "samtools sort ./mapping/"+Merge_out+" ./mapping/"+Sort_out
+			os.system("samtools sort ./mapping/"+Merge_out+" ./mapping/"+Sort_out)
+			print "samtools index ./mapping/"+Sort_out+".bam"
+			os.system("samtools index ./mapping/"+Sort_out+".bam")
 
 def SE_bam_process(file):
 #	for root,dirs,files in os.walk("mapping"):
 #		print "Processing SE BAMs"
-#	for file in files:
-	if file.endswith(".SE.bam"):
-		name = file.split(os.extsep)
-		sample = name[0]
-		SEin = name[0]+".SE.bam"
-		Sort_out = name[0]+".sort"
-		print "samtools sort ./mapping/"+SEin+" ./mapping/"+Sort_out
-		os.system("samtools sort ./mapping/"+SEin+" ./mapping/"+Sort_out)
-		print "samtools index ./mapping/"+Sort_out+".bam"
-		os.system("samtools index ./mapping/"+Sort_out+".bam")
+	for file in files:
+		if file.endswith(".SE.bam"):
+			name = file.split(os.extsep)
+			sample = name[0]
+			SEin = name[0]+".SE.bam"
+			Sort_out = name[0]+".sort"
+			print "samtools sort ./mapping/"+SEin+" ./mapping/"+Sort_out
+			os.system("samtools sort ./mapping/"+SEin+" ./mapping/"+Sort_out)
+			print "samtools index ./mapping/"+Sort_out+".bam"
+			os.system("samtools index ./mapping/"+Sort_out+".bam")
 
 		
 def main():
