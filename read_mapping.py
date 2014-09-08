@@ -229,9 +229,10 @@ def main():
 	if options.ext is None:											# User didn't specify read file extension (e.g., fastq)
 		print "\n***Error: specify the file extension for the read files!***\n"
 	else:
-		names = {}
 		print "\n***Running mapping pipeline***\n"
 		for root,dirs,files in os.walk(options.directory):			# Gather all objects in specified directory
+			print "\n***Gathing read files from specified directory***\n"
+		names = {}
 		for file in files:
 			if file.endswith("."+options.ext):						# If file ends with specified extension
 				foo = file.split(os.extsep)
