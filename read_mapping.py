@@ -155,7 +155,7 @@ def SE_map(file):
 		print "bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+file
 		os.system("bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+file)
 
-def sam2bam(file):
+def sam2bam(files):
 #	for root,dirs,files in os.walk("mapping"):
 #		print "Converting to BAM"
 	for file in files:
@@ -166,7 +166,7 @@ def sam2bam(file):
 			print "samtools view -bS ./mapping/"+input+" > ./mapping/"+output
 			os.system("samtools view -bS ./mapping/"+input+" > ./mapping/"+output)
 			
-def PE_bam_process(file):
+def PE_bam_process(files):
 #	for root,dirs,files in os.walk("mapping"):
 #		print "Processing PE BAMs"
 	for file in files:
@@ -184,7 +184,7 @@ def PE_bam_process(file):
 			print "samtools index ./mapping/"+Sort_out+".bam"
 			os.system("samtools index ./mapping/"+Sort_out+".bam")
 
-def SE_bam_process(file):
+def SE_bam_process(files):
 #	for root,dirs,files in os.walk("mapping"):
 #		print "Processing SE BAMs"
 	for file in files:
