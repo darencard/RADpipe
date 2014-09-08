@@ -67,6 +67,7 @@ def setup():
 	if options.index is True:											# If reference is already indexed, can skip lengthy indexing
 		print "\n***Not indexing reference genome***\n"					# by passing '--no_index' flag
 	else:									
+		print "\n***Indexing reference genome***\n"
 		os.system("bwa index "+options.reference)						# Otherwise $ bwa index <reference>
 
 
@@ -76,7 +77,7 @@ def setup():
 
 def make_SE_dict(name):													
 	SE_dict = {}
-	print "Making SE_dict"
+#	print "\n***Making SE_dict***\n"
 	root = name
 	ext = options.ext
 	nameS1 = str(root)+".S1."+str(ext)									# Set S1 to sample.S1.ext
@@ -93,7 +94,7 @@ def make_SE_dict(name):
 #################################################
 	
 def cat_SE(SE_dict):
-	print "Concatenating single-end reads"
+	print "\n***Concatenating broken pairs (ignore errors)***\n"
 	for key in SE_dict.keys():											# For each S1 key in SE_dict
 		foo = key.split(".")											# split by '.'
 		file = foo[0]+".SE."+options.ext								# output file = sample.SE.ext
@@ -110,7 +111,7 @@ def cat_SE(SE_dict):
 def SE_map(name):	
 	SE_dict = make_SE_dict(name)										# Run 'make_SE_dict' and pass name, return SE_dict
 	for key in SE_dict.keys():											# for each SE_dict key
-		print "Mapping SE reads"
+		print "\n***Mapping single-end reads***\n"
 		foo = key.split(".")											# split by '.'
 		print foo[0]
 		input = foo[0]+".SE."+options.ext								# input SE file for mapping
@@ -148,7 +149,7 @@ def make_PE_dict(name):
 def PE_map(name):											
 	PE_dict = make_PE_dict(name)										# Run 'make_PE_dict' and pass name, return PE_dict
 	for key in PE_dict.keys():											# For each set of paired reads
-		print "Mapping PE reads"
+		print "\n***Mapping paired-end reads***\n"
 		foo = key.split(".")											# Split file name by '.'
 		print foo[0]
 		file = foo[0]+".PE.sam"											# Make output file name
@@ -169,6 +170,7 @@ def PE_map(name):
 
 def sam2bam(file):
 	name = file.split(os.extsep)										# Split .sam file into parts
+	print "\n***Converting SAM to BAM***\n"
 	input = name[0]+"."+name[1]+".sam"									# Put together input .sam file name
 	output = name[0]+"."+name[1]+".bam"									# Put together output .bam file name
 # command = $ samtools view -bS ./mapping/<input_sam> > ./mapping/<output_bam> !! Working in 'mapping'
@@ -185,14 +187,17 @@ def PE_bam_process(name):
 	SEin = name+".SE.bam"												# Input SE bam
 	Merge_out = name+".merge.bam"										# name for merged (PE+SE) bam output file
 	Sort_out = name+".merge.sort"										# name for sorted, merged bam output file
+	print "\n***Merging single-end and paired-end BAMs together***\n"
 ## MERGE
 # command = $ samtools merge -f ./mapping/<merged_bam> ./mapping/<PE_bam> ./mapping/<SE_bam> !! force overwrite
 	print "samtools merge -f ./mapping/"+Merge_out+" ./mapping/"+PEin+" ./mapping/"+SEin
 	os.system("samtools merge -f ./mapping/"+Merge_out+" ./mapping/"+PEin+" ./mapping/"+SEin)
+	print "\n***Sorting BAM***\n"
 ## SORT
 # command = $ samtools sort ./mapping/<merged_bam> ./mapping/<sort_prefix>
 	print "samtools sort ./mapping/"+Merge_out+" ./mapping/"+Sort_out
 	os.system("samtools sort ./mapping/"+Merge_out+" ./mapping/"+Sort_out)
+	print "\n***Indexing BAM***\n"
 ## INDEX MAPPING
 # command = $ samtools index ./mapping/<sort_prefix>.bam
 	print "samtools index ./mapping/"+Sort_out+".bam"
@@ -206,10 +211,12 @@ def PE_bam_process(name):
 def SE_bam_process(name):
 	SEin = name+".SE.bam"												# Input SE bam
 	Sort_out = name+".sort"												# name for sorted SE bam output file
+	print "\n***Sorting BAM***\n"
 ## SORT
 # command = $ samtools sort ./mapping/<SE_bam> ./mapping/<sort_prefix>
 	print "samtools sort ./mapping/"+SEin+" ./mapping/"+Sort_out
 	os.system("samtools sort ./mapping/"+SEin+" ./mapping/"+Sort_out)
+	print "\n***Indexing BAM***\n"
 ## INDEX MAPPING
 # command = $ samtools index ./mapping/<sort_prefix>.bam
 	print "samtools index ./mapping/"+Sort_out+".bam"
@@ -251,9 +258,11 @@ def main():
 			else:													# If user doesn't specified single or paired, error
 				print "\n***Error: specify whether reads are single-end only ('-s') or paired end ('-p')!***\n"
 	if options.sams == True:										# If user elects to keep all SAMs
-		print "SAM output will be saved"
+		print "\n***As specified, SAM output will be saved!***\n"
 	else:															# Else, if no election to keep SAMs, delete anything with *.sam
+		print "\n***Removing unnecessary intermediate SAM output!***\n"
 		os.system("rm -f ./mapping/*.sam")
+	print "\n***Mapping complete! See 'mapping' directory for results!***\n"
 
 
 #################################################
