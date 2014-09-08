@@ -205,20 +205,20 @@ def main():
 		print "Running pipeline"
 		print files
 	for file in files:
-		if file.endswith("."+options.ext):
-			name = file.split(os.extsep)
-			if name[1] == "SE":
-#				make_SE_dict(SE_dict)
-				SE_map(file)
-				sam2bam(file)
-				SE_bam_process(file)
-			else:
-#				make_PE_dict(PE_dict)
-#				make_SE_dict(SE_dict)
-				PE_map(file)
-				SE_map(file)
-				sam2bam(file)
-				PE_bam_process(file)
+#		if file.endswith("."+options.ext):
+#			name = file.split(os.extsep)
+		if name[1] == "SE":
+#			make_SE_dict(SE_dict)
+			SE_map(file)
+			sam2bam(file)
+			SE_bam_process(file)
+		else:
+#			make_PE_dict(PE_dict)
+#			make_SE_dict(SE_dict)
+			PE_map(file)
+			SE_map(file)
+			sam2bam(file)
+			PE_bam_process(file)
 	if options.sams == True:
 		print "SAM output will be saved"
 	else:
