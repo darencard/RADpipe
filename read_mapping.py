@@ -209,8 +209,8 @@ def main():
 	else:
 		for root,dirs,files in os.walk(options.directory):
 			print "Running pipeline"
-			if dir in dirs != "mapping":
-				os.system("mkdir mapping")
+			if dir in dirs != "mapping2":
+				os.system("mkdir mapping2")
 			print files
 		names = {}
 		for file in files:
@@ -221,7 +221,6 @@ def main():
 					names[name] = 1
 		print names
 		for name in names.keys():	
-			print "running"
 			if options.single == True:
 				SE_map(name)
 				SE_bam_process(name)
