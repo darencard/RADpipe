@@ -62,8 +62,8 @@ options, args = parser.parse_args()
 
 def make_PE_dict():
 	PE_dict = {}
-	for root,dirs,files in os.walk(options.directory):
-		print "making PE_dict"
+#	for root,dirs,files in os.walk(options.directory):
+#		print "making PE_dict"
 	for file in files:
 		if file.endswith("."+options.ext):
 			name = file.split(os.extsep)
@@ -81,8 +81,8 @@ def make_PE_dict():
 
 def make_SE_dict():
 	SE_dict = {}
-	for root,dirs,files in os.walk(options.directory):
-		print "Making SE_dict"
+#	for root,dirs,files in os.walk(options.directory):
+#		print "Making SE_dict"
 	for file in files:
 		if file.endswith("."+options.ext):
 			name = file.split(os.extsep)
@@ -155,8 +155,8 @@ def SE_map():
 		os.system("bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+key+" > ./mapping/"+file)
 
 def sam2bam():
-	for root,dirs,files in os.walk("mapping"):
-		print "Converting to BAM"
+#	for root,dirs,files in os.walk("mapping"):
+#		print "Converting to BAM"
 	for file in files:
 		if file.endswith(".sam"):
 			name = file.split(os.extsep)
@@ -167,8 +167,8 @@ def sam2bam():
 				
 
 def PE_bam_process():
-	for root,dirs,files in os.walk("mapping"):
-		print "Processing PE BAMs"
+#	for root,dirs,files in os.walk("mapping"):
+#		print "Processing PE BAMs"
 	for file in files:
 		if file.endswith(".PE.bam"):
 			name = file.split(os.extsep)
@@ -186,8 +186,8 @@ def PE_bam_process():
 
 
 def SE_bam_process():
-	for root,dirs,files in os.walk("mapping"):
-		print "Processing SE BAMs"
+#	for root,dirs,files in os.walk("mapping"):
+#		print "Processing SE BAMs"
 	for file in files:
 		if file.endswith(".SE.bam"):
 			name = file.split(os.extsep)
