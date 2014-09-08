@@ -227,7 +227,7 @@ def SE_bam_process(name):
 ###       Remove intermediate SAM output      ###
 #################################################
 	
-def remove_sams()
+def remove_sams():
 	if options.sams == True:										# If user elects to keep all SAMs
 		print "\n***As specified, SAM output will be saved!***\n"
 	else:															# Else, if no election to keep SAMs, delete anything with *.sam
