@@ -59,6 +59,125 @@ parser.add_option("-s", action = "store_true", dest = "single", help = "single-e
 
 options, args = parser.parse_args()
 
+def make_SE_dict(name):
+	SE_dict = {}
+#	for root,dirs,files in os.walk(options.directory):
+#		print "Making SE_dict"
+#	for file in files:
+#	if file.endswith("."+options.ext):
+#		name = file.split(os.extsep)
+#		if name[1] == "S1":
+	print "Making SE_dict"
+	root = name
+	ext = options.ext
+	nameS1 = str(root)+".S1."+str(ext)
+	nameS2 = str(root)+".S2."+str(ext)
+	if nameS1 not in SE_dict.keys():
+		SE_dict[nameS1] = nameS2
+	cat_SE(SE_dict)
+	print SE_dict
+	return SE_dict
+	
+def cat_SE(SE_dict):
+	print "Concatenating single-end reads"
+	for key in SE_dict.keys():
+		foo = key.split(".")
+		file = foo[0]+".SE."+options.ext
+		value = SE_dict[key]
+		print "cat ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./"+options.directory+"/"+file
+		os.system("cat ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./"+options.directory+"/"+file)
+
+def SE_map(name):
+	SE_dict = make_SE_dict(name)
+	for key in SE_dict.keys():
+		print "Mapping SE reads"
+		foo = key.split(".")
+		print foo[0]
+		input = foo[0]+".SE."+options.ext
+		file = foo[0]+".SE.sam"
+		if options.bwa == None:
+			params = ""
+		else:
+			params = options.bwa
+		print "bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+file
+		os.system("bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+file)
+		sam2bam(file)
+
+def make_PE_dict(name):
+	PE_dict = {}
+#	for root,dirs,files in os.walk(options.directory):
+#		print "making PE_dict"
+#	for file in files:
+#	if file.endswith("."+options.ext):
+#		name = file.split(os.extsep)
+#		if name[1] == "P1":
+	root = name
+	ext = options.ext
+	nameP1 = str(root)+".P1."+str(ext)
+	nameP2 = str(root)+".P2."+str(ext)
+	if nameP1 not in PE_dict.keys():
+		PE_dict[nameP1] = nameP2
+	print PE_dict
+	return PE_dict
+
+def PE_map(name):
+	PE_dict = make_PE_dict(name)
+	for key in PE_dict.keys():
+		print "Mapping PE reads"
+		foo = key.split(".")
+		print foo[0]
+		file = foo[0]+".PE.sam"
+		value = PE_dict[key]
+		if options.bwa == None:
+			params = ""
+		else:
+			params = options.bwa
+		print "bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./mapping/"+file
+		os.system("bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./mapping/"+file)
+		sam2bam(file)
+
+def sam2bam(file):
+#	for root,dirs,files in os.walk("mapping"):
+#		print "Converting to BAM"
+#	for file in files:
+#		if file.endswith(".sam"):
+#			name = file.split(os.extsep)
+	name = file.split(os.extsep)
+	input = name[0]+"."+name[1]+".sam"
+	output = name[0]+"."+name[1]+".bam"
+	print "samtools view -bS ./mapping/"+input+" > ./mapping/"+output
+	os.system("samtools view -bS ./mapping/"+input+" > ./mapping/"+output)
+	
+def PE_bam_process(name):
+#	for root,dirs,files in os.walk("mapping"):
+#		print "Processing PE BAMs"
+#	for file in files:
+#		if file.endswith(".PE.bam"):
+#		name = file.split(os.extsep)
+	PEin = name+".PE.bam"
+	SEin = name+".SE.bam"
+	Merge_out = name+".merge.bam"
+	Sort_out = name+".merge.sort"
+	print "samtools merge -f ./mapping/"+Merge_out+" ./mapping/"+PEin+" ./mapping/"+SEin
+	os.system("samtools merge -f ./mapping/"+Merge_out+" ./mapping/"+PEin+" ./mapping/"+SEin)
+	print "samtools sort ./mapping/"+Merge_out+" ./mapping/"+Sort_out
+	os.system("samtools sort ./mapping/"+Merge_out+" ./mapping/"+Sort_out)
+	print "samtools index ./mapping/"+Sort_out+".bam"
+	os.system("samtools index ./mapping/"+Sort_out+".bam")
+
+def SE_bam_process(foo):
+#	for root,dirs,files in os.walk("mapping"):
+#		print "Processing SE BAMs"
+#	for file in files:
+#		if file.endswith(".SE.bam"):
+#		name = file.split(os.extsep)
+	SEin = name+".SE.bam"
+	Sort_out = name+".sort"
+	print "samtools sort ./mapping/"+SEin+" ./mapping/"+Sort_out
+	os.system("samtools sort ./mapping/"+SEin+" ./mapping/"+Sort_out)
+	print "samtools index ./mapping/"+Sort_out+".bam"
+	os.system("samtools index ./mapping/"+Sort_out+".bam")
+
 
 		
 def main():
@@ -74,14 +193,15 @@ def main():
 			name = foo[0]
 			if name not in names.keys():
 				names[name] = 1
-	print names
-#		if options.single == True:
-#			SE_map(name)
-#			sam2bam(files)
-#			SE_bam_process(files)
-#		elif options.paired == True:
-#			PE_map(name)
-#			SE_map(name)
+		print names
+	for name in names.keys():	
+		if options.single == True:
+			SE_map(name)
+			SE_bam_process(name)
+		elif options.paired == True:
+			PE_map(name)
+			SE_map(name)
+			PE_bam_process()
 #	if options.sams == True:
 #		print "SAM output will be saved"
 #	else:
