@@ -206,7 +206,7 @@ def main():
 		print files
 	for file in files:
 #		if file.endswith("."+options.ext):
-#			name = file.split(os.extsep)
+		name = file.split(os.extsep)
 		if name[1] == "SE":
 #			make_SE_dict(SE_dict)
 			SE_map(file)
