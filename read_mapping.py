@@ -1,6 +1,6 @@
 #!/usr/local/env python
 
-#print __name__
+##print __name__
 
 import optparse
 import os
