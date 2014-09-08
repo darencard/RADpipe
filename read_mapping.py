@@ -219,7 +219,7 @@ def main():
 				name = foo[0]
 				if name not in names.keys():
 					names[name] = 1
-			print names
+		print names
 		for name in names.keys():	
 			print "running"
 			if options.single == True:
