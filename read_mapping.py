@@ -62,7 +62,7 @@ options, args = parser.parse_args()
 ###         Setup mapping enviornment         ###
 #################################################
 
-def setup():
+def setup()
 	os.system("mkdir mapping")											# make 'mapping' directory (may error if already present)
 	if options.index is True:											# If reference is already indexed, can skip lengthy indexing
 		print "\n***Not indexing reference genome***\n"					# by passing '--no_index' flag
