@@ -74,7 +74,7 @@ def main():
 			name = foo[0]
 			if name not in names.keys():
 				names[name] = 1
-		print name
+		print names
 #		if options.single == True:
 #			SE_map(name)
 #			sam2bam(files)
