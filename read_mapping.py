@@ -212,8 +212,8 @@ def main():
 			if dir in dirs != "mapping":
 				os.system("mkdir mapping")
 			print files
+		names = {}
 		for file in files:
-			names = {}
 			if file.endswith("."+options.ext):
 				foo = file.split(os.extsep)
 				name = foo[0]
