@@ -269,7 +269,7 @@ def main():
 				SE_map(name)
 				PE_bam_process(name)
 				remove_sams()
-				print "\n***Mapping complete! See 'mapping' directory for results!***\n"
+				print "\n***Mapping complete for "+name+"! See 'mapping' directory for results!***\n"
 			else:													# If user doesn't specified single or paired, error
 				print "\n***Error: specify whether reads are single-end only ('-s') or paired end ('-p')!***\n"
 
