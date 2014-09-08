@@ -124,7 +124,7 @@ def index_ref():
 	
 	
 def PE_map(files):
-	PE_dict = make_PE_dict()
+	PE_dict = make_PE_dict(files)
 	for key in PE_dict.keys():
 		print "Mapping PE reads"
 		foo = key.split(".")
@@ -141,7 +141,7 @@ def PE_map(files):
 
 	
 def SE_map(files):
-	SE_dict = make_SE_dict()
+	SE_dict = make_SE_dict(files)
 	for key in SE_dict.keys():
 		print "Mapping SE reads"
 		foo = key.split(".")
