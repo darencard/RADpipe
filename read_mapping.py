@@ -224,6 +224,18 @@ def SE_bam_process(name):
 
 
 #################################################
+###       Remove intermediate SAM output      ###
+#################################################
+	
+def remove_sams()
+	if options.sams == True:										# If user elects to keep all SAMs
+		print "\n***As specified, SAM output will be saved!***\n"
+	else:															# Else, if no election to keep SAMs, delete anything with *.sam
+		print "\n***Removing unnecessary intermediate SAM output!***\n"
+		os.system("rm -f ./mapping/*.sam")
+
+
+#################################################
 ###            	   Full Program               ###
 #################################################
 		
@@ -251,18 +263,16 @@ def main():
 			if options.single == True:								# If user specifies reads as single-end only
 				SE_map(name)										# Run single-end mapping pipeline
 				SE_bam_process(name)
+				remove_sams()
+				print "\n***Mapping complete! See 'mapping' directory for results!***\n"
 			elif options.paired == True:							# If user specifies reads as paired-end
 				PE_map(name)										# Run paired-end mapping pipeline
 				SE_map(name)
 				PE_bam_process(name)
+				remove_sams()
+				print "\n***Mapping complete! See 'mapping' directory for results!***\n"
 			else:													# If user doesn't specified single or paired, error
 				print "\n***Error: specify whether reads are single-end only ('-s') or paired end ('-p')!***\n"
-	if options.sams == True:										# If user elects to keep all SAMs
-		print "\n***As specified, SAM output will be saved!***\n"
-	else:															# Else, if no election to keep SAMs, delete anything with *.sam
-		print "\n***Removing unnecessary intermediate SAM output!***\n"
-		os.system("rm -f ./mapping/*.sam")
-	print "\n***Mapping complete! See 'mapping' directory for results!***\n"
 
 
 #################################################
