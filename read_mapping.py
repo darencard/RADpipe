@@ -60,10 +60,6 @@ parser.add_option("-s", action = "store_true", dest = "single", help = "single-e
 options, args = parser.parse_args()
 
 
-
-
-
-
 		
 def main():
 #	os.system("mkdir mapping")
@@ -72,10 +68,12 @@ def main():
 		print "Running pipeline"
 		print files
 	for file in files:
+		names = {}
 		if file.endswith("."+options.ext):
 			foo = file.split(os.extsep)
 			name = foo[0]
-			print name
+			if name not in names.keys():
+				print name
 #		if options.single == True:
 #			SE_map(name)
 #			sam2bam(files)
