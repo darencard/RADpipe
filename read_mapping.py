@@ -165,7 +165,7 @@ def PE_bam_process(name):
 	print "samtools index ./mapping/"+Sort_out+".bam"
 	os.system("samtools index ./mapping/"+Sort_out+".bam")
 
-def SE_bam_process(foo):
+def SE_bam_process(name):
 #	for root,dirs,files in os.walk("mapping"):
 #		print "Processing SE BAMs"
 #	for file in files:
@@ -201,7 +201,7 @@ def main():
 		elif options.paired == True:
 			PE_map(name)
 			SE_map(name)
-			PE_bam_process()
+			PE_bam_process(name)
 #	if options.sams == True:
 #		print "SAM output will be saved"
 #	else:
