@@ -8,12 +8,24 @@ import os
 import optparse
 import subprocess
 
+usage_line = """
+process_rawreads.py
+
+Version 1.0 (8 September, 2014)
+License: GNU GPLv2
+To report bugs or errors, please contact Daren Card (dcard@uta.edu).
+This script is provided as-is, with no support and no guarantee of proper or desirable functioning.
+
+Script that...
+
+python process_rawreads.py							
+"""
 
 #################################################
 ###           Parse command options           ###
 #################################################
 
-usage = """Usage: filter_parse.py [options]"""
+usage = usage_line
                         
 parser = optparse.OptionParser(usage=usage)
 parser.add_option("-t", action="store", type = "string", dest = "threads", help = "threads")
@@ -197,7 +209,7 @@ def quality_trim():
 
 
 #################################################
-###		Specify processes	      ###
+###				Specify processes		      ###
 #################################################	
 
 def main():
