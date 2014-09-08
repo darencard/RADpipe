@@ -86,8 +86,8 @@ def make_SE_dict(file):
 #	for root,dirs,files in os.walk(options.directory):
 #		print "Making SE_dict"
 #	for file in files:
-	if file.endswith("."+options.ext):
-		name = file.split(os.extsep)
+#	if file.endswith("."+options.ext):
+#		name = file.split(os.extsep)
 		if name[1] == "S1":
 			print "Making SE_dict"
 			root = name[0]
@@ -142,8 +142,8 @@ def PE_map(file):
 		sam2bam(foo)
 	
 	
-def SE_map(file):
-	SE_dict = make_SE_dict(file)
+def SE_map(name):
+	SE_dict = make_SE_dict(name)
 	for key in SE_dict.keys():
 		print "Mapping SE reads"
 		foo = key.split(".")
@@ -190,7 +190,7 @@ def PE_bam_process(foo):
 	print "samtools index ./mapping/"+Sort_out+".bam"
 	os.system("samtools index ./mapping/"+Sort_out+".bam")
 
-def SE_bam_process(files):
+def SE_bam_process(foo):
 #	for root,dirs,files in os.walk("mapping"):
 #		print "Processing SE BAMs"
 #	for file in files:
@@ -212,24 +212,20 @@ def main():
 		print "Running pipeline"
 		print files
 	for file in files:
-#		if file.endswith("."+options.ext):
-		name = file.split(os.extsep)
-		print name
-		if name[1] == "SE":
-#			make_SE_dict(SE_dict)
-			SE_map(file)
+		if file.endswith("."+options.ext):
+			foo = file.split(os.extsep)
+			name = foo[0]
+			print name
+#		if options.single == True:
+#			SE_map(name)
 #			sam2bam(files)
 #			SE_bam_process(files)
-		else:
-#			make_PE_dict(PE_dict)
-#			make_SE_dict(SE_dict)
-			PE_map(file)
-			SE_map(file)
-#		sam2bam(files)
-#		PE_bam_process(files)
-	if options.sams == True:
-		print "SAM output will be saved"
-	else:
-		os.system("rm -f ./mapping/*.sam")
+#		elif options.paired == True:
+#			PE_map(name)
+#			SE_map(name)
+#	if options.sams == True:
+#		print "SAM output will be saved"
+#	else:
+#		os.system("rm -f ./mapping/*.sam")
 		
 main()
