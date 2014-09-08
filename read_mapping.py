@@ -60,7 +60,7 @@ options, args = parser.parse_args()
 
 
 
-def make_PE_dict():
+def make_PE_dict(files):
 	PE_dict = {}
 #	for root,dirs,files in os.walk(options.directory):
 #		print "making PE_dict"
@@ -79,7 +79,7 @@ def make_PE_dict():
 	return PE_dict
 		
 
-def make_SE_dict():
+def make_SE_dict(files):
 	SE_dict = {}
 #	for root,dirs,files in os.walk(options.directory):
 #		print "Making SE_dict"
@@ -123,7 +123,7 @@ def index_ref():
 	os.system("bwa index "+options.reference)	
 	
 	
-def PE_map():
+def PE_map(files):
 	PE_dict = make_PE_dict()
 	for key in PE_dict.keys():
 		print "Mapping PE reads"
@@ -140,7 +140,7 @@ def PE_map():
 
 
 	
-def SE_map():
+def SE_map(files):
 	SE_dict = make_SE_dict()
 	for key in SE_dict.keys():
 		print "Mapping SE reads"
@@ -154,7 +154,7 @@ def SE_map():
 		print "bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+key+" > ./mapping/"+file
 		os.system("bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+key+" > ./mapping/"+file)
 
-def sam2bam():
+def sam2bam(files):
 #	for root,dirs,files in os.walk("mapping"):
 #		print "Converting to BAM"
 	for file in files:
@@ -166,7 +166,7 @@ def sam2bam():
 			os.system("samtools view -bS ./mapping/"+input+" > ./mapping/"+output)
 				
 
-def PE_bam_process():
+def PE_bam_process(files):
 #	for root,dirs,files in os.walk("mapping"):
 #		print "Processing PE BAMs"
 	for file in files:
@@ -185,7 +185,7 @@ def PE_bam_process():
 			os.system("samtools index ./mapping/"+Sort_out+".bam")
 
 
-def SE_bam_process():
+def SE_bam_process(files):
 #	for root,dirs,files in os.walk("mapping"):
 #		print "Processing SE BAMs"
 	for file in files:
@@ -211,16 +211,16 @@ def main():
 			name = file.split(os.extsep)
 			if name[1] == "SE":
 #				make_SE_dict(SE_dict)
-				SE_map()
-				sam2bam()
-				SE_bam_process()
+				SE_map(files)
+				sam2bam(files)
+				SE_bam_process(files)
 			else:
 #				make_PE_dict(PE_dict)
 #				make_SE_dict(SE_dict)
-				PE_map()
-				SE_map()
-				sam2bam()
-				PE_bam_process()
+				PE_map(files)
+				SE_map(files)
+				sam2bam(files)
+				PE_bam_process(files)
 	if options.sams == True:
 		print "SAM output will be saved"
 	else:
