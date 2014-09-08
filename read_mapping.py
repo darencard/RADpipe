@@ -240,7 +240,6 @@ def remove_sams()
 #################################################
 		
 def main():
-	setup()														# Setup the pipeline environment
 	if options.reference is None:									# User didn't input reference genome
 		print "\n***Error: specify reference for mapping!***\n"
 	if options.directory is None:									# User didn't input directory containing read files
@@ -248,6 +247,7 @@ def main():
 	if options.ext is None:											# User didn't specify read file extension (e.g., fastq)
 		print "\n***Error: specify the file extension for the read files!***\n"
 	else:
+		setup()														# Setup the pipeline environment
 		print "\n***Running mapping pipeline***\n"
 		for root,dirs,files in os.walk(options.directory):			# Gather all objects in specified directory
 			print "\n***Gathing read files from specified directory***\n"
