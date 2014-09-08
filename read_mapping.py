@@ -149,7 +149,6 @@ def PE_map(name):
 	PE_dict = make_PE_dict(name)										# Run 'make_PE_dict' and pass name, return PE_dict
 	for key in PE_dict.keys():											# For each set of paired reads
 		foo = key.split(".")											# Split file name by '.'
-		print foo[0]
 		print "\n***Mapping paired-end reads from "+foo[0]+"***\n"
 		file = foo[0]+".PE.sam"											# Make output file name
 		value = PE_dict[key]											# Look up P2 reads name
