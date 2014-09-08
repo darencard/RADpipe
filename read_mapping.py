@@ -141,7 +141,7 @@ def PE_map(file):
 
 	
 def SE_map(file):
-	SE_dict = make_SE_dict(files)
+	SE_dict = make_SE_dict(file)
 	for key in SE_dict.keys():
 		print "Mapping SE reads"
 		foo = key.split(".")
