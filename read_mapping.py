@@ -146,13 +146,14 @@ def SE_map(file):
 		print "Mapping SE reads"
 		foo = key.split(".")
 		print foo[0]
+		input = foo[0]+".SE."+options.ext
 		file = foo[0]+".SE.sam"
 		if options.bwa == None:
 			params = ""
 		else:
 			params = options.bwa
-		print "bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+key+" > ./mapping/"+file
-		os.system("bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+key+" > ./mapping/"+file)
+		print "bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+file
+		os.system("bwa mem -t "+str(options.threads)+" "+str(params)+" ./"+options.reference+" ./"+options.directory+"/"+input+" > ./mapping/"+file)
 
 def sam2bam(file):
 #	for root,dirs,files in os.walk("mapping"):
