@@ -62,7 +62,7 @@ options, args = parser.parse_args()
 ###         Setup mapping enviornment         ###
 #################################################
 
-def setup()
+def setup():
 	os.system("mkdir mapping")											# make 'mapping' directory (may error if already present)
 	if options.index is True:											# If reference is already indexed, can skip lengthy indexing
 		print "\n***Not indexing reference genome***\n"					# by passing '--no_index' flag
@@ -221,7 +221,7 @@ def SE_bam_process(name):
 #################################################
 		
 def main():
-	setup():														# Setup the pipeline environment
+	setup()														# Setup the pipeline environment
 	if options.reference is None:									# User didn't input reference genome
 		print "\n***Error: specify reference for mapping!***\n"
 	if options.directory is None:									# User didn't input directory containing read files
