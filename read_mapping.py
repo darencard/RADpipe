@@ -73,7 +73,8 @@ def main():
 			foo = file.split(os.extsep)
 			name = foo[0]
 			if name not in names.keys():
-				print name
+				names[name] = 1
+			print name
 #		if options.single == True:
 #			SE_map(name)
 #			sam2bam(files)
