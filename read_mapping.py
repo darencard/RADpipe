@@ -200,6 +200,14 @@ def PE_bam_process(name):
 # command = $ samtools index ./mapping/<sort_prefix>.bam
 	print "samtools index ./mapping/"+Sort_out+".bam"
 	os.system("samtools index ./mapping/"+Sort_out+".bam")
+## GENERATE MAPPING REPORT
+# command = $ samtools flagstat ./mapping/<sort_prefix>.bam > ./mapping/<sort_prefix>.bam.report
+	print "samtools flagstat ./mapping/"+Sort_out+".bam > ./mapping"+Sort_out+".bam.report"
+	os.system("samtools flagstat ./mapping/"+Sort_out+".bam > ./mapping"+Sort_out+".bam.report")
+## CONVERT SORTED BAM BACK TO SAM
+# command = $ samtools view -h ./mapping/<sort_prefix>.bam > ./mapping/<sort_prefix>.sam
+	print "samtools view -h ./mapping/"+Sort_out+".bam > "+Sort_out+".sam"
+	os.system("samtools view -h ./mapping/"+Sort_out+".bam > "+Sort_out+".sam")
 
 
 #################################################
@@ -219,7 +227,14 @@ def SE_bam_process(name):
 # command = $ samtools index ./mapping/<sort_prefix>.bam
 	print "samtools index ./mapping/"+Sort_out+".bam"
 	os.system("samtools index ./mapping/"+Sort_out+".bam")
-
+## GENERATE MAPPING REPORT
+# command = $ samtools flagstat ./mapping/<sort_prefix>.bam > ./mapping/<sort_prefix>.bam.report
+	print "samtools flagstat ./mapping/"+Sort_out+".bam > ./mapping"+Sort_out+".bam.report"
+	os.system("samtools flagstat ./mapping/"+Sort_out+".bam > ./mapping"+Sort_out+".bam.report")
+## CONVERT SORTED BAM BACK TO SAM
+# command = $ samtools view -h ./mapping/<sort_prefix>.bam > ./mapping/<sort_prefix>.sam
+	print "samtools view -h ./mapping/"+Sort_out+".bam > ./mapping/"+Sort_out+".sam"
+	os.system("samtools view -h ./mapping/"+Sort_out+".bam > ./mapping/"+Sort_out+".sam")
 
 #################################################
 ###       Remove intermediate SAM output      ###
