@@ -185,29 +185,31 @@ def PE_bam_process(name):
 	SEin = name+".SE.bam"												# Input SE bam
 	Merge_out = name+".merge.bam"										# name for merged (PE+SE) bam output file
 	Sort_out = name+".merge.sort"										# name for sorted, merged bam output file
-	print "\n***Merging single-end and paired-end BAMs together***\n"
 ## MERGE
+	print "\n***Merging single-end and paired-end BAMs together***\n"
 # command = $ samtools merge -f ./mapping/<merged_bam> ./mapping/<PE_bam> ./mapping/<SE_bam> !! force overwrite
 	print "samtools merge -f ./mapping/"+Merge_out+" ./mapping/"+PEin+" ./mapping/"+SEin
 	os.system("samtools merge -f ./mapping/"+Merge_out+" ./mapping/"+PEin+" ./mapping/"+SEin)
-	print "\n***Sorting BAM***\n"
 ## SORT
+	print "\n***Sorting BAM***\n"
 # command = $ samtools sort ./mapping/<merged_bam> ./mapping/<sort_prefix>
 	print "samtools sort ./mapping/"+Merge_out+" ./mapping/"+Sort_out
 	os.system("samtools sort ./mapping/"+Merge_out+" ./mapping/"+Sort_out)
-	print "\n***Indexing BAM***\n"
 ## INDEX MAPPING
+	print "\n***Indexing BAM***\n"
 # command = $ samtools index ./mapping/<sort_prefix>.bam
 	print "samtools index ./mapping/"+Sort_out+".bam"
 	os.system("samtools index ./mapping/"+Sort_out+".bam")
 ## GENERATE MAPPING REPORT
+	print "\n***Generating mapping summary report***\n"
 # command = $ samtools flagstat ./mapping/<sort_prefix>.bam > ./mapping/<sort_prefix>.bam.report
-	print "samtools flagstat ./mapping/"+Sort_out+".bam > ./mapping"+Sort_out+".bam.report"
-	os.system("samtools flagstat ./mapping/"+Sort_out+".bam > ./mapping"+Sort_out+".bam.report")
+	print "samtools flagstat ./mapping/"+Sort_out+".bam > ./mapping/"+Sort_out+".bam.report"
+	os.system("samtools flagstat ./mapping/"+Sort_out+".bam > ./mapping/"+Sort_out+".bam.report")
 ## CONVERT SORTED BAM BACK TO SAM
+	print "\n***Converting the sorted BAM back to a final SAM***\n"
 # command = $ samtools view -h ./mapping/<sort_prefix>.bam > ./mapping/<sort_prefix>.sam
-	print "samtools view -h ./mapping/"+Sort_out+".bam > "+Sort_out+".sam"
-	os.system("samtools view -h ./mapping/"+Sort_out+".bam > "+Sort_out+".sam")
+	print "samtools view -h ./mapping/"+Sort_out+".bam > ./mapping/"+Sort_out+".sam"
+	os.system("samtools view -h ./mapping/"+Sort_out+".bam > ./mapping/"+Sort_out+".sam")
 
 
 #################################################
@@ -217,21 +219,23 @@ def PE_bam_process(name):
 def SE_bam_process(name):
 	SEin = name+".SE.bam"												# Input SE bam
 	Sort_out = name+".sort"												# name for sorted SE bam output file
-	print "\n***Sorting BAM***\n"
 ## SORT
+	print "\n***Sorting BAM***\n"
 # command = $ samtools sort ./mapping/<SE_bam> ./mapping/<sort_prefix>
 	print "samtools sort ./mapping/"+SEin+" ./mapping/"+Sort_out
 	os.system("samtools sort ./mapping/"+SEin+" ./mapping/"+Sort_out)
-	print "\n***Indexing BAM***\n"
 ## INDEX MAPPING
+	print "\n***Indexing BAM***\n"
 # command = $ samtools index ./mapping/<sort_prefix>.bam
 	print "samtools index ./mapping/"+Sort_out+".bam"
 	os.system("samtools index ./mapping/"+Sort_out+".bam")
 ## GENERATE MAPPING REPORT
+	print "\n***Generating mapping summary report***\n"
 # command = $ samtools flagstat ./mapping/<sort_prefix>.bam > ./mapping/<sort_prefix>.bam.report
-	print "samtools flagstat ./mapping/"+Sort_out+".bam > ./mapping"+Sort_out+".bam.report"
-	os.system("samtools flagstat ./mapping/"+Sort_out+".bam > ./mapping"+Sort_out+".bam.report")
+	print "samtools flagstat ./mapping/"+Sort_out+".bam > ./mapping/"+Sort_out+".bam.report"
+	os.system("samtools flagstat ./mapping/"+Sort_out+".bam > ./mapping/"+Sort_out+".bam.report")
 ## CONVERT SORTED BAM BACK TO SAM
+	print "\n***Converting the sorted BAM back to a final SAM***\n"
 # command = $ samtools view -h ./mapping/<sort_prefix>.bam > ./mapping/<sort_prefix>.sam
 	print "samtools view -h ./mapping/"+Sort_out+".bam > ./mapping/"+Sort_out+".sam"
 	os.system("samtools view -h ./mapping/"+Sort_out+".bam > ./mapping/"+Sort_out+".sam")
