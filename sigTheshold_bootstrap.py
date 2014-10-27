@@ -16,15 +16,14 @@ a '#'.
 usage = usage_line
 
 parser = optparse.OptionParser(usage=usage)
-parser.add_option("--input", action= "store", type= "string", dest="input", help="""The input <batch>.sumstats.tsv file""")
+parser.add_option("--input", action= "store", type= "string", dest="input", help="""The input file""")
 parser.add_option("--permutations", action="store", type= "string", dest="perms", help="""The number of bootstrap reps/permutations""")
-parser.add_option("--alpha", action="store", type= "string", dest= "alpha", help="""The value of alpha for the confidence interval width [0.05]""", default = "0.05")
+parser.add_option("--alpha", action="store", type= "string", dest= "alpha", help="""The value of alpha for the threshold [0.05]""", default = "0.05")
 parser.add_option("--tails", action="store", type="string", dest="tails", help="""Specify whether this is one-tailed (1) or two-tailed (2)""")
 parser.add_option("--column", action="store", type="string", dest="column", help="The column of data to be bootstrapped""")
 options, args = parser.parse_args()
 
 def bootstrap(data, num_samples, statistic, alpha_raw):
-    ## Returns bootstrap estimate of 100.0*(1-alpha) CI for statistic.
     n = len(data)
     idx = npr.randint(0, n, (num_samples,n))
     samples = data[idx]
@@ -40,19 +39,19 @@ def bootstrap(data, num_samples, statistic, alpha_raw):
     	high = np.sort(statistic(samples, beta))
     else:
     	print "\n\n**Error: Specify whether you want one-tailed or two-tailed thresholds!**\n\n"
-    return (np.mean(low),
-    		np.mean(high))
+    return (np.median(low),
+    		np.median(high))
 
 if __name__ == '__main__':
-    pop = []
-    for line in open(options.input, "r"):
+	pop = []
+	for line in open(options.input, "r"):
 	    if not line.strip().startswith("#"):
-        	record = line.rstrip().split("\t")
-        	num = record[int(options.column)-1]
-        	pop.append(float(num))
-    x = np.array(pop)
+	    	record = line.rstrip().split("\t")
+	    	num = record[int(options.column)-1]
+	    	pop.append(float(num))
+	x = np.array(pop)
 
-    low, high = bootstrap(x, int(options.perms), np.percentile, float(options.alpha))
-    
-    ciline = "The "+options.tails+"-tailed bootstrapping significance threshold after "+options.perms+" bootstraps with alpha = "+options.alpha+" is "+str(low)+" - "+str(high)+"."
-    print "\n\n"+ciline+"\n\n"
+	low, high = bootstrap(x, int(options.perms), np.percentile, float(options.alpha))
+   
+	ciline = "The "+options.tails+"-tailed bootstrapping significance threshold after "+options.perms+" bootstraps with alpha = "+options.alpha+" is "+str(low)+" - "+str(high)+"."
+	print "\n\n"+ciline+"\n\n"
