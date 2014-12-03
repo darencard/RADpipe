@@ -124,17 +124,17 @@ def PE_sample_parser(r1nm, r2nm):
 			print "\n***Quality-trimming reads using Trimmomatic***\n"
                         
 	else:
-        			if options.clean == True:
-            			alert = open("./cleaned/ATTENTION", "w")
-            			line = "You elected to quality-trim your reads using Stacks. This trimming was done simultaneously with parsing. See the 'parsed' folder for your trimmed reads."
-            			alert.write(line)
-            			alert.close()
-						os.system("process_radtags -c -q -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
-            			print "\n***Quality-trimming reads using Stacks***\n"
+        if options.clean == True:
+        	alert = open("./cleaned/ATTENTION", "w")
+            line = "You elected to quality-trim your reads using Stacks. This trimming was done simultaneously with parsing. See the 'parsed' folder for your trimmed reads."
+            alert.write(line)
+            alert.close()
+			os.system("process_radtags -c -q -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
+            print "\n***Quality-trimming reads using Stacks***\n"
                                     
-        			else:
-						os.system("process_radtags -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
-            			print "\n***Quality-trimming reads using Trimmomatic***\n"
+		else:
+			os.system("process_radtags -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
+            print "\n***Quality-trimming reads using Trimmomatic***\n"
                                     
 
 def SE_sample_parser(r1nm):
