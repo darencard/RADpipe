@@ -35,7 +35,8 @@ filtering in Stacks, this filtering takes place simulteneously with read parsing
 Dependencies include the Stacks pipeline (v. 1.10 - 1.19), the FastX toolkit, and Trimmomatic v. 0.32 \
 (if desired), and all need to be installed in the users path.
 
-python process_rawreads.py							
+python process_rawreads.py -t <#threads> -s <samplesheet.txt> [-p -r] -c/-q -1 <single-end.fastq> \
+[-2 <paired-end.fastq>] --renz1 <RE_1> --renz2 <RE_2> --bar_loc <inline/index> [-x [1,2,3,4,5,6>]							
 """
 
 #################################################
