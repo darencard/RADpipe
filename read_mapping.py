@@ -126,7 +126,7 @@ def SE_map(name):
 
 
 #################################################
-###           Parse command options           ###
+###        Create paired-end dictionary       ###
 #################################################
 
 def make_PE_dict(name):
