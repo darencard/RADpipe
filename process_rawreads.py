@@ -182,10 +182,10 @@ def SE_sample_parser(r1nm):
 def PE_sample_rename(r1nm):
 	for foo in open(options.sheet).read().splitlines():
         	bar = foo.split()
-		parsep1_rename = "mv ./parsed/"+str(r1nm)+"/sample_"+bar[3]+"-"+bar[4]+".1.fq ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".1.fq"
-		parsep2_rename = "mv ./parsed/"+str(r1nm)+"/sample_"+bar[3]+"-"+bar[4]+".2.fq ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".2.fq"
-		remp1_rename = "mv ./parsed/"+str(r1nm)+"/sample_"+bar[3]+"-"+bar[4]+".rem.1.fq ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".rem.1.fq"
-		remp2_rename = "mv ./parsed/"+str(r1nm)+"/sample_"+bar[3]+"-"+bar[4]+".rem.2.fq ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".rem.2.fq"
+		parsep1_rename = "mv ./parsed/"+str(r1nm)+"/sample_"+bar[3]+"-"+bar[4]+".1.fq ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".P1.fq"
+		parsep2_rename = "mv ./parsed/"+str(r1nm)+"/sample_"+bar[3]+"-"+bar[4]+".2.fq ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".P2.fq"
+		remp1_rename = "mv ./parsed/"+str(r1nm)+"/sample_"+bar[3]+"-"+bar[4]+".rem.1.fq ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".rem.P1.fq"
+		remp2_rename = "mv ./parsed/"+str(r1nm)+"/sample_"+bar[3]+"-"+bar[4]+".rem.2.fq ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".rem.P2.fq"
 		os.system(parsep1_rename)
 		os.system(parsep2_rename)
 		os.system(remp1_rename)
@@ -195,7 +195,7 @@ def PE_sample_rename(r1nm):
 def SE_sample_rename(r1nm):
 	for foo in open(options.sheet).read().splitlines():
         	bar = foo.split()
-        	parse_single = "mv ./parsed/"+str(r1nm)+"/sample_"+bar[3]+".fq ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+".1.fq"
+        	parse_single = "mv ./parsed/"+str(r1nm)+"/sample_"+bar[3]+".fq ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+".S1.fq"
 		os.system(parse_single)
 ### Place restriction site trimming routine here ###
 
@@ -210,7 +210,7 @@ def PE_quality_trim(r1nm):
         		bar = foo.split()
 			handle = bar[0]+"_"+bar[3]+"-"+bar[4]
 			threads = options.threads
-			PEclean = "trimmomatic-0.32.jar PE -threads "+threads+" -trimlog ./cleaned/"+handle+".qtrim.log ./parsed/"+str(r1nm)+"/"+handle+".1.fq ./parsed/"+str(r1nm)+"/"+handle+".2.fq ./cleaned/"+handle+".P1.qtrim ./cleaned/"+handle+".S1.qtrim ./cleaned/"+handle+".P2.qtrim ./cleaned/"+handle+".S2.qtrim LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:36 TOPHRED33"
+			PEclean = "trimmomatic-0.32.jar PE -threads "+threads+" -trimlog ./cleaned/"+handle+".qtrim.log ./parsed/"+str(r1nm)+"/"+handle+".P1.fq ./parsed/"+str(r1nm)+"/"+handle+".P2.fq ./cleaned/"+handle+".P1.qtrim ./cleaned/"+handle+".S1.qtrim ./cleaned/"+handle+".P2.qtrim ./cleaned/"+handle+".S2.qtrim LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:36 TOPHRED33"
 			os.system(str(PEclean))
 ### Put command to trim away restriction site here and below else for Trimmomatic option ###
 				
@@ -220,7 +220,7 @@ def SE_quality_trim(r1nm):
         		bar = foo.split()
             		handle = bar[0]+"_"+bar[3]
             		threads = options.threads
-            		SEclean = "trimmomatic-0.32.jar SE -threads "+threads+" -trimlog ./cleaned/"+handle+".qtrim.log ./parsed/"+str(r1nm)+"/"+handle+".1.fq ./cleaned/"+handle+".S1.qtrim LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:36 TOPHRED33"
+            		SEclean = "trimmomatic-0.32.jar SE -threads "+threads+" -trimlog ./cleaned/"+handle+".qtrim.log ./parsed/"+str(r1nm)+"/"+handle+".S1.fq ./cleaned/"+handle+".S1.qtrim LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:36 TOPHRED33"
 			os.system(str(SEclean))
 ### Put command to trim away restriction site here and below else for Trimmomatic option ###
 
