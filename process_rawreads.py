@@ -123,7 +123,7 @@ def PE_sample_parser(r1nm, r2nm):
 			os.system("process_radtags -r -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
 			print "\n***Quality-trimming reads using Trimmomatic***\n"
                         
-	else:
+	elif options.rescue == False:
 		nothing = 1
         if options.clean == True:
             alert = open("./cleaned/ATTENTION", "w")
