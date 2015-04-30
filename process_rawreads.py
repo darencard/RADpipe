@@ -82,11 +82,11 @@ def setup(r1nm):
 
 def PE_clone_filter():
 	print "\n***Filtering PCR duplicates***\n"
-	os.system("clone_filter -1 "+options.read1+" -2 "+options.read2+" -o ./clone_filtered/")
+	os.system("clone_filter -1 "+options.read1+" -2 "+options.read2+" -o ./clone_filtered/ 2>&1 | tee ./clone_filtered/"+options.read1+".clonefilter.log")
 
 def SE_clone_filter():
 	print "\n***Filtering PCR duplicates***\n"
-	os.system("clone_filter -1 "+options.read1+" -2 "+options.read1+" -o ./clone_filtered/")
+	os.system("clone_filter -1 "+options.read1+" -2 "+options.read1+" -o ./clone_filtered/ 2>&1 | tee ./clone_filtered/"+options.read1+".clonefilter.log")
 	os.system("rm -f ./clone_filtered/*.fil.fq_2")
 
 #################################################
@@ -134,22 +134,22 @@ def PE_sample_parser(r1nm, r2nm):
 			line = "You elected to quality-trim your reads using Stacks. This trimming was done simultaneously with parsing. See the 'parsed' folder for your trimmed reads."
 			alert.write(line)
 			alert.close()
-			os.system("process_radtags -r -c -q -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
+			os.system("process_radtags -r -c -q -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq 2>&1 | tee ./parsed/"+str(r1nm)+"/"+str(r1nm)+".parse.log")
 			print "\n***Quality-trimming reads using Stacks***\n"
                         
 		else:
-			os.system("process_radtags -r -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
+			os.system("process_radtags -r -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq 2>&1 | tee ./parsed/"+str(r1nm)+"/"+str(r1nm)+".parse.log")
 			print "\n***Quality-trimming reads using Trimmomatic***\n"
 	else:
 		if options.clean == True:
-        		os.system("process_radtags -c -q -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
+        		os.system("process_radtags -c -q -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq 2>&1 | tee ./parsed/"+str(r1nm)+"/"+str(r1nm)+".parse.log")
             		print "\n***Quality-trimming reads using Stacks***\n"
             		alert = open("./cleaned/ATTENTION", "w")
             		line = "You elected to quality-trim your reads using Stacks. This trimming was done simultaneously with parsing. See the 'parsed' folder for your trimmed reads."
             		alert.write(line)
             		alert.close()                   
 		else:
-			os.system("process_radtags -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq")
+			os.system("process_radtags -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_index --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -1 ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq -2 ./lead_trimmed/"+r2nm+".2.clone.trim.fastq 2>&1 | tee ./parsed/"+str(r1nm)+"/"+str(r1nm)+".parse.log")
             		print "\n***Quality-trimming reads using Trimmomatic***\n"
                                     
 
@@ -160,11 +160,11 @@ def SE_sample_parser(r1nm):
 			line = "You elected to quality-trim your reads using Stacks. This trimming was done simultaneously with parsing. See the 'parsed' folder for your trimmed reads."
 			alert.write(line)
 			alert.close()
-			os.system("process_radtags -r -c -q -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_null --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -f ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq")
+			os.system("process_radtags -r -c -q -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_null --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -f ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq 2>&1 | tee ./parsed/"+str(r1nm)+"/"+str(r1nm)+".parse.log")
 			print "\n***Quality-trimming reads using Stacks***\n"
 			                        
 		else:
-			os.system("process_radtags -r -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_null --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -f ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq")
+			os.system("process_radtags -r -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_null --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -f ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq 2>&1 | tee ./parsed/"+str(r1nm)+"/"+str(r1nm)+".parse.log")
 			print "\n***Quality-trimming reads using Trimmomatic***\n"
 	else:
         	if options.clean == True:
@@ -172,10 +172,10 @@ def SE_sample_parser(r1nm):
             		line = "You elected to quality-trim your reads using Stacks. This trimming was done simultaneously with parsing. See the 'parsed' folder for your trimmed reads."
             		alert.write(line)
             		alert.close()
-			os.system("process_radtags -c -q -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_null --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -f ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq")
+			os.system("process_radtags -c -q -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_null --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -f ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq 2>&1 | tee ./parsed/"+str(r1nm)+"/"+str(r1nm)+".parse.log")
             		print "\n***Quality-trimming reads using Stacks***\n"
 		else:
-			os.system("process_radtags -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_null --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -f ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq")
+			os.system("process_radtags -b barcodes.txt -o ./parsed/"+str(r1nm)+" --inline_null --renz_1 "+str(options.renz1)+" --renz_2 "+str(options.renz2)+" -f ./lead_trimmed/"+str(r1nm)+".1.clone.trim.fastq 2>&1 | tee ./parsed/"+str(r1nm)+"/"+str(r1nm)+".parse.log")
             		print "\n***Quality-trimming reads using Trimmomatic***\n"                        
 
 
@@ -211,7 +211,7 @@ def PE_quality_trim(r1nm):
         		bar = foo.split()
 			handle = bar[0]+"_"+bar[3]+"-"+bar[4]
 			threads = options.threads
-			PEclean = "trimmomatic-0.32.jar PE -threads "+threads+" -trimlog ./cleaned/"+handle+".qtrim.log ./parsed/"+str(r1nm)+"/"+handle+".P1.fq ./parsed/"+str(r1nm)+"/"+handle+".P2.fq ./cleaned/"+handle+".P1.qtrim ./cleaned/"+handle+".S1.qtrim ./cleaned/"+handle+".P2.qtrim ./cleaned/"+handle+".S2.qtrim LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:36 TOPHRED33"
+			PEclean = "trimmomatic-0.32.jar PE -threads "+threads+" -trimlog ./cleaned/"+handle+".qtrim.log ./parsed/"+str(r1nm)+"/"+handle+".P1.fq ./parsed/"+str(r1nm)+"/"+handle+".P2.fq ./cleaned/"+handle+".P1.qtrim ./cleaned/"+handle+".S1.qtrim ./cleaned/"+handle+".P2.qtrim ./cleaned/"+handle+".S2.qtrim LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:36 TOPHRED33 2>&1 | tee ./cleaned/"+handle+".qtrim.summary.log"
 			os.system(str(PEclean))
 ### Put command to trim away restriction site here and below else for Trimmomatic option ###
 				
@@ -221,7 +221,7 @@ def SE_quality_trim(r1nm):
         		bar = foo.split()
             		handle = bar[0]+"_"+bar[3]
             		threads = options.threads
-            		SEclean = "trimmomatic-0.32.jar SE -threads "+threads+" -trimlog ./cleaned/"+handle+".qtrim.log ./parsed/"+str(r1nm)+"/"+handle+".S1.fq ./cleaned/"+handle+".S1.qtrim LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:36 TOPHRED33"
+            		SEclean = "trimmomatic-0.32.jar SE -threads "+threads+" -trimlog ./cleaned/"+handle+".qtrim.log ./parsed/"+str(r1nm)+"/"+handle+".S1.fq ./cleaned/"+handle+".S1.qtrim LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:36 TOPHRED33 2>&1 | tee ./cleaned/"+handle+".qtrim.summary.log"
 			os.system(str(SEclean))
 ### Put command to trim away restriction site here and below else for Trimmomatic option ###
 
