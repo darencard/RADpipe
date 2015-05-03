@@ -213,6 +213,10 @@ def PE_quality_trim(r1nm):
 			threads = options.threads
 			PEclean = "trimmomatic-0.32.jar PE -threads "+threads+" -trimlog ./cleaned/"+handle+".qtrim.log ./parsed/"+str(r1nm)+"/"+handle+".P1.fq ./parsed/"+str(r1nm)+"/"+handle+".P2.fq ./cleaned/"+handle+".P1.qtrim ./cleaned/"+handle+".S1.qtrim ./cleaned/"+handle+".P2.qtrim ./cleaned/"+handle+".S2.qtrim LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:36 TOPHRED33 2>&1 | tee ./cleaned/"+handle+".qtrim.summary.log"
 			os.system(str(PEclean))
+			os.system("sed -i 's/\_1$/\ 1/g' ./cleaned/"+handle+".P1.qtrim")
+			os.system("sed -i 's/\_2$/\ 2/g' ./cleaned/"+handle+".P2.qtrim")
+			os.system("sed -i 's/\_1$/\ 1/g' ./cleaned/"+handle+".S1.qtrim")
+                        os.system("sed -i 's/\_2$/\ 2/g' ./cleaned/"+handle+".S2.qtrim")
 ### Put command to trim away restriction site here and below else for Trimmomatic option ###
 				
 def SE_quality_trim(r1nm):
@@ -223,6 +227,8 @@ def SE_quality_trim(r1nm):
             		threads = options.threads
             		SEclean = "trimmomatic-0.32.jar SE -threads "+threads+" -trimlog ./cleaned/"+handle+".qtrim.log ./parsed/"+str(r1nm)+"/"+handle+".S1.fq ./cleaned/"+handle+".S1.qtrim LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:36 TOPHRED33 2>&1 | tee ./cleaned/"+handle+".qtrim.summary.log"
 			os.system(str(SEclean))
+			os.system("sed -i 's/\_1$/\ 1/g' ./cleaned/"+handle+".S1.qtrim")
+			os.system("sed -i 's/\_2$/\ 2/g' ./cleaned/"+handle+".S2.qtrim")
 ### Put command to trim away restriction site here and below else for Trimmomatic option ###
 
 
