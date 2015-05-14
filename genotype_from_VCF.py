@@ -66,6 +66,7 @@ parser.add_option("--nucl", action = "store_true", dest = "nucl", help = "create
 parser.add_option("--trinary", action = "store_true", dest = "tri", help = "create trinary FASTA alignment with 0, 1, 2 genotype codes [TRUE]", default = "True")
 parser.add_option("--gq", action = "store", dest = "gq", help = "threshold genotype quality for reporting individual genotype (otherwise coded as missing - ?) [20]", default = "20")
 parser.add_option("--ind", action = "store_true", dest = "ind", help = "thin dataset to only include 1 SNP per 10 kb, so as to reduce chance of linked SNPs [TRUE]", default = "True")
+parser.add_option("--thin", action = "store", dest = "ind", help = "window size to use for thinning in bp (keeps first SNP it finds and ignores others) [10000]", default = "10000")
 parser.add_option("--maf", action = "store", dest = "maf", help = "the minor allele frequency range desired: 0 (all MAF), 1 (MAF >= 0.050), 2 (0.010 <= MAF < 0.050), 3 (MAF < 0.050) [1]", default = "1") 
 parser.add_option("--filvcf", action = "store", type = "string", dest = "filvcf", help ="specify a filtered VCF for genotyping (e.g., re-running a script) - bipasses creating new VCF [N/A]", default = "")
 
@@ -94,15 +95,19 @@ def vcf_filter():
 	else:
 		print "\n\n***Error: a minor allele range needs to be specified!***\n\n"
 	
-	## Thinning routine
+	## Thinning routine (if applicable)
 	if options.ind is True:
-		vcf_thin = "--thin 10000"
-		print "\n\n***Thinning to one SNP per 10 kb***\n\n"
+		vcf_thin = options.thin
+		print "\n\n***Thinning to one SNP per 10 kb using the following command***\n\n"
+		command = "vcftools --vcf "+options.prefix+".maf"+options.maf+".recode.vcf"+" --thin"+vcf_thin+" --recode --recode-INFO-all --out "+options.prefix+".thin
+		print command
+		os.system(command)
+		os.system("mv "+options.prefix+".thin "+options.prefix+".maf"+options.maf+".recode.vcf"
 	else:
 		vcf_thin = ""
 		print "\n\n***No thinning will be performed***\n\n"
 	
-	## construct command and run it
+	## construct MAF filtering command and run it
 	command = "vcftools --vcf "+options.vcf+" "+vcf_maf+" "+vcf_thin+" --recode --recode-INFO-all --out "+options.prefix+".maf"+options.maf
 	print "\n\n###Using the following command with VCFtools to produce filtered VCF###\n\n"
 	print command
