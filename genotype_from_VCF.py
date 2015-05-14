@@ -96,7 +96,7 @@ def vcf_filter():
 		print "\n\n***Error: a minor allele range needs to be specified!***\n\n"
 	
 	## construct MAF filtering command and run it
-	command = "vcftools --vcf "+options.vcf+" "+vcf_maf+" --recode --recode-INFO-all --out "+options.prefix+".maf"+options.maf
+	command = str("vcftools --vcf "+options.vcf+" "+vcf_maf+" --recode --recode-INFO-all --out "+options.prefix+".maf"+options.maf)
 	print "\n\n###Using the following command with VCFtools to produce filtered VCF###\n\n"
 	print command
 	os.system(command)
