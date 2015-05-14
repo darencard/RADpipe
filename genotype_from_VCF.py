@@ -97,10 +97,9 @@ def vcf_filter():
 	
 	## construct MAF filtering command and run it
 	command = "vcftools --vcf "+str(options.vcf)+" "+str(vcf_maf)+" --recode --recode-INFO-all --out "+str(options.prefix)+".maf"+str(options.maf)
-	print "\n\n###Using the following command with VCFtools to produce filtered VCF###\n\n"
+	print "\n\n###Using the following command with VCFtools to produce MAF filtered VCF###\n\n"
 	print command
 	os.system(command)
-	print "\n\n###The filtered VCF is named "+options.prefix+".maf"+options.maf+".recode.vcf###\n\n"
 
 	## Thinning routine (if applicable)
 	if options.ind is True:
@@ -109,10 +108,12 @@ def vcf_filter():
 		command = "vcftools --vcf "+str(options.prefix)+".maf"+str(options.maf)+".recode.vcf --thin "+str(vcf_thin)+" --recode --recode-INFO-all --out "+str(options.prefix)+".thin"
 		print command
 		os.system(command)
-		os.system("mv "+options.prefix+".thin "+options.prefix+".maf"+options.maf+".recode.vcf")
+		os.system("mv "+options.prefix+".thin.recode.vcf "+options.prefix+".maf"+options.maf+".recode.vcf")
 	else:
 		vcf_thin = ""
 		print "\n\n***No thinning will be performed***\n\n"
+	print "\n\n###The filtered VCF is named "+options.prefix+".maf"+options.maf+".recode.vcf###\n\n"
+
 
 #################################################
 ###          Creating Entropy output          ###
