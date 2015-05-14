@@ -99,7 +99,7 @@ def vcf_filter():
 	if options.ind is True:
 		vcf_thin = options.thin
 		print "\n\n***Thinning to one SNP per 10 kb using the following command***\n\n"
-		command = "vcftools --vcf "+options.prefix+".maf"+options.maf+".recode.vcf"+" --thin"+vcf_thin+" --recode --recode-INFO-all --out "+options.prefix+".thin
+		command = "vcftools --vcf "+options.prefix+".maf"+options.maf+".recode.vcf"+" --thin"+vcf_thin+" --recode --recode-INFO-all --out "+options.prefix+".thin"
 		print command
 		os.system(command)
 		os.system("mv "+options.prefix+".thin "+options.prefix+".maf"+options.maf+".recode.vcf"
