@@ -169,9 +169,9 @@ def nucl_fasta(GT, GQ, filtered_vcf):
 	## For each individual in sample sheet
 	for line in open(options.sheet, "r"):
 	    if not line.strip().startswith("#"):
-			
+
 			## Write out fasta header with sample ID and population ID
-			nucl_out.write(">"+line.split()[1]+"_"+line.split()[2]+"\n")
+			nucl_out.write(">"+line.split("\t")[1]+"_"+line.split("\t")[2]+"_"+line.split("\t")[3])
 			
 			## For each line (locus) in VCF
 			for vline in open(filtered_vcf, "r"):
@@ -217,7 +217,7 @@ def tri_fasta(GT, GQ, filtered_vcf):
 	    if not line.strip().startswith("#"):
 			
 			## Write out fasta header with sample ID and population ID
-			tri_out.write(">"+line.split()[1]+"_"+line.split()[2]+"\n")
+			tri_out.write(">"+line.split()[1]+"_"+line.split()[2]+"_"+line.split()[3]+"\n")
 			
 			## for each line (locus) in VCF
 			for vline in open(filtered_vcf, "r"):
