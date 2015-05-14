@@ -102,7 +102,7 @@ def vcf_filter():
 		command = "vcftools --vcf "+options.prefix+".maf"+options.maf+".recode.vcf"+" --thin"+vcf_thin+" --recode --recode-INFO-all --out "+options.prefix+".thin"
 		print command
 		os.system(command)
-		os.system("mv "+options.prefix+".thin "+options.prefix+".maf"+options.maf+".recode.vcf"
+		os.system("mv "+options.prefix+".thin "+options.prefix+".maf"+options.maf+".recode.vcf")
 	else:
 		vcf_thin = ""
 		print "\n\n***No thinning will be performed***\n\n"
