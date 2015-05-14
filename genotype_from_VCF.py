@@ -95,25 +95,24 @@ def vcf_filter():
 	else:
 		print "\n\n***Error: a minor allele range needs to be specified!***\n\n"
 	
+	## construct MAF filtering command and run it
+	command = "vcftools --vcf "+options.vcf+" "+vcf_maf+" --recode --recode-INFO-all --out "+options.prefix+".maf"+options.maf
+	print "\n\n###Using the following command with VCFtools to produce filtered VCF###\n\n"
+	print command
+	os.system(command)
+	print "\n\n###The filtered VCF is named "+options.prefix+".maf"+options.maf+".recode.vcf###\n\n"
+
 	## Thinning routine (if applicable)
 	if options.ind is True:
 		vcf_thin = options.thin
 		print "\n\n***Thinning to one SNP per 10 kb using the following command***\n\n"
-		command = "vcftools --vcf "+options.prefix+".maf"+options.maf+".recode.vcf"+" --thin"+vcf_thin+" --recode --recode-INFO-all --out "+options.prefix+".thin"
+		command = "vcftools --vcf "+options.prefix+".maf"+options.maf+".recode.vcf"+" --thin "+vcf_thin+" --recode --recode-INFO-all --out "+options.prefix+".thin"
 		print command
 		os.system(command)
 		os.system("mv "+options.prefix+".thin "+options.prefix+".maf"+options.maf+".recode.vcf")
 	else:
 		vcf_thin = ""
 		print "\n\n***No thinning will be performed***\n\n"
-	
-	## construct MAF filtering command and run it
-	command = "vcftools --vcf "+options.vcf+" "+vcf_maf+" "+vcf_thin+" --recode --recode-INFO-all --out "+options.prefix+".maf"+options.maf
-	print "\n\n###Using the following command with VCFtools to produce filtered VCF###\n\n"
-	print command
-	os.system(command)
-	print "\n\n###The filtered VCF is named "+options.prefix+".maf"+options.maf+".recode.vcf###\n\n"
-
 
 #################################################
 ###          Creating Entropy output          ###
