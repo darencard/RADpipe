@@ -37,7 +37,7 @@ naming the output files created. The suffixes for the different file types are a
 	5. IN DEVELOPMENT: Various R plots from discriminant analysis: .dapc.plot
 	6. Nucleotide FASTA: .nucl.fasta
 	7. Trinary FASTA: .tri.fasta
-	8. Log file: .maf<#>.log (needs to be saved if specifying filtered VCF)
+	8. Log files: .maf<#>.log (needs to be saved if specifying filtered VCF)
 	
 Dependencies include the latest versions of R, with the package MASS installed, and VCFtools, all \
 included in the user's $PATH. The user should provide an input VCF that has already been filtered \
@@ -295,7 +295,11 @@ def get_stat(filtered_VCF):
 ## Uses a regular expression search of the VCFtools log
 def get_vcf_dims():
 	out = []
-	for line in open(options.prefix+".maf"+options.maf+".log", "r"):
+	if options.ind is True:
+		file = options.prefix+".thin.log"
+	else:
+		file = options.prefix+".maf"+options.maf+".log"
+	for line in open(file, "r"):
 		if line.strip().startswith("After"):
 			query = re.compile('kept (.*?) out')
 			match = query.search(line)
