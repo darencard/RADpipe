@@ -1,4 +1,4 @@
-#!/usr/local/env python
+#!/usr/bin/env python
 
 ##print __name__
 
@@ -62,8 +62,8 @@ parser.add_option("--prefix", action = "store", dest = "prefix", help = "prefix 
 #parser.add_option("--entropy", action = "store_true", dest = "entropy", help = "create entropy input file and proper starting points [TRUE]", default = "True")
 #parser.add_option("--startK", action = "store", dest = "sK", help = "starting (lower) K [1]", default = "1")
 #parser.add_option("--endK", action = "store", dest = "eK", help = "ending (higher) K [5]", default = "2")
-parser.add_option("--nucl", action = "store_true", dest = "nucl", help = "create nucleotide FASTA alignment with IUPAC ambiguities for heterozygous sites [TRUE]", default = True)
-parser.add_option("--trinary", action = "store_true", dest = "tri", help = "create trinary FASTA alignment with 0, 1, 2 genotype codes [TRUE]", default = "True")
+parser.add_option("--nucl", action = "store_true", dest = "nucl", help = "create nucleotide FASTA alignment with IUPAC ambiguities for heterozygous sites [TRUE]", default = False)
+parser.add_option("--trinary", action = "store_true", dest = "tri", help = "create trinary FASTA alignment with 0, 1, 2 genotype codes [TRUE]", default = False)
 parser.add_option("--genotype", action = "store", dest = "genotype", help = "type of genotype likelihood output: 0 = PHRED, 1 = -Log10, 2 = Standardized, 3 = Genotype Uncertainty [0]", default = "0")
 parser.add_option("--gq", action = "store", dest = "gq", help = "threshold genotype quality for reporting individual genotype (otherwise coded as missing - ?) [20]", default = "20")
 parser.add_option("--ind", action = "store_true", dest = "ind", help = "thin dataset to only include 1 SNP per 10 kb, so as to reduce chance of linked SNPs [TRUE]", default = "True")
@@ -412,14 +412,14 @@ def main():
 		print "\n\n***Not creating a genotype likelihood matrix***\n\n"
 	
 	## If user specified nucleotide fasta output, give it to them
-	if options.nucl == True:
+	if options.nucl is True:
 		print "\n\n***Creating nucleotide SNP genotype alignment***\n\n"
 		nucl_fasta(GT, GQ, filtered_vcf)
 	else:
 		print "\n\n***Not creating a nucleotide SNP genotype alignment***\n\n"
 	
 	## If user specified trinary fasta output, give it to them
-	if options.tri == True:
+	if options.tri is True:
 		print "\n\n***Creating trinary SNP genotype alignment***\n\n"
 		tri_fasta(GT, GQ, filtered_vcf)
 	else:
