@@ -297,10 +297,10 @@ def recode_gl(outfile, genochunk, delimiter):
 	p1 = float(10 ** (int(bar[1])/-10))
 	p2 = float(10 ** (int(bar[2])/-10))
 	psum = float(p0 + p1 + p2)
-	g0 = float((p0/psum)*0)
-	g1 = float((p1/psum)*1)
-	g2 = float((p2/psum)*2)
-	gsum = float(round((g0 + g1 + g2),4))
+	g0 = float(p0/psum)
+	g1 = float(p1/psum)
+	g2 = float(p2/psum)
+	gsum = float(float(g0*0) + float(g1*1) + float(g2*2))
 	if options.genotype == "0":
 		return bar[0]+delimiter+bar[1]+delimiter+bar[2]
 	elif options.genotype == "1":
@@ -399,29 +399,29 @@ def main():
 	## Retrieve location of FORMAT flags so we can extract the values we want
 	(GT, PL, GQ) = get_stat(filtered_vcf)
 	
-	## If user specified Entropy output, give it to them
+	## If user specified genotype likelihood output, give it to them
 	if options.genotype is not "":
+		print "\n\n***Creating a genotype likelihood matrix***\n\n"
 		if options.delimit == "1":
 			geno_matrix(PL, filtered_vcf, " ")
 		elif options.delimit == "2":
 			geno_matrix(PL, filtered_vcf, "\t")
 		else:
 			print "\n\n***Specify a delimiter for the genotype matrix!***\n\n"
-		print "\n\n***Creating genotype input for Entropy***\n\n"
 	else:
-		print "\n\n***Not creating any input for Entropy***\n\n"
+		print "\n\n***Not creating a genotype likelihood matrix***\n\n"
 	
 	## If user specified nucleotide fasta output, give it to them
 	if options.nucl == True:
-		nucl_fasta(GT, GQ, filtered_vcf)
 		print "\n\n***Creating nucleotide SNP genotype alignment***\n\n"
+		nucl_fasta(GT, GQ, filtered_vcf)
 	else:
 		print "\n\n***Not creating a nucleotide SNP genotype alignment***\n\n"
 	
 	## If user specified trinary fasta output, give it to them
 	if options.tri == True:
-		tri_fasta(GT, GQ, filtered_vcf)
 		print "\n\n***Creating trinary SNP genotype alignment***\n\n"
+		tri_fasta(GT, GQ, filtered_vcf)
 	else:
 		print "\n\n***Not creating a trinary SNP genotype alignment***\n\n"
 	
