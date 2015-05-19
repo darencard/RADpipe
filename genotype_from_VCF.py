@@ -389,12 +389,12 @@ def file_len(fname):
 def main():
 	## If previously filtered VCF is specified, use that, otherwise filter based on user input
 	if options.filvcf == "":
+		print "\n\n***Producing new VCF based on MAF and SNP independence settings***\n\n"
 		vcf_filter()
 		filtered_vcf = options.prefix+".maf"+options.maf+".recode.vcf"
-		print "\n\n***Producing new VCF based on MAF and SNP independence settings***\n\n"
 	else:
-		filtered_vcf = options.filvcf
 		print "\n\n***Working from previously filtered VCF***\n\n"
+		filtered_vcf = options.filvcf
 	
 	## Retrieve location of FORMAT flags so we can extract the values we want
 	(GT, PL, GQ) = get_stat(filtered_vcf)
