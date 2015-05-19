@@ -26,6 +26,14 @@ def bootstrap(data, num_samples, statistic, alpha):
     n = len(data)
     idx = npr.randint(0, n, (num_samples,n))
     samples = data[idx]
+    for fst in np.arange(0, 1, 0.01):
+    	for row in samples:
+    		#print fst
+    		#print row.shape[0]
+    		cond = (row >= fst).sum()
+    		total = row.shape[0]
+    		if float(cond)/total <= 0.05:
+    			print fst
     stat = np.sort(statistic(samples, 1))
     return (stat[int((alpha/2.0)*num_samples)],
             stat[int((1-alpha/2.0)*num_samples)])

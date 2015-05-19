@@ -1,4 +1,4 @@
-#!/usr/local/env python
+#!/usr/bin/env python
 
 import numpy as np
 import numpy.random as npr
