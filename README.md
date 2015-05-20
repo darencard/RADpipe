@@ -35,23 +35,23 @@ Three other scripts are provided for downstream purposes:
 Given that each script contains detailed usage information, no further details will be provided here for now. I hope to start filling in examples as time permits.
 
 ## Citations
-#### This Repository:
-Card. 2015. RADpipe. GitHub repository. [doi: 10.5281/zenodo.17809](http://doi.org/10.5281/zenodo.17809)
+##### This Repository:
+Card. 2015. RADpipe. GitHub repository. [doi: 10.5281/zenodo.17809](http://doi.org/10.5281/zenodo.17809).
 
-#### ddRADseq:
+##### ddRADseq:
 Peterson, et al. 2012. Double Digest RADseq: An inexpensive method for de novo SNP discovery and genotyping in model and non-model species. PLoS ONE 7 (5): e37135. [doi: 10.1371/journal.pone.0037135](http://doi.org/10.1371/journal.pone.0037135).
 
-#### Stacks:
+##### Stacks:
 Catchen, et al. 2011. Stacks: building and genotyping loci de novo from short-read sequences. G3: Genes, Genomes, Genetics 1 (3): 171-182. [doi: 10.1534/g3.111.000240](http://doi.org/10.1534/g3.111.000240).
 Catchen, et al. 2013. Stacks: an analysis tool set for population genomics. Molecular Ecology 22 (11): 3124-3140. [doi: 10.1111/mec.12354](http://doi.org/10.1111/mec.12354).
 
-#### BWA/SAMtools/BCFtools:
+##### BWA/SAMtools/BCFtools:
 Li & Durbin. 2009. Fast and accurate short read alignment with Burrows-Wheeler transform. Bioinformatics 25 (14): 1754-1760. [doi: 10.1093/bioinformatics/btp324](http://doi.org/10.1093/bioinformatics/btp324).
 Li, et al. 2009. The Sequence Alignment/Map format and SAMtools. Bioinformatics 25 (16): 2078-2079. [doi: 10.1093/bioinformatics/btp352](http://doi.org/10.1093/bioinformatics/btp352).
 Li. 2011. A statistical framework for SNP calling, mutation discovery, association mapping, and population genetical parameter estimation from sequence data. Bioinformatics 27 (21): 2987-2993. [doi: 10.1093/bioinformatics/btr509](http://doi.org/10.1093/bioinformatics/btr509).
 
-#### VCFtools:
+##### VCFtools:
 Danecek, et al. 2011. The variant call format and VCFtools. Bioinformatics 27 (15): 2156-2158. [doi: 10.1093/bioinformatics/btr330](http://doi.org/10.1093/bioinformatics/btr330).
 
-#### R:
+##### R:
 R Development Core Team. 2015. R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. [http://www.r-project.org./](http://www.r-project.org/).
