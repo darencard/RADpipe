@@ -1,4 +1,52 @@
 RADpipe
 =======
 
-Daren's RADseq pipeline. Currently in development.
+# Overview:
+This repository contains a set of scripts that will pipeline data processing of RADseq data to produce files necessary for analysis. Details of this pipeline and of some supplementary scripts are included below. Please note that some up-front data processing steps are specific to the type of library prep and reads used in my work and may not work properly in instances where alternative library preparations or adapter designs are used. These scripts are designed to process double digest RADseq data with combinatorial barcodes, like that presented in Peterson et al. (2012). These data also include an 8bp unique molecular identifier (UMI) sequence at the beginning of both the forward and reverse (if applicable) reads that enable PCR clones to be excluded. With this in mind, considerable flexibility is included in the pipeline scripts, which may allow other library types to be accommodated. Moreover, anyone with working knowledge of Python can adapt these scripts to their design. I apologize in advance for the inefficient nature of many portions of the code and I know that it would be largely frowned upon by a more seasoned coder, but ultimately it does work (at least for me).
+
+If you decide to use or adapt these scripts for your own work, please be sure to acknowledge them, and all dependencies, in any resulting publications. Full citations have been included below to facilitate this.
+
+Please note that I do not have the time or expertise to provide support, so these scripts are provided as-is, with no guarantee of proper functioning or desirable results.
+
+# Dependencies:
+1. Python 2 (tested using v.2.7.3)
+2. Stacks up to v.1.19 (tested using v.1.19)
+3. BWA (tested using v.0.7.9)
+4. SAMtools version 0 (tested using v.0.1.19)
+5. BCFtools version 0 (tested using v.0.1.19)
+6. VCFtools (tested using v.0.1.12b)
+7. R with Base, Utils, Stats, and MASS packages installed
+
+# Core Pipeline:
+The pipeline is composed of three main core scripts:
+1. process_rawreads.py: Filters PCR clones, trims away 8bp UMI, parses reads for each sample, and quality trims.
+2. read_mapping.py: Maps parsed reads from each sample to a specified reference genome and processes mapping files.
+3. variant_calling_from_BAM.py: Uses mapping BAM files to call variants and produce a VCF output.
+
+# Other Scripts:
+Three other scripts are provided for downstream purposes:
+1. sigThreshold_bootstrap.py: Returns a threshold for significance based on bootstrap resampling of a given column (i.e., a population genetic statistic).
+2. genotype_from_VCF.py: Returns either genotype likelihood matrices (with format designated by user) or variant alignments for downstream programs.
+3. entropyStart.R: Produces MCMC starting points for the Entropy program using output from genotype_from_VCF.py.
+
+# Running the Pipeline:
+Given that each script contains detailed usage information, no further details will be provided here for now. I hope to start filling in examples as time permits.
+
+# Citations
+ddRADseq:
+Peterson, et al. 2012. Double Digest RADseq: An inexpensive method for de novo SNP discovery and genotyping in model and non-model species. PLoS ONE 7 (5): e37135. [doi: 10.1371/journal.pone.0037135](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0037135#s5).
+
+Stacks:
+Catchen, et al. 2011. Stacks: building and genotyping loci de novo from short-read sequences. G3: Genes, Genomes, Genetics 1 (3): 171-182. [doi: 10.1534/g3.111.000240](http://www.g3journal.org/content/1/3/171.short).
+Catchen, et al. 2013. Stacks: an analysis tool set for population genomics. Molecular Ecology 22 (11): 3124-3140. [doi: 10.1111/med.12354](http://onlinelibrary.wiley.com/doi/10.1111/mec.12354/full).
+
+BWA/SAMtools/BCFtools:
+Li & Durbin. 2009. Fast and accurate short read alignment with Burrows-Wheeler transform. Bioinformatics 25 (14): 1754-1760. [doi: 10.1093/bioinformatics/btp324](http://bioinformatics.oxfordjournals.org/content/25/14/1754.short).
+Li, et al. 2009. The Sequence Alignment/Map format and SAMtools. Bioinformatics 25 (16): 2078-2079. [doi: 10.1093/bioinformatics/btp352](http://bioinformatics.oxfordjournals.org/content/25/16/2078.short).
+Li. 2011. A statistical framework for SNP calling, mutation discovery, association mapping, and population genetical parameter estimation from sequence data. Bioinformatics 27 (21): 2987-2993. [doi: 10.1093/bioinformatics/btr509](http://bioinformatics.oxfordjournals.org/content/27/21/2987.short).
+
+VCFtools:
+Danecek, et al. 2011. The variant call format and VCFtools. Bioinformatics 27 (15): 2156-2158. [doi: 10.1093/bioinformatics/btr330](http://bioinformatics.oxfordjournals.org/content/27/15/2156.short).
+
+R:
+R Development Core Team. 2015. R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. [http://www.r-project.org./](http://www.r-project.org./).
