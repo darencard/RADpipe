@@ -36,7 +36,7 @@ Dependencies include the Stacks pipeline (v. 1.10 - 1.19), the FastX toolkit, an
 (if desired), and all need to be installed in the users path.
 
 python process_rawreads.py -t <#threads> -s <samplesheet.txt> [-p -r] -c/-q -1 <single-end.fastq> \
-[-2 <paired-end.fastq>] --renz1 <RE_1> --renz2 <RE_2> --bar_loc <inline/index> [-x [1,2,3,4,5,6>]							
+[-2 <paired-end.fastq>] --renz1 <RE_1> --renz2 <RE_2> --bar_loc <inline/index> [-x [1,2,3,4,5]							
 """
 
 #################################################
@@ -57,7 +57,7 @@ parser.add_option("-2", action="store", type = "string", dest = "read2", help = 
 parser.add_option("--renz1", action="store", type = "string", dest = "renz1", help = "restriction enzyme 1 (common cutter)")
 parser.add_option("--renz2", action="store", type = "string", dest = "renz2", help = "restriction enzyme 2 (rare cutter)")
 parser.add_option("--bar_loc", action="store", type = "string", dest = "bar_loc", help = "location of barcode & index (per process_radtags documentation)")
-parser.add_option("-x", action="store", type = "string", dest = "run", help = "processes to run, deparated by commas (e.g., 1,2,...,5) [1,2,3,4,5]", default = "1,2,3,4,5")
+parser.add_option("-x", action="store", type = "string", dest = "run", help = "processes to run, separated by commas (e.g., 1,2,...,5) [1,2,3,4,5]", default = "1,2,3,4,5")
 
 options, args = parser.parse_args()
 
