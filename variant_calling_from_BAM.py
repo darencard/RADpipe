@@ -107,7 +107,7 @@ def main():
 	
 	## If user wanted to create variants VCF, create command and then run it
 	if "2" in options.exe:
-		variants = options.bcftools+" view -N -c -e -g -v -P full -t 0.001 "+indels+"-d "+options.miss+" -p "+options.pval+" ./vcf/"+options.prefix+".mpileup.bcf > ./vcf/"+options.prefix+".variants.vcf"
+		variants = options.bcftools+" view -N -c -e -g -v -P full -t 0.001 "+indels+"-d "+options.miss+" -p "+options.pval+" ./vcf/"+options.prefix+".mpileup.bcf > ./vcf/"+options.prefix+".variants.d"+options.miss+".p"+options.pval+".vcf"
 		print variants
 		os.system(variants)
 	
