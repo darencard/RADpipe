@@ -26,12 +26,9 @@ The pipeline is composed of three main core scripts:
 3. variant_calling_from_BAM.py: Uses mapping BAM files to call variants and produce a VCF output.
 
 ## Other Scripts:
-Three other scripts are provided for downstream purposes:
-```
 1. sigThreshold_bootstrap.py: Returns a threshold for significance based on bootstrap resampling of a given column (i.e., a population genetic statistic).
 2. genotype_from_VCF.py: Returns either genotype likelihood matrices (with format designated by user) or variant alignments for downstream programs.
 3. entropyStart.R: Produces MCMC starting points for the Entropy program using output from genotype_from_VCF.py.
-```
 
 ## Running the Pipeline:
 Given that each script contains detailed usage information, no further details will be provided here for now. I hope to start filling in examples as time permits.
