@@ -112,19 +112,18 @@ def parse_sample_sheet():
 
 ### Parse the sample sheet to create barcodes file ###
 	barcodes = open("barcodes.txt", "w")
-	for foo in open(options.sheet).read().splitlines():
-        	bar = foo.split()
-		if options.paired == True:
-#			print bar[0], bar[1], bar[2], bar[3], bar[4]
-        		out = bar[3] + "\t" + bar[4] + "\n"
-#			print out
-        		barcodes.write(out)
-		else:
-#               	print bar[0], bar[1], bar[2], bar[3]
-                	out = bar[3] + "\n"
-#               	print out
-                	barcodes.write(out)
-    	barcodes.close()
+	for line in open(options.sheet, "r"):
+		if not line.strip().startswith("#"):
+			bar = line.rstrip().split("\t")
+			if options.paired == True:
+#				print bar[0], bar[1], bar[2], bar[3], bar[4]
+        			out = bar[3] + "\t" + bar[4] + "\n"
+#				print out
+        			barcodes.write(out)
+			else:
+				out = bar[3] + "\n"
+				barcodes.write(out)
+	barcodes.close()
 
 ### process_radtags subroutine ###
 def PE_sample_parser(r1nm, r2nm):
