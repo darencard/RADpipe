@@ -1,14 +1,16 @@
+[![DOI](https://zenodo.org/badge/13132/darencard/RADpipe.svg)](http://dx.doi.org/10.5281/zenodo.17809)
+
 RADpipe
 =======
 
-# Overview:
+## Overview:
 This repository contains a set of scripts that will pipeline data processing of RADseq data to produce files necessary for analysis. Details of this pipeline and of some supplementary scripts are included below. Please note that some up-front data processing steps are specific to the type of library prep and reads used in my work and may not work properly in instances where alternative library preparations or adapter designs are used. These scripts are designed to process double digest RADseq data with combinatorial barcodes, like that presented in Peterson et al. (2012). These data also include an 8bp unique molecular identifier (UMI) sequence at the beginning of both the forward and reverse (if applicable) reads that enable PCR clones to be excluded. With this in mind, considerable flexibility is included in the pipeline scripts, which may allow other library types to be accommodated. Moreover, anyone with working knowledge of Python can adapt these scripts to their design. I apologize in advance for the inefficient nature of many portions of the code and I know that it would be largely frowned upon by a more seasoned coder, but ultimately it does work (at least for me).
 
 If you decide to use or adapt these scripts for your own work, please be sure to acknowledge them, and all dependencies, in any resulting publications. Full citations have been included below to facilitate this.
 
 Please note that I do not have the time or expertise to provide support, so these scripts are provided as-is, with no guarantee of proper functioning or desirable results.
 
-# Dependencies:
+## Dependencies:
 1. Python 2 (tested using v.2.7.3)
 2. Stacks up to v.1.19 (tested using v.1.19)
 3. BWA (tested using v.0.7.9)
@@ -17,22 +19,22 @@ Please note that I do not have the time or expertise to provide support, so thes
 6. VCFtools (tested using v.0.1.12b)
 7. R with Base, Utils, Stats, and MASS packages installed
 
-# Core Pipeline:
+## Core Pipeline:
 The pipeline is composed of three main core scripts:
 1. process_rawreads.py: Filters PCR clones, trims away 8bp UMI, parses reads for each sample, and quality trims.
 2. read_mapping.py: Maps parsed reads from each sample to a specified reference genome and processes mapping files.
 3. variant_calling_from_BAM.py: Uses mapping BAM files to call variants and produce a VCF output.
 
-# Other Scripts:
+## Other Scripts:
 Three other scripts are provided for downstream purposes:
 1. sigThreshold_bootstrap.py: Returns a threshold for significance based on bootstrap resampling of a given column (i.e., a population genetic statistic).
 2. genotype_from_VCF.py: Returns either genotype likelihood matrices (with format designated by user) or variant alignments for downstream programs.
 3. entropyStart.R: Produces MCMC starting points for the Entropy program using output from genotype_from_VCF.py.
 
-# Running the Pipeline:
+## Running the Pipeline:
 Given that each script contains detailed usage information, no further details will be provided here for now. I hope to start filling in examples as time permits.
 
-# Citations
+## Citations
 ddRADseq:
 Peterson, et al. 2012. Double Digest RADseq: An inexpensive method for de novo SNP discovery and genotyping in model and non-model species. PLoS ONE 7 (5): e37135. [doi: 10.1371/journal.pone.0037135](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0037135#s5).
 
