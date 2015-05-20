@@ -52,4 +52,4 @@ Li. 2011. A statistical framework for SNP calling, mutation discovery, associati
 Danecek, et al. 2011. The variant call format and VCFtools. Bioinformatics 27 (15): 2156-2158. [doi: 10.1093/bioinformatics/btr330](http://doi.org/10.1093/bioinformatics/btr330).
 
 ##### R:
-R Development Core Team. 2015. R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. [http://www.r-project.org./](http://www.r-project.org).
+R Development Core Team. 2015. R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. [http://www.r-project.org/](http://www.r-project.org/).
