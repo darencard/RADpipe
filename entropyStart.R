@@ -1,9 +1,10 @@
 #!/usr/bin/env Rscript --vanilla --default-packages=base,utils,stats,MASS
 
+library(MASS)
+
 args<-commandArgs(TRUE)
 
 entropyStart <- function(infile, startk, endk, ...){
-#  library(MASS)
   genoIn <- read.table(infile, header = FALSE, sep = " ", fill = TRUE)
   rmCol <- ncol(genoIn) - 1
   genoInTrim <- as.matrix(genoIn[-c(1:3), c(2:rmCol)])
