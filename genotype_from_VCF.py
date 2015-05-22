@@ -86,7 +86,7 @@ options, args = parser.parse_args()
 def vcf_filter():
 	## MAF routine
 	if options.maf == "0":
-		vcf_maf = ""
+		vcf_maf = "--maf 0.0000001"
 		print "\n\n***VCF will not be filtered by MAF***\n\n"
 	elif options.maf == "1":
 		vcf_maf = "--maf 0.0500"
