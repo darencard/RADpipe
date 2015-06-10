@@ -301,13 +301,13 @@ def recode_gl(outfile, genochunk, delimiter):
 	g1 = float(p1/psum)
 	g2 = float(p2/psum)
 	gsum = float(float(g0*0) + float(g1*1) + float(g2*2))
-	if options.genotype == "0":
+	if options.genotype == "1":
 		return bar[0]+delimiter+bar[1]+delimiter+bar[2]
-	elif options.genotype == "1":
-		return '{:.3f}'.format(p0)+delimiter+'{:.3f}'.format(p1)+delimiter+'{:.3f}'.format(p2)
 	elif options.genotype == "2":
-		return '{:.3f}'.format(g0)+delimiter+'{:.3f}'.format(g1)+delimiter+'{:.3f}'.format(g2)
+		return '{:.3f}'.format(p0)+delimiter+'{:.3f}'.format(p1)+delimiter+'{:.3f}'.format(p2)
 	elif options.genotype == "3":
+		return '{:.3f}'.format(g0)+delimiter+'{:.3f}'.format(g1)+delimiter+'{:.3f}'.format(g2)
+	elif options.genotype == "4":
 		return '{:.5f}'.format(gsum)
 	else:
 		print "\n\n***Specify the output genotype format for genotype matrix***\n\n"
