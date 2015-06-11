@@ -8,7 +8,7 @@ This repository contains a set of scripts that will pipeline data processing of 
 
 If you decide to use or adapt these scripts for your own work, please be sure to acknowledge them, and all dependencies, in any resulting publications. Full citations have been included below to facilitate this.
 
-Please note that I do not have the time or expertise to provide support, so these scripts are provided as-is, with no guarantee of proper functioning or desirable results.
+Please note that I do not have the time or expertise to provide support, so these scripts are provided as-is, with no guarantee of proper functioning or desirable results. Use with caution!
 
 ## Dependencies:
 1. Python 2 (tested using v.2.7.3)
@@ -17,7 +17,7 @@ Please note that I do not have the time or expertise to provide support, so thes
 4. SAMtools version 0 (tested using v.0.1.19)
 5. BCFtools version 0 (tested using v.0.1.19)
 6. VCFtools (tested using v.0.1.12b)
-7. R with Base, Utils, Stats, and MASS packages installed
+7. R with Base, Utils, Stats, MASS, and RColorBrewer packages installed
 
 ## Core Pipeline:
 1. process_rawreads.py: Filters PCR clones, trims away 8bp UMI, parses reads for each sample, and quality trims.
@@ -27,10 +27,15 @@ Please note that I do not have the time or expertise to provide support, so thes
 ## Other Scripts:
 1. sigThreshold_bootstrap.py: Returns a threshold for significance based on bootstrap resampling of a given column (i.e., a population genetic statistic).
 2. genotype_from_VCF.py: Returns either genotype likelihood matrices (with format designated by user) or variant alignments for downstream programs.
-3. entropyStart.R: Produces MCMC starting points for the Entropy program using output from genotype_from_VCF.py.
+3. entropyStart.R: Produces MCMC starting points for the Entropy program (Gompert et al. 2014) using output from genotype_from_VCF.py.
+4. meta_sort_NGSadmix.py: Formats admixture proportion output from NGSadmix () so it can be manipulated and plotted using admixturePlot.R. Will likely adjust so that alternate outputs can be parsed.
+5. admixturePlot.R: Produces admixture bar plot (i.e., "Structure" plot) from formated output from meta_sort_NGSadmix.py for visualization.
 
 ## Running the Pipeline:
 Given that each script contains detailed usage information, no further details will be provided here for now. I hope to start filling in examples as time permits.
+
+## Acknowledgements:
+This pipeline benefited from many discussions with other members of the Castoe lab at the University of Texas at Arlington. Chris Nice (Texas State University) provided guidance on SNP calling and formating VCF files for downstream analyses.
 
 ## Citations
 ##### This Repository:
@@ -50,6 +55,10 @@ Li. 2011. A statistical framework for SNP calling, mutation discovery, associati
 
 ##### VCFtools:
 Danecek, et al. 2011. The variant call format and VCFtools. Bioinformatics 27 (15): 2156-2158. [doi: 10.1093/bioinformatics/btr330](http://doi.org/10.1093/bioinformatics/btr330).
+
+##### Admixture Analyses:
+Gompert, et al. 2014. Admixture and the organization of genetic diversity in a butterfly species complex revealed through common and rare genetic variants. Molecular Ecology 23 (18): 4555-4573. [doi: 10.1111/mec.12811](http://doi.org/10.1111/mec.12811).
+Skotte, et al. 2013. Estimating individual admixture proportions from next generation sequencing data. Genetics 195 (3): 693-702. [doi: 10.1534/genetics.113.154138](http://doi.org/10.1534/genetics.113.154138).
 
 ##### R:
 R Development Core Team. 2015. R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. [http://www.r-project.org/](http://www.r-project.org/).
