@@ -56,7 +56,7 @@ parser.add_option("--samtools", action = "store", dest = "samtools", help = "pat
 parser.add_option("--bcftools", action = "store", dest = "bcftools", help = "path to BCFtools v0.X.XX, or just provide the program if it is in your path (this option is needed because of the multiple versions of BCFtools that exist)")
 parser.add_option("--ref", action = "store", dest = "ref", help = "path to the faidx-indexed reference file in FASTA format")
 parser.add_option("--indels", action = "store_true", dest = "indels", help = "do not perform INDEL calling [TRUE]", default = True)
-parser.add_option("--miss", action = "store", dest = "miss", help = "only include variants where fraction fo samples covered by reads is below given FLOAT threshold (0-1) [0.50]", default = "0.50")
+parser.add_option("--miss", action = "store", dest = "miss", help = "only include variants where fraction of samples covered by reads is above given FLOAT threshold (0-1) [0.50]", default = "0.50")
 parser.add_option("--pval", action = "store", dest = "pval", help = "p-value threshold for variant calling model (i.e., if P(ref|data)<FLOAT) [0.05]", default = "0.05")
 parser.add_option("--exe", action = "store", dest = "exe", help = "processes to run, separated by comma (1 or 2 or 1,2): 1 = generate mpileup; 2 = call variants", default = "1,2")
 
