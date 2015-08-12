@@ -64,7 +64,7 @@ parser.add_option("--prefix", action = "store", dest = "prefix", help = "prefix 
 #parser.add_option("--endK", action = "store", dest = "eK", help = "ending (higher) K [5]", default = "2")
 parser.add_option("--nucl", action = "store_true", dest = "nucl", help = "create nucleotide FASTA alignment with IUPAC ambiguities for heterozygous sites [TRUE]", default = False)
 parser.add_option("--trinary", action = "store_true", dest = "tri", help = "create trinary FASTA alignment with 0, 1, 2 genotype codes [TRUE]", default = False)
-parser.add_option("--genotype", action = "store", dest = "genotype", help = "type of genotype likelihood output: 0 = PHRED, 1 = -Log10, 2 = Standardized, 3 = Genotype Uncertainty [0]", default = "0")
+parser.add_option("--genotype", action = "store", dest = "genotype", help = "type of genotype likelihood output: 0 = Option is off (no matrix output), 1 = PHRED, 2 = -Log10, 3 = Standardized, 4 = Genotype Uncertainty [0]", default = "0")
 parser.add_option("--gq", action = "store", dest = "gq", help = "threshold genotype quality for reporting individual genotype (otherwise coded as missing - ?) [20]", default = "20")
 parser.add_option("--ind", action = "store_true", dest = "ind", help = "thin dataset to only include 1 SNP per 10 kb, so as to reduce chance of linked SNPs [TRUE]", default = "True")
 parser.add_option("--thin", action = "store", dest = "thin", help = "window size to use for thinning in bp (keeps first SNP it finds and ignores others) [10000]", default = "10000")
@@ -86,7 +86,7 @@ options, args = parser.parse_args()
 def vcf_filter():
 	## MAF routine
 	if options.maf == "0":
-		vcf_maf = ""
+		vcf_maf = "--maf 0.0000001"
 		print "\n\n***VCF will not be filtered by MAF***\n\n"
 	elif options.maf == "1":
 		vcf_maf = "--maf 0.0500"
@@ -147,9 +147,9 @@ def geno_matrix(PL, filtered_vcf, delimiter):
 		for sline in open(options.sheet, "r"):
 			if not sline.strip().startswith("#"):
 				bar = sline.rstrip().split("\t")
-				if "3" in options.genotype:
+				if "4" in options.genotype:
 					l1out = bar[1]+str(delimiter)
-				elif "0" or "1" or "2" in options.genotype:
+				elif "1" or "2" or "3" in options.genotype:
 					l1out = bar[1]+str(delimiter)+bar[1]+str(delimiter)+bar[1]+str(delimiter)
 				genomatrix_out.write(l1out)
 		genomatrix_out.write("\n")
@@ -165,9 +165,9 @@ def geno_matrix(PL, filtered_vcf, delimiter):
 		for sline in open(options.sheet, "r"):
 			if not sline.strip().startswith("#"):
 				bar = sline.rstrip().split("\t")
-				if "3" in options.genotype:
+				if "4" in options.genotype:
 					l2out = bar[2]+str(delimiter)
-				elif "0" or "1" or "2" in options.genotype:
+				elif "1" or "2" or "3" in options.genotype:
 					l2out = bar[2]+str(delimiter)+bar[2]+str(delimiter)+bar[2]+str(delimiter)
 				genomatrix_out.write(l2out)
 		genomatrix_out.write("\n")
@@ -301,13 +301,13 @@ def recode_gl(outfile, genochunk, delimiter):
 	g1 = float(p1/psum)
 	g2 = float(p2/psum)
 	gsum = float(float(g0*0) + float(g1*1) + float(g2*2))
-	if options.genotype == "0":
+	if options.genotype == "1":
 		return bar[0]+delimiter+bar[1]+delimiter+bar[2]
-	elif options.genotype == "1":
-		return '{:.3f}'.format(p0)+delimiter+'{:.3f}'.format(p1)+delimiter+'{:.3f}'.format(p2)
 	elif options.genotype == "2":
-		return '{:.3f}'.format(g0)+delimiter+'{:.3f}'.format(g1)+delimiter+'{:.3f}'.format(g2)
+		return '{:.3f}'.format(p0)+delimiter+'{:.3f}'.format(p1)+delimiter+'{:.3f}'.format(p2)
 	elif options.genotype == "3":
+		return '{:.3f}'.format(g0)+delimiter+'{:.3f}'.format(g1)+delimiter+'{:.3f}'.format(g2)
+	elif options.genotype == "4":
 		return '{:.5f}'.format(gsum)
 	else:
 		print "\n\n***Specify the output genotype format for genotype matrix***\n\n"
@@ -400,7 +400,7 @@ def main():
 	(GT, PL, GQ) = get_stat(filtered_vcf)
 	
 	## If user specified genotype likelihood output, give it to them
-	if options.genotype is not "":
+	if options.genotype is not "0":
 		print "\n\n***Creating a genotype likelihood matrix***\n\n"
 		if options.delimit == "1":
 			geno_matrix(PL, filtered_vcf, " ")

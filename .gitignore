@@ -1,5 +1,8 @@
 *.fastq
 *.fq
+*.fastq.gz
+*.fq.gz
+*.qtrim
 clone_filtered
 lead_trimmed
 parsed

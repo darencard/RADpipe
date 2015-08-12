@@ -1,5 +1,0 @@
-1. Incorporate restriction site trimming subroutines into process_rawreads.py. Script contains comments at logical places for incorporation.
-2. Need support for following restriction enzymes: sbfI, sau3AI, mspI/hpaII, pstI
-3. Save output/logs properly (clone_filter and trimmomatic)
-4. Merge all quality-trimmed reads into single file for use in generating pseudo-reference contigs. Create a new flag to handle this preprocessing.
-5. Incorporate adapter list/trimming into Trimmomatic and Stacks. Can supply adapter list with repository.
