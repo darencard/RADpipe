@@ -24,6 +24,8 @@ name for SAMtools and BCFtools v.1.X (tested with v.1.X). Some further capabilit
 	1. The option to exclude INDELS from the variants file
 	2. The option to set the p-value for the variant calling model (see SAMtools documentation)
 	3. The option to run either the mpileup or the variant calling steps individually
+	4. If running the mpileup and variant calling separately, a mpileup file can be specified from a \
+previous run
 	
 This script produces two output files:
 	1. Output mpileup of all loci in BCF format: <prefix>.mpileup.bcf
@@ -36,8 +38,8 @@ versions that may be in use and allows the user to specify an executable with a 
 'samtools' or 'bcftools', in case he or she has both version 0 and 1 on the computer.
 
 python Variant_calling_from_BAM.py --samplsheet <samplesheet.txt> --dir <dir_with_BAMs> --prefix <out_prefix> \
---samtools <path_to_samtools> --bcftools <path_to_bcftools> --ref <path_to_reference> [--indels --miss <0.XX> \
---pval <0.XX> --exe <1,2>]
+--samtools <path_to_samtools> --bcftools <path_to_bcftools> --ref <path_to_reference> [--indels --pval <0.XX> \
+--mpileup <mpileup.bcf> --exe <1,2>]
 """
 
 
