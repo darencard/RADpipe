@@ -21,10 +21,12 @@ sheet enables the user to subset data, if desired, and orders the samples in the
 so that downstream scripts will work properly. The user must also specify the faidx-indexed reference \
 (FASTA) and can specify a prefix for the output files. The user also must specify the path or the executable \
 name for SAMtools and BCFtools v.0.X.XX (tested with v.0.1.19). Some further capability is also provided:
-	1. The option to exclude INDELS from the mpileup and the variants file
+	1. The option to exclude INDELS from the variants file
 	2. The option to set the amount of missing data (i.e., samples without data at a locus)
 	3. The option to set the p-value for the variant calling model (see SAMtools documentation)
 	4. The option to run either the mpileup or the variant calling steps individually
+	5. If running the mpileup and variant calling separately, a mpileup file can be specified from a \
+previous run
 	
 This script produces two output files:
 	1. Output mpileup of all loci in BCF format: <prefix>.mpileup.bcf
@@ -38,7 +40,7 @@ she has both version 0 and 1 on the computer.
 
 python Variant_calling_from_BAM.py --samplsheet <samplesheet.txt> --dir <dir_with_BAMs> --prefix <out_prefix> \
 --samtools <path_to_samtools> --bcftools <path_to_bcftools> --ref <path_to_reference> [--indels --miss <0.XX> \
---pval <0.XX> --exe <1,2>]
+--pval <0.XX> --mpileup <mpileup.bcf> --exe <1,2>]
 """
 
 
@@ -58,6 +60,7 @@ parser.add_option("--ref", action = "store", dest = "ref", help = "path to the f
 parser.add_option("--indels", action = "store_true", dest = "indels", help = "do not perform INDEL calling [TRUE]", default = True)
 parser.add_option("--miss", action = "store", dest = "miss", help = "only include variants where fraction of samples covered by reads is above given FLOAT threshold (0-1) [0.50]", default = "0.50")
 parser.add_option("--pval", action = "store", dest = "pval", help = "p-value threshold for variant calling model (i.e., if P(ref|data)<FLOAT) [0.05]", default = "0.05")
+parser.add_option("--mpileup", action = "store", dest = "mpileup", help = "a mpileup file to use for variant calling (i.e., if it was already generated previously) [NA]")
 parser.add_option("--exe", action = "store", dest = "exe", help = "processes to run, separated by comma (1 or 2 or 1,2): 1 = generate mpileup; 2 = call variants", default = "1,2")
 
 options, args = parser.parse_args()
@@ -101,19 +104,23 @@ def main():
 	
 	## If user wanted to create mpileup, create command and then run it
 	if "1" in options.exe:
-		mpileup = options.samtools+" mpileup -P ILLUMINA -u -g "+indels+"-f "+options.ref+" "+sample_list+" > ./vcf/"+options.prefix+".mpileup.bcf"
+		mpileup = options.samtools+" mpileup -P ILLUMINA -u -g -f "+options.ref+" "+sample_list+" > ./vcf/"+options.prefix+".mpileup.bcf"
 		print mpileup
 		os.system(mpileup)
 	
 	## If user wanted to create variants VCF, create command and then run it
 	if "2" in options.exe:
-		variants = options.bcftools+" view -N -c -e -g -v -P full -t 0.001 "+indels+"-d "+options.miss+" -p "+options.pval+" ./vcf/"+options.prefix+".mpileup.bcf > ./vcf/"+options.prefix+".variants.d"+options.miss+".p"+options.pval+".vcf"
+                if options.mpileup is not None:
+                        mpilein = options.mpileup
+                else:
+                        mpilein = "./vcf/"+options.prefix+".mpileup.bcf"
+		variants = options.bcftools+" view -N -c -e -g -v -P full -t 0.001 "+indels+"-d "+options.miss+" -p "+options.pval+" "+mpilein+".mpileup.bcf > ./vcf/"+options.prefix+".variants.d"+options.miss+".p"+options.pval+".vcf"
 		print variants
 		os.system(variants)
 	
 
 #################################################
-###        	  Call Main Program               ###
+###        	Call Main Program             ###
 #################################################
 
 main()
