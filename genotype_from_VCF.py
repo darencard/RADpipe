@@ -68,7 +68,8 @@ parser.add_option("--genotype", action = "store", dest = "genotype", help = "typ
 parser.add_option("--gq", action = "store", dest = "gq", help = "threshold genotype quality for reporting individual genotype (otherwise coded as missing - ?) [20]", default = "20")
 parser.add_option("--ind", action = "store_true", dest = "ind", help = "thin dataset to only include 1 SNP per 10 kb, so as to reduce chance of linked SNPs [TRUE]", default = "True")
 parser.add_option("--thin", action = "store", dest = "thin", help = "window size to use for thinning in bp (keeps first SNP it finds and ignores others) [10000]", default = "10000")
-parser.add_option("--maf", action = "store", dest = "maf", help = "the minor allele frequency range desired: 0 (all MAF), 1 (MAF >= 0.050), 2 (0.010 <= MAF < 0.050), 3 (MAF < 0.050) [1]", default = "1") 
+parser.add_option("--maf", action = "store", dest = "maf", help = "the minor allele frequency range desired: 0 (all MAF), 1 (MAF >= 0.050), 2 (0.010 <= MAF < 0.050), 3 (MAF < 0.050) [1]", default = "1")
+parser.add_option("--miss", action = "store", dest = "miss", help = "the proportion of missing data allowed (0 = all missing data, 1 = no missing data) [0.5]", default = "0.5") 
 parser.add_option("--locinfo", action = "store_true", dest = "locinfo", help = "include locus positional information (format = chromosome_position) in genotype matrix [FALSE]", default = False)
 parser.add_option("--refalt", action = "store_true", dest = "refalt", help = "include reference and alternative alleles in genotype matrix [FALSE]", default = False)
 parser.add_option("--headers", action = "store", dest = "headers", help = "specify which type of header to include in the genotype matrix (comma separated): 0 = none, 1 = matrix dimensions, 2 = sample IDs, 3 = population IDs, 4 = position and reference/alternative headers [1,2,3,4]", default = "1,2,3,4")
@@ -86,7 +87,7 @@ options, args = parser.parse_args()
 def vcf_filter():
 	## MAF routine
 	if options.maf == "0":
-		vcf_maf = "--maf 0.0000001"
+		vcf_maf = ""
 		print "\n\n***VCF will not be filtered by MAF***\n\n"
 	elif options.maf == "1":
 		vcf_maf = "--maf 0.0500"
@@ -95,13 +96,13 @@ def vcf_filter():
 		vcf_maf = "--maf 0.0100000 --max-maf 0.0499999"
 		print "\n\n***Filtering VCF to 0.01 <= MAF < 0.05***\n\n"
 	elif options.maf == "3":
-		vcf_maf = "--maf 0.0000001 --max-maf 0.0499999"
+		vcf_maf = "--maf 0 --max-maf 0.0499999"
 		print "\n\n***Filtering VCF to MAF < 0.05***\n\n"
 	else:
 		print "\n\n***Error: a minor allele range needs to be specified!***\n\n"
 	
 	## construct MAF filtering command and run it
-	command = "vcftools --vcf "+str(options.vcf)+" "+str(vcf_maf)+" --recode --recode-INFO-all --out "+str(options.prefix)+".maf"+str(options.maf)
+	command = "vcftools --vcf "+str(options.vcf)+" "+str(vcf_maf)+" --max-missing "+options.miss+" --recode --recode-INFO-all --out "+str(options.prefix)+".maf"+str(options.maf)+".miss"+str(options.miss)
 	print "\n\n###Using the following command with VCFtools to produce MAF filtered VCF###\n\n"
 	print command
 	os.system(command)
@@ -109,7 +110,7 @@ def vcf_filter():
 	## Thinning routine (if applicable)
 	if options.ind is True:
 		vcf_thin = options.thin
-		print "\n\n***Thinning to one SNP per 10 kb using the following command***\n\n"
+		print "\n\n***Thinning to one SNP per "+options.thin+" bp using the following command***\n\n"
 		command = "vcftools --vcf "+str(options.prefix)+".maf"+str(options.maf)+".recode.vcf --thin "+str(vcf_thin)+" --recode --recode-INFO-all --out "+str(options.prefix)+".thin"
 		print command
 		os.system(command)
