@@ -45,7 +45,8 @@ based upon factors like base quality, mapping quality, and missing data. This VC
 GP, GL, and GQ format/genotype flags.
 
 python genotypes_from_VCF.py --samplsheet <samplesheet.txt> --vcf <in.vcf> --prefix <out_prefix> \
---maf <1-3> [--entropy --startK <#> --endK <#> --nucl --trinary --gq <PHRED_genotype_quality> --ind]
+--maf <0-3> [--miss <0-1> --entropy --startK <#> --endK <#> --nucl --trinary \
+--gq <PHRED_genotype_quality> --thin <#>]
 """
 
 
@@ -65,11 +66,13 @@ parser.add_option("--prefix", action = "store", dest = "prefix", help = "prefix 
 parser.add_option("--nucl", action = "store_true", dest = "nucl", help = "create nucleotide FASTA alignment with IUPAC ambiguities for heterozygous sites [TRUE]", default = False)
 parser.add_option("--trinary", action = "store_true", dest = "tri", help = "create trinary FASTA alignment with 0, 1, 2 genotype codes [TRUE]", default = False)
 parser.add_option("--genotype", action = "store", dest = "genotype", help = "type of genotype likelihood output: 0 = Option is off (no matrix output), 1 = PHRED, 2 = -Log10, 3 = Standardized, 4 = Genotype Uncertainty [0]", default = "0")
-parser.add_option("--gq", action = "store", dest = "gq", help = "threshold genotype quality for reporting individual genotype (otherwise coded as missing - ?) [20]", default = "20")
-parser.add_option("--ind", action = "store_true", dest = "ind", help = "thin dataset to only include 1 SNP per 10 kb, so as to reduce chance of linked SNPs [TRUE]", default = "True")
+parser.add_option("--gq", action = "store", dest = "gq", help = "threshold genotype PHRED quality score for reporting individual genotype [20]", default = "20")
+#parser.add_option("--ind", action = "store_true", dest = "ind", help = "thin dataset to only include 1 SNP per 10 kb, so as to reduce chance of linked SNPs [TRUE]", default = "True")
 parser.add_option("--thin", action = "store", dest = "thin", help = "window size to use for thinning in bp (keeps first SNP it finds and ignores others) [10000]", default = "10000")
 parser.add_option("--maf", action = "store", dest = "maf", help = "the minor allele frequency range desired: 0 (all MAF), 1 (MAF >= 0.050), 2 (0.010 <= MAF < 0.050), 3 (MAF < 0.050) [1]", default = "1")
 parser.add_option("--miss", action = "store", dest = "miss", help = "the proportion of missing data allowed (0 = all missing data, 1 = no missing data) [0.5]", default = "0.5") 
+parser.add_option("--qual", action = "store", dest = "qual", help = "threshold variant PHRED quality score for preserving a variant (otherwise filtered out) [20]", default = "20")
+parser.add_option("--biallelic", action = "store_true", dest = "biallelic", help = "only keep biallelic variants [TRUE]", default = True)
 parser.add_option("--locinfo", action = "store_true", dest = "locinfo", help = "include locus positional information (format = chromosome_position) in genotype matrix [FALSE]", default = False)
 parser.add_option("--refalt", action = "store_true", dest = "refalt", help = "include reference and alternative alleles in genotype matrix [FALSE]", default = False)
 parser.add_option("--headers", action = "store", dest = "headers", help = "specify which type of header to include in the genotype matrix (comma separated): 0 = none, 1 = matrix dimensions, 2 = sample IDs, 3 = population IDs, 4 = position and reference/alternative headers [1,2,3,4]", default = "1,2,3,4")
@@ -101,20 +104,26 @@ def vcf_filter():
 	else:
 		print "\n\n***Error: a minor allele range needs to be specified!***\n\n"
 	
-	## construct MAF filtering command and run it
-	command = "vcftools --vcf "+str(options.vcf)+" "+str(vcf_maf)+" --max-missing "+options.miss+" --recode --recode-INFO-all --out "+str(options.prefix)+".maf"+str(options.maf)+".miss"+str(options.miss)
+	## Biallelic routine
+	if options.biallelic is True:
+		biallelic = "--min-alleles 2 --max-alleles 2"
+	else:
+		biallelic = ""
+
+	## construct genotype quality, MAF, missing data, and biallelic filtering command and run it
+	command = "vcftools --vcf "+str(options.vcf)+" "+str(vcf_maf)+" --minQ "+options.qual+" --minGQ "+options.gq+" --max-missing "+options.miss+" "+biallelic+" --recode --recode-INFO-all --out "+str(options.prefix)+".maf"+str(options.maf)+".miss"+str(options.miss)
 	print "\n\n###Using the following command with VCFtools to produce MAF filtered VCF###\n\n"
 	print command
 	os.system(command)
 
 	## Thinning routine (if applicable)
-	if options.ind is True:
+	if options.thin is not None:
 		vcf_thin = options.thin
 		print "\n\n***Thinning to one SNP per "+options.thin+" bp using the following command***\n\n"
-		command = "vcftools --vcf "+str(options.prefix)+".maf"+str(options.maf)+".recode.vcf --thin "+str(vcf_thin)+" --recode --recode-INFO-all --out "+str(options.prefix)+".thin"
+		command = "vcftools --vcf "+str(options.prefix)+".maf"+str(options.maf)+".miss"+options.miss+".recode.vcf --thin "+str(vcf_thin)+" --recode --recode-INFO-all --out "+str(options.prefix)+".maf"+str(options.maf)+".miss"+options.miss+".thin"+options.thin
 		print command
 		os.system(command)
-		os.system("mv "+options.prefix+".thin.recode.vcf "+options.prefix+".maf"+options.maf+".recode.vcf")
+#		os.system("mv "+options.prefix+".thin.recode.vcf "+options.prefix+".maf"+options.maf+".recode.vcf")
 	else:
 		vcf_thin = ""
 		print "\n\n***No thinning will be performed***\n\n"
@@ -218,18 +227,30 @@ def nucl_fasta(GT, GQ, filtered_vcf):
 					vcfchunks = target.split(":")
 					
 					## Only write genotypes for loci with genotype quality greater than threshold
-					if int(vcfchunks[GQ]) >= int(options.gq):
-						
-						if vcfchunks[GT] == "0/0":					# homozygous reference (4th column)
-							nucl_out.write(str(bar[3]))
-						elif vcfchunks[GT] == "1/1":
-							nucl_out.write(str(bar[4]))				# homozygous alternative (5th column)
-						else:
-							nucl_out.write(str(get_amb(bar[3], bar[4])))	# heterozygous (use column 4/5 and subroutine to get ambiguity)
-					
-					## Else write missing data (?)
-					else:
+#					if int(vcfchunks[GQ]) >= int(options.gq):
+
+#					print vcfchunks[GT]						
+					if vcfchunks[GT] == "0/0":				# homozygous reference (4th column)
+#						print "homozygous ref"
+						nucl_out.write(str(bar[3]))
+					elif vcfchunks[GT] == "1/1":
+#						print "homozygous alt"
+						nucl_out.write(str(bar[4]))			# homozygous alternative (5th column)
+					elif vcfchunks[GT] == "1/0":
+#                                               print "heterozygous"
+                                                nucl_out.write(str(get_amb(bar[3], bar[4])))    # heterozygous (use column 4/5 and subroutine to get ambiguity) 
+					elif vcfchunks[GT] == "0/1":
+#						print "heterozygous"
+						nucl_out.write(str(get_amb(bar[3], bar[4])))	# heterozygous (use column 4/5 and subroutine to get ambiguity)
+					elif vcfchunks[GT] == """./.""":
+#						print "missing"
 						nucl_out.write("?")
+					else:
+						print "Error! Unknown genotype!"
+
+					## Else write missing data (?)
+#					else:
+#						nucl_out.write("?")
 			nucl_out.write("\n")
 			counter += 1
 	
@@ -264,18 +285,24 @@ def tri_fasta(GT, GQ, filtered_vcf):
 					vcfchunks = target.split(":")
 
 					## Knly write genotypes for loci with genotype quality greater than threshold
-					if int(vcfchunks[GQ]) >= int(options.gq):
+#					if int(vcfchunks[GQ]) >= int(options.gq):
 						
-						if vcfchunks[GT] == "0/0":				# homozygous reference = 0
-							tri_out.write("0")
-						elif vcfchunks[GT] == "1/1":			# homozygous alternative = 2
-							tri_out.write("2")
-						else:									# heterozygous = 1
-							tri_out.write("1")
-					
-					## Else write missing data (?)
-					else:
+					if vcfchunks[GT] == "0/0":			# homozygous reference = 0
+						tri_out.write("0")
+					elif vcfchunks[GT] == "1/1":			# homozygous alternative = 2
+						tri_out.write("2")
+					elif vcfchunks [GT] == "0/1":			# heterozygous = 1
+                                                tri_out.write("1")
+					elif vcfchunks [GT] == "1/0":			# heterozygous = 1
+						tri_out.write("1")
+					elif vcfchunks [GT] == "./.":
 						tri_out.write("?")
+					else:
+						print "Error! Unknown genotype!"
+
+					## Else write missing data (?)
+#					else:
+#						tri_out.write("?")
 			tri_out.write("\n")
 			counter += 1
 	
@@ -384,7 +411,7 @@ def file_len(fname):
 
 
 #################################################
-###        		   Main Program               ###
+###   		   Main Program               ###
 #################################################
 
 def main():
@@ -392,7 +419,10 @@ def main():
 	if options.filvcf == "":
 		print "\n\n***Producing new VCF based on MAF and SNP independence settings***\n\n"
 		vcf_filter()
-		filtered_vcf = options.prefix+".maf"+options.maf+".recode.vcf"
+		if options.thin is None:
+			filtered_vcf = options.prefix+".maf"+options.maf+".miss"+options.miss+".recode.vcf"
+		else:
+			filtered_vcf = options.prefix+".maf"+options.maf+".miss"+options.miss+".thin"+options.thin+".recode.vcf"
 	else:
 		print "\n\n***Working from previously filtered VCF***\n\n"
 		filtered_vcf = options.filvcf
