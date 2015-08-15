@@ -111,7 +111,7 @@ def vcf_filter():
 		biallelic = ""
 
 	## construct genotype quality, MAF, missing data, and biallelic filtering command and run it
-	command = "vcftools --vcf "+str(options.vcf)+" "+str(vcf_maf)+" --minQ "+options.qual+" --minGQ "+options.gq+" --max-missing "+options.miss+" "+biallelic+" --recode --recode-INFO-all --out "+str(options.prefix)+".maf"+str(options.maf)+".miss"+str(options.miss)
+	command = "vcftools --vcf "+str(options.vcf)+" --non-ref-af 1 "+str(vcf_maf)+" --minQ "+options.qual+" --minGQ "+options.gq+" --max-missing "+options.miss+" "+biallelic+" --recode --recode-INFO-all --out "+str(options.prefix)+".maf"+str(options.maf)+".miss"+str(options.miss)
 	print "\n\n###Using the following command with VCFtools to produce MAF filtered VCF###\n\n"
 	print command
 	os.system(command)
@@ -284,7 +284,7 @@ def tri_fasta(GT, GQ, filtered_vcf):
 					target = bar[counter + 9]
 					vcfchunks = target.split(":")
 
-					## Knly write genotypes for loci with genotype quality greater than threshold
+					## Only write genotypes for loci with genotype quality greater than threshold
 #					if int(vcfchunks[GQ]) >= int(options.gq):
 						
 					if vcfchunks[GT] == "0/0":			# homozygous reference = 0
@@ -462,7 +462,7 @@ def main():
 
 
 #################################################
-###        	  Call Main Program               ###
+###        	 Call Main Program            ###
 #################################################
 
 main()
