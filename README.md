@@ -14,8 +14,8 @@ Please note that I do not have the time or expertise to provide support, so thes
 1. Python 2 (tested using v.2.7.3)
 2. Stacks up to v.1.19 (tested using v.1.19)
 3. BWA (tested using v.0.7.9)
-4. SAMtools version 0 (tested using v.0.1.19)
-5. BCFtools version 0 (tested using v.0.1.19)
+4. SAMtools version 0 or 1 (tested using v.0.1.19 and v.1.2)
+5. BCFtools version 0 or 1 (tested using v.0.1.19 and v.1.2)
 6. VCFtools (tested using v.0.1.12b)
 7. R with Base, Utils, Stats, MASS, and RColorBrewer packages installed
 
@@ -28,7 +28,7 @@ Please note that I do not have the time or expertise to provide support, so thes
 1. sigThreshold_bootstrap.py: Returns a threshold for significance based on bootstrap resampling of a given column (i.e., a population genetic statistic).
 2. genotype_from_VCF.py: Returns either genotype likelihood matrices (with format designated by user) or variant alignments for downstream programs.
 3. entropyStart.R: Produces MCMC starting points for the Entropy program (Gompert et al. 2014) using output from genotype_from_VCF.py.
-4. meta_sort_NGSadmix.py: Formats admixture proportion output from NGSadmix () so it can be manipulated and plotted using admixturePlot.R. Will likely adjust so that alternate outputs can be parsed.
+4. meta_sort_NGSadmix.py: Formats admixture proportion output from NGSadmix (Skotte et al. 2013) so it can be manipulated and plotted using admixturePlot.R. Will likely adjust so that alternate outputs can be parsed.
 5. admixturePlot.R: Produces admixture bar plot (i.e., "Structure" plot) from formated output from meta_sort_NGSadmix.py for visualization.
 
 ## Running the Pipeline:
@@ -62,3 +62,4 @@ Skotte, et al. 2013. Estimating individual admixture proportions from next gener
 
 ##### R:
 R Development Core Team. 2015. R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. [http://www.r-project.org/](http://www.r-project.org/).
+Venables & Ripley. 2002. Modern Applied Statistics with S. Fourth Edition. Springer, New York. ISBN 0-387-95457-0.
