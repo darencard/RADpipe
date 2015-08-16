@@ -111,7 +111,7 @@ def vcf_filter():
 		biallelic = ""
 
 	## construct genotype quality, MAF, missing data, and biallelic filtering command and run it
-	command = "vcftools --vcf "+str(options.vcf)+" --non-ref-af 1 "+str(vcf_maf)+" --minQ "+options.qual+" --minGQ "+options.gq+" --max-missing "+options.miss+" "+biallelic+" --recode --recode-INFO-all --out "+str(options.prefix)+".maf"+str(options.maf)+".miss"+str(options.miss)
+	command = "vcftools --vcf "+str(options.vcf)+" --non-ref-af 0.0001 --max-non-ref-af 0.9999 "+str(vcf_maf)+" --minQ "+options.qual+" --minGQ "+options.gq+" --max-missing "+options.miss+" "+biallelic+" --recode --recode-INFO-all --out "+str(options.prefix)+".maf"+str(options.maf)+".miss"+str(options.miss)
 	print "\n\n###Using the following command with VCFtools to produce MAF filtered VCF###\n\n"
 	print command
 	os.system(command)
