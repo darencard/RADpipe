@@ -9,44 +9,39 @@ import re
 usage_line = """
 genotypes_from_VCF.py
 
-Version 1.0 (12 May, 2015)
+Version 1.1 (16 August, 2015)
 License: GNU GPLv2
 To report bugs or errors, please contact Daren Card (dcard@uta.edu).
 This script is provided as-is, with no support and no guarantee of proper or desirable functioning.
 
 Script that takes VCF file and parses it to produce input files for downstream analysis. Will produce:
-	1. An output VCF based on the user defined MAF ranges
-	2. An input file for Entropy (Gompert & Buerkle), as well as appropriate starting points for the MCMC
+	1. An output VCF based on the user defined filtering values
+	2. A genotype matrix that is customizable for various downstream programs
 	3. A FASTA nucleotide alignment (with IUPAC ambiguities) for phylogenetic analysis (i.e., RAxML)
 	4. A FASTA trinary genotype alignment for phylogenetic analysis (i.e., SNAPP)
 
 The script uses a sample sheet to correctly parse the desired samples, which is a tab-delimited text file \
 with four columns: (1) BAM input file name, (2) Sample name, (3) Population ID, and (4) Location. \
-User must also designate the MAF range desired for the run (this represents minimal output). \
-User can specify any combination of the three outputs by using the appropriate flag. In the case of \
-Entropy, starting and ended K values should be provided for creating the MCMC chain starting points. \
-For the nucleotide and trinary alignments, a genotype quality threshold is needed so that unreliable \
-sites can be coded as missing data (?). There is also the option to thin the number of SNPs by \
-only taking 1 SNP per 10 kb, so as not to violate the assumptions of many models that dictate SNPs \
-should be independent (i.e., not linked). The user specifies a naming prefix that will be used for \
-naming the output files created. The suffixes for the different file types are as follows:
-	1. Output VCF filtered by MAF and possibly thinned: .maf<#>.recode.vcf
-	2. Entropy input: .entropy
-	3. Entropy MCMC initialization (for each K): .entropy.startK<#>
-	4. IN DEVELOPMENT: Various R plots from K-means clustering: .kmean.K<#>.plot
-	5. IN DEVELOPMENT: Various R plots from discriminant analysis: .dapc.plot
-	6. Nucleotide FASTA: .nucl.fasta
-	7. Trinary FASTA: .tri.fasta
-	8. Log files: .maf<#>.log (needs to be saved if specifying filtered VCF)
+User can designate various filtering criteria to eliminate unconfident or inappropriate variants. \
+User can specify any combination of the three outputs by using the appropriate flag. For the nucleotide \
+and trinary alignments, a genotype quality threshold is needed so that unreliable sites can be coded \
+as missing data (?). There is also the option to thin the number of SNPs by only taking 1 SNP per 10 kb, \
+so as not to violate the assumptions of many models that dictate SNPs should be independent (i.e., not \
+linked). The user specifies a naming prefix that will be used for naming the output files created. \
+The suffixes for the different file types are as follows:
+	1. Output VCF filtered by MAF, missing data, and other options and possibly thinned.
+	2. Genotype matrix output customizable for various downstream programs: .genotype
+	3. Nucleotide FASTA: .nucl.fasta
+	4. Trinary FASTA: .tri.fasta
+	5. Log files: .maf<#>.log (needs to be saved if specifying filtered VCF)
 	
 Dependencies include the latest versions of R, with the package MASS installed, and VCFtools, all \
-included in the user's $PATH. The user should provide an input VCF that has already been filtered \
-based upon factors like base quality, mapping quality, and missing data. This VCF must include the \
-GP, GL, and GQ format/genotype flags.
+included in the user's $PATH. This VCF must include the GP, GL, and GQ format/genotype flags. \
 
 python genotypes_from_VCF.py --samplsheet <samplesheet.txt> --vcf <in.vcf> --prefix <out_prefix> \
---maf <0-3> [--miss <0-1> --entropy --startK <#> --endK <#> --nucl --trinary \
---gq <PHRED_genotype_quality> --thin <#>]
+[--maf <0-3> --miss <0-1> --gq <PHRED_genotype_quality> --qual <PHRED_variant_quality> --thin <#> \
+--biallelic --nucl --trinary --genotype --locinfo <T/F> --refalt <T/F> --headers <0-4> --delimit <1/2> \
+--filvcf <file.vcf>]
 """
 
 
@@ -60,14 +55,10 @@ parser = optparse.OptionParser(usage = usage)
 parser.add_option("--samplesheet", action= "store", type = "string", dest = "sheet", help = "sample sheet containing samples being processed")
 parser.add_option("--vcf", action = "store", type = "string", dest = "vcf", help = "VCF input file")
 parser.add_option("--prefix", action = "store", dest = "prefix", help = "prefix for output files [out]", default = "out")
-#parser.add_option("--entropy", action = "store_true", dest = "entropy", help = "create entropy input file and proper starting points [TRUE]", default = "True")
-#parser.add_option("--startK", action = "store", dest = "sK", help = "starting (lower) K [1]", default = "1")
-#parser.add_option("--endK", action = "store", dest = "eK", help = "ending (higher) K [5]", default = "2")
 parser.add_option("--nucl", action = "store_true", dest = "nucl", help = "create nucleotide FASTA alignment with IUPAC ambiguities for heterozygous sites [TRUE]", default = False)
 parser.add_option("--trinary", action = "store_true", dest = "tri", help = "create trinary FASTA alignment with 0, 1, 2 genotype codes [TRUE]", default = False)
 parser.add_option("--genotype", action = "store", dest = "genotype", help = "type of genotype likelihood output: 0 = Option is off (no matrix output), 1 = PHRED, 2 = -Log10, 3 = Standardized, 4 = Genotype Uncertainty [0]", default = "0")
 parser.add_option("--gq", action = "store", dest = "gq", help = "threshold genotype PHRED quality score for reporting individual genotype [20]", default = "20")
-#parser.add_option("--ind", action = "store_true", dest = "ind", help = "thin dataset to only include 1 SNP per 10 kb, so as to reduce chance of linked SNPs [TRUE]", default = "True")
 parser.add_option("--thin", action = "store", dest = "thin", help = "window size to use for thinning in bp (keeps first SNP it finds and ignores others) [10000]", default = "10000")
 parser.add_option("--maf", action = "store", dest = "maf", help = "the minor allele frequency range desired: 0 (all MAF), 1 (MAF >= 0.050), 2 (0.010 <= MAF < 0.050), 3 (MAF < 0.050) [1]", default = "1")
 parser.add_option("--miss", action = "store", dest = "miss", help = "the proportion of missing data allowed (0 = all missing data, 1 = no missing data) [0.5]", default = "0.5") 
@@ -111,7 +102,7 @@ def vcf_filter():
 		biallelic = ""
 
 	## construct genotype quality, MAF, missing data, and biallelic filtering command and run it
-	command = "vcftools --vcf "+str(options.vcf)+" --non-ref-af 0.0001 --max-non-ref-af 0.9999 "+str(vcf_maf)+" --minQ "+options.qual+" --minGQ "+options.gq+" --max-missing "+options.miss+" "+biallelic+" --recode --recode-INFO-all --out "+str(options.prefix)+".maf"+str(options.maf)+".miss"+str(options.miss)
+	command = "vcftools --vcf "+str(options.vcf)+" --max-non-ref-af 0.99 "+str(vcf_maf)+" --minQ "+options.qual+" --minGQ "+options.gq+" --max-missing "+options.miss+" "+biallelic+" --recode --recode-INFO-all --out "+str(options.prefix)+".maf"+str(options.maf)+".miss"+str(options.miss)
 	print "\n\n###Using the following command with VCFtools to produce MAF filtered VCF###\n\n"
 	print command
 	os.system(command)
