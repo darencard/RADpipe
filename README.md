@@ -34,6 +34,8 @@ Please note that I do not have the time or expertise to provide support, so thes
 ## Running the Pipeline:
 Given that each script contains detailed usage information, no further details will be provided here for now. I hope to start filling in examples as time permits.
 
+The genotype_from_VCF.py script produces both nucleotide/trinary alignments and various genotype matrices. For an overview of genotype matrix formatting necessary for downstream programs or for the entropyStart.R script, see [https://gist.github.com/darencard/812bbae0d2b8739a0486](https://gist.github.com/darencard/812bbae0d2b8739a0486).
+
 ## Acknowledgements:
 This pipeline benefited from many discussions with other members of the Castoe lab at the University of Texas at Arlington. Chris Nice (Texas State University) provided guidance on SNP calling and formating VCF files for downstream analyses.
 
