@@ -183,7 +183,10 @@ def geno_matrix(PL, filtered_vcf, delimiter):
 				genomatrix_out.write(bar[3]+str(delimiter)+bar[4]+str(delimiter))
 			for sample in range(9, sample_total+9):
 				vcfchunks = bar[sample].split(":")
-				geno_out = recode_gl(genomatrix_out, vcfchunks[PL], delimiter)		# recode genotype likelihoods user choice
+				if vcfchunks[GT] == "./.":
+					geno_out = recode_gl(genomatrix_out, "0,0,0", delimiter)
+				else:
+					geno_out = recode_gl(genomatrix_out, vcfchunks[PL], delimiter)		# recode genotype likelihoods user choice
 				genomatrix_out.write(geno_out+str(delimiter))
 			genomatrix_out.write("\n")
 	
@@ -311,15 +314,20 @@ def tri_fasta(GT, GQ, filtered_vcf):
 ## Multiple standardized likelihoods by number of alternative alles: = standardized likelihoods * # alternative alleles
 ## Sum to produce absolute genotype on 0 (homozygous reference) to 2 (homozygous alternative) scale
 def recode_gl(outfile, genochunk, delimiter):
-	bar = genochunk.split(",")
-	p0 = float(10 ** (int(bar[0])/-10))
-	p1 = float(10 ** (int(bar[1])/-10))
-	p2 = float(10 ** (int(bar[2])/-10))
-	psum = float(p0 + p1 + p2)
-	g0 = float(p0/psum)
-	g1 = float(p1/psum)
-	g2 = float(p2/psum)
-	gsum = float(float(g0*0) + float(g1*1) + float(g2*2))
+	if genochunk == "0,0,0":
+		bar = genochunk.split(",")
+		p0 = p1 = p2 = psum = g0 = g1 = g2 = 0
+		gsum = -9
+	else:
+		bar = genochunk.split(",")
+		p0 = float(10 ** (int(bar[0])/-10))
+		p1 = float(10 ** (int(bar[1])/-10))
+		p2 = float(10 ** (int(bar[2])/-10))
+		psum = float(p0 + p1 + p2)
+		g0 = float(p0/psum)
+		g1 = float(p1/psum)
+		g2 = float(p2/psum)
+		gsum = float(float(g0*0) + float(g1*1) + float(g2*2))
 	if options.genotype == "1":
 		return bar[0]+delimiter+bar[1]+delimiter+bar[2]
 	elif options.genotype == "2":
