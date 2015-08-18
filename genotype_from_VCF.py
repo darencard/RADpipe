@@ -126,7 +126,7 @@ def vcf_filter():
 #################################################
 
 ## Create input file for Entropy program using sample sheet and VCF
-def geno_matrix(PL, filtered_vcf, delimiter):
+def geno_matrix(PL, GT, filtered_vcf, delimiter):
 	## Initialize output file
 	genomatrix_out = open(options.prefix+".genomatrix", "w")
 	
@@ -358,10 +358,11 @@ def get_stat(filtered_VCF):
 ## Uses a regular expression search of the VCFtools log
 def get_vcf_dims():
 	out = []
-	if options.ind is True:
-		file = options.prefix+".thin.log"
-	else:
-		file = options.prefix+".maf"+options.maf+".log"
+	file = options.prefix+".maf"+options.maf+".miss"+options.miss+".thin"+options.thin+".log"
+#	if options.thin is not:
+#		file = options.prefix+".thin.log"
+#	else:
+#		file = options.prefix+".maf"+options.maf+".log"
 	for line in open(file, "r"):
 		if line.strip().startswith("After"):
 			query = re.compile('kept (.*?) out')
@@ -433,9 +434,9 @@ def main():
 	if options.genotype is not "0":
 		print "\n\n***Creating a genotype likelihood matrix***\n\n"
 		if options.delimit == "1":
-			geno_matrix(PL, filtered_vcf, " ")
+			geno_matrix(PL, GT, filtered_vcf, " ")
 		elif options.delimit == "2":
-			geno_matrix(PL, filtered_vcf, "\t")
+			geno_matrix(PL, GT, filtered_vcf, "\t")
 		else:
 			print "\n\n***Specify a delimiter for the genotype matrix!***\n\n"
 	else:
