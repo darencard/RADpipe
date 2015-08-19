@@ -365,8 +365,8 @@ def get_vcf_dims():
 			bar = line.rstrip().split("\t")
 			samples = len(bar) - 9
 			snps += 1
-	out.append(snps)
 	out.append(samples)
+	out.append(snps)
 
 	return out
 
