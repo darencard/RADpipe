@@ -314,20 +314,15 @@ def tri_fasta(GT, GQ, filtered_vcf):
 ## Multiple standardized likelihoods by number of alternative alles: = standardized likelihoods * # alternative alleles
 ## Sum to produce absolute genotype on 0 (homozygous reference) to 2 (homozygous alternative) scale
 def recode_gl(outfile, genochunk, delimiter):
-	if genochunk == "0,0,0":
-		bar = genochunk.split(",")
-		p0 = p1 = p2 = psum = g0 = g1 = g2 = 0
-		gsum = -9
-	else:
-		bar = genochunk.split(",")
-		p0 = float(10 ** (int(bar[0])/-10))
-		p1 = float(10 ** (int(bar[1])/-10))
-		p2 = float(10 ** (int(bar[2])/-10))
-		psum = float(p0 + p1 + p2)
-		g0 = float(p0/psum)
-		g1 = float(p1/psum)
-		g2 = float(p2/psum)
-		gsum = float(float(g0*0) + float(g1*1) + float(g2*2))
+	bar = genochunk.split(",")
+	p0 = float(10 ** (int(bar[0])/-10))
+	p1 = float(10 ** (int(bar[1])/-10))
+	p2 = float(10 ** (int(bar[2])/-10))
+	psum = float(p0 + p1 + p2)
+	g0 = float(p0/psum)
+	g1 = float(p1/psum)
+	g2 = float(p2/psum)
+	gsum = float(float(g0*0) + float(g1*1) + float(g2*2))
 	if options.genotype == "1":
 		return bar[0]+delimiter+bar[1]+delimiter+bar[2]
 	elif options.genotype == "2":
