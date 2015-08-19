@@ -133,7 +133,7 @@ def geno_matrix(PL, GT, filtered_vcf, delimiter):
 	## Get matrix dimensions (samples x loci) from VCFtools log
 	if "1" in options.headers:
 		[samples, loci] = get_vcf_dims()
-		genomatrix_out.write(samples+str(delimiter)+loci+str(delimiter)+"1\n")
+		genomatrix_out.write(str(samples)+str(delimiter)+str(loci)+str(delimiter)+"1\n")
 	
 	sample_total = file_len(options.sheet)
 	
@@ -349,22 +349,25 @@ def get_stat(filtered_VCF):
 	GQ = foo.index("GQ")
 	return GT, PL, GQ
 	
-## Determines the dimensions of the genotype matrix (individuals x loci)
-## Uses a regular expression search of the VCFtools log
+## Determines the dimensions of the genotype matrix (loci X individuals)
+## Calculates the number of uncommented (#) rows (=# loci) and the number of columns - 9 (=# individuals)
 def get_vcf_dims():
 	out = []
-	file = options.prefix+".maf"+options.maf+".miss"+options.miss+".thin"+options.thin+".log"
-#	if options.thin is not:
-#		file = options.prefix+".thin.log"
-#	else:
-#		file = options.prefix+".maf"+options.maf+".log"
+	if options.filvcf is not "":
+		file = options.filvcf
+	elif options.vcf is not "":
+		file = options.vcf
+	else:
+		print "Error! Either a raw VCF or a filtered VCF must be specified!"
+	snps = 0
 	for line in open(file, "r"):
-		if line.strip().startswith("After"):
-			query = re.compile('kept (.*?) out')
-			match = query.search(line)
-			if match:
-				element = match.group(1)
-				out.append(element)
+		if not line.strip().startswith("#"):
+			bar = line.rstrip().split("\t")
+			samples = len(bar) - 9
+			snps += 1
+	out.append(snps)
+	out.append(samples)
+
 	return out
 
 ## Determine proper ambiguity code at a locus for heterozygous individuals
