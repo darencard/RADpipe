@@ -69,6 +69,7 @@ parser.add_option("--locinfo", action = "store_true", dest = "locinfo", help = "
 parser.add_option("--refalt", action = "store_true", dest = "refalt", help = "include reference and alternative alleles in genotype matrix [FALSE]", default = False)
 parser.add_option("--headers", action = "store", dest = "headers", help = "specify which type of header to include in the genotype matrix (comma separated): 0 = none, 1 = matrix dimensions, 2 = sample IDs, 3 = population IDs, 4 = position and reference/alternative headers [1,2,3,4]", default = "1,2,3,4")
 parser.add_option("--delimit", action = "store", dest = "delimit", help = "specify which delimiter to use for the genotype matrix: 1 = space, 2 = tab [1]", default = "1")
+parser.add_option("--entropycomp", action = "store_true", dest = "entcomp", help = "create a genotype uncertainty matrix for direct comparison with Bayesian estimates from Entropy output [FALSE]", default = False)
 parser.add_option("--filvcf", action = "store", type = "string", dest = "filvcf", help ="specify a filtered VCF for genotyping (e.g., re-running a script) - bipasses creating new VCF [N/A]", default = "")
 
 options, args = parser.parse_args()
@@ -394,7 +395,61 @@ def structure(GT, GQ, filtered_vcf):
 	
 	struct_out.close()
 	print "\n\n###Nucleotide genotype alignment can be found in "+options.prefix+".structure###\n\n"
+
+
+
+##########################################################################################
+###      Creating 'Transposed' genotype matrix for comparison with Entropy output      ###
+##########################################################################################
+
+## Create genotype matrix to compare with genotype uncertainty values produced by Entropy
+def entropy_compare(PL, filtered_vcf, delimiter):
+
+	## Initalize output file
+	entcomp_out = open(options.prefix+".entcomp", "w")
 	
+	## Write an initial line that contains the locus ID information
+	for vline in open(filtered_vcf, "r"):
+				if not vline.strip().startswith("#"):
+					bar = vline.rstrip().split("\t")
+					
+					entcom_out.write("Individual")
+					
+					entcomp_out.write(options.delimiter+bar[0]+"_"+bar[1])
+								
+	entcomp_out.write("\n")
+	
+	counter = 0
+	
+	## For each individual in sample sheet
+	for line in open(options.sheet, "r"):
+	    if not line.strip().startswith("#"):
+
+			## Write out first column with sample ID
+			entcomp_out.write(line.split("\t")[1]+"\t")
+			
+			## For each line (locus) in VCF
+			for vline in open(filtered_vcf, "r"):
+				if not vline.strip().startswith("#"):
+					bar = vline.rstrip().split("\t")
+					
+					## For each individual in VCF
+					target = bar[counter + 9]
+					vcfchunks = target.split(":")
+					
+					## Recode the genotype likelihood to desired format (should be 4)
+					geno_out = recode_gl(entcomp_out, vcfchunks[PL], delimiter)
+					
+					## Write the genotype likelihood to output with a delimiter (should be comma) prefix
+					genomatrix_out.write(str(delimiter)+geno_out)
+					
+			entcomp_out.write("\n")
+						
+			counter += 1
+	
+	entcomp_out.close()
+	print "\n\n###Nucleotide genotype alignment can be found in "+options.prefix+".structure###\n\n"
+		
 
 #################################################
 ###      Subroutines for above functions      ###
@@ -541,6 +596,8 @@ def main():
 			geno_matrix(PL, GT, filtered_vcf, " ")
 		elif options.delimit == "2":
 			geno_matrix(PL, GT, filtered_vcf, "\t")
+		elif options.delimit == "3":
+			geno_matrix(PL, GT, filtered_vcf, ",")
 		else:
 			print "\n\n***Specify a delimiter for the genotype matrix!***\n\n"
 	else:
@@ -560,12 +617,19 @@ def main():
 	else:
 		print "\n\n***Not creating a trinary SNP genotype alignment***\n\n"
 
-	## If user specified trinary fasta output, give it to them
+	## If user specified Structure output, give it to them
 	if options.structure is True:
 		print "\n\n***Creating genotype matrix input for Structure***\n\n"
 		structure(GT, GQ, filtered_vcf)
 	else:
 		print "\n\n***Not creating genotype matrix input for Structure***\n\n"
+		
+	## If user specified a genotype matrix to compare to Entropy output, give it to them
+	if options.entcomp is True:
+		print "\n\n***Creating genotype matrix to compare with Entropy results***\n\n"
+		entropy_compare(PL, filtered_vcf, ",")
+	else:
+		print "\n\n***Not creating genotype matrix to compare with Entropy results***\n\n"
 	
 	os.system("rm -f sample_VCF_line.txt")  # clean up
 	
