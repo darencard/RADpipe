@@ -408,14 +408,14 @@ def entropy_compare(PL, filtered_vcf, delimiter):
 	## Initalize output file
 	entcomp_out = open(options.prefix+".entcomp", "w")
 	
+	entcomp_out.write("Individual")
+	
 	## Write an initial line that contains the locus ID information
 	for vline in open(filtered_vcf, "r"):
 				if not vline.strip().startswith("#"):
 					bar = vline.rstrip().split("\t")
 					
-					entcom_out.write("Individual")
-					
-					entcomp_out.write(options.delimiter+bar[0]+"_"+bar[1])
+					entcomp_out.write(delimiter+bar[0]+"_"+bar[1])
 								
 	entcomp_out.write("\n")
 	
@@ -426,7 +426,7 @@ def entropy_compare(PL, filtered_vcf, delimiter):
 	    if not line.strip().startswith("#"):
 
 			## Write out first column with sample ID
-			entcomp_out.write(line.split("\t")[1]+"\t")
+			entcomp_out.write(line.split("\t")[1])
 			
 			## For each line (locus) in VCF
 			for vline in open(filtered_vcf, "r"):
@@ -441,7 +441,7 @@ def entropy_compare(PL, filtered_vcf, delimiter):
 					geno_out = recode_gl(entcomp_out, vcfchunks[PL], delimiter)
 					
 					## Write the genotype likelihood to output with a delimiter (should be comma) prefix
-					genomatrix_out.write(str(delimiter)+geno_out)
+					entcomp_out.write(str(delimiter)+geno_out)
 					
 			entcomp_out.write("\n")
 						
