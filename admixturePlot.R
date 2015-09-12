@@ -21,7 +21,7 @@ require("RColorBrewer")
 admixturePlot <- function(infile, outfile, k, ...){
   admixIn <- read.table(infile, header=FALSE, sep="\t", fill=TRUE)
 #  print(admixIn)
-  tAdmixIn <- t(as.matrix(admixIn[1:nrow(admixIn), 6:ncol(admixIn)-1]))
+  tAdmixIn <- t(as.matrix(admixIn[1:nrow(admixIn), 5:ncol(admixIn)]))
 #  print(tAdmixIn)
   mycol <- brewer.pal(as.numeric(k), "Paired")
   

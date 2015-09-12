@@ -127,14 +127,14 @@ def vcf_filter():
 #################################################
 
 ## Create input file for Entropy program using sample sheet and VCF
-def geno_matrix(PL, filtered_vcf, delimiter):
+def geno_matrix(PL, GT, filtered_vcf, delimiter):
 	## Initialize output file
 	genomatrix_out = open(options.prefix+".genomatrix", "w")
 	
 	## Get matrix dimensions (samples x loci) from VCFtools log
 	if "1" in options.headers:
 		[samples, loci] = get_vcf_dims()
-		genomatrix_out.write(samples+str(delimiter)+loci+str(delimiter)+"1\n")
+		genomatrix_out.write(str(samples)+str(delimiter)+str(loci)+str(delimiter)+"1\n")
 	
 	sample_total = file_len(options.sheet)
 	
@@ -184,7 +184,10 @@ def geno_matrix(PL, filtered_vcf, delimiter):
 				genomatrix_out.write(bar[3]+str(delimiter)+bar[4]+str(delimiter))
 			for sample in range(9, sample_total+9):
 				vcfchunks = bar[sample].split(":")
-				geno_out = recode_gl(genomatrix_out, vcfchunks[PL], delimiter)		# recode genotype likelihoods user choice
+				if vcfchunks[GT] == "./.":
+					geno_out = recode_gl(genomatrix_out, "0,0,0", delimiter)
+				else:
+					geno_out = recode_gl(genomatrix_out, vcfchunks[PL], delimiter)		# recode genotype likelihoods user choice
 				genomatrix_out.write(geno_out+str(delimiter))
 			genomatrix_out.write("\n")
 	
@@ -438,21 +441,25 @@ def get_stat(filtered_VCF):
 	GQ = foo.index("GQ")
 	return GT, PL, GQ
 	
-## Determines the dimensions of the genotype matrix (individuals x loci)
-## Uses a regular expression search of the VCFtools log
+## Determines the dimensions of the genotype matrix (loci X individuals)
+## Calculates the number of uncommented (#) rows (=# loci) and the number of columns - 9 (=# individuals)
 def get_vcf_dims():
 	out = []
-	if options.ind is True:
-		file = options.prefix+".thin.log"
+	if options.filvcf is not "":
+		file = options.filvcf
+	elif options.vcf is not "":
+		file = options.vcf
 	else:
-		file = options.prefix+".maf"+options.maf+".log"
+		print "Error! Either a raw VCF or a filtered VCF must be specified!"
+	snps = 0
 	for line in open(file, "r"):
-		if line.strip().startswith("After"):
-			query = re.compile('kept (.*?) out')
-			match = query.search(line)
-			if match:
-				element = match.group(1)
-				out.append(element)
+		if not line.strip().startswith("#"):
+			bar = line.rstrip().split("\t")
+			samples = len(bar) - 9
+			snps += 1
+	out.append(samples)
+	out.append(snps)
+
 	return out
 
 ## Determine proper ambiguity code at a locus for heterozygous individuals
@@ -531,9 +538,9 @@ def main():
 	if options.genotype is not "0":
 		print "\n\n***Creating a genotype likelihood matrix***\n\n"
 		if options.delimit == "1":
-			geno_matrix(PL, filtered_vcf, " ")
+			geno_matrix(PL, GT, filtered_vcf, " ")
 		elif options.delimit == "2":
-			geno_matrix(PL, filtered_vcf, "\t")
+			geno_matrix(PL, GT, filtered_vcf, "\t")
 		else:
 			print "\n\n***Specify a delimiter for the genotype matrix!***\n\n"
 	else:
