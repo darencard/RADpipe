@@ -320,7 +320,7 @@ def structure(GT, GQ, filtered_vcf):
 	    if not line.strip().startswith("#"):
 
 			## Write out fasta header with sample ID and population ID
-			struct_out.write(line.split("\t")[1]+"_"+line.split("\t")[2]+"_"+line.split("\t")[3])
+			struct_out.write(line.split("\t")[1]+"\t")
 			
 			## For each line (locus) in VCF
 			for vline in open(filtered_vcf, "r"):
@@ -337,16 +337,16 @@ def structure(GT, GQ, filtered_vcf):
 #					print vcfchunks[GT]						
 					if vcfchunks[GT] == "0/0":				# homozygous reference (4th column)
 #						print "homozygous ref"
-						struct_out.write(str(str_amb(bar[3])))
+						struct_out.write(str(str_amb(bar[3]))+"\t")
 					elif vcfchunks[GT] == "1/1":
 #						print "homozygous alt"
-						struct_out.write(str(str_amb(bar[4])))			# homozygous alternative (5th column)
+						struct_out.write(str(str_amb(bar[4]))+"\t")			# homozygous alternative (5th column)
 					elif vcfchunks[GT] == "1/0":
 #                       print "heterozygous"
-						struct_out.write(str(str_amb(bar[4])))    # heterozygous (use column 4/5 and subroutine to get ambiguity) 
+						struct_out.write(str(str_amb(bar[4]))+"\t")    # heterozygous (use column 4/5 and subroutine to get ambiguity) 
 					elif vcfchunks[GT] == "0/1":
 #						print "heterozygous"
-						struct_out.write(str(str_amb(bar[3])))	# heterozygous (use column 4/5 and subroutine to get ambiguity)
+						struct_out.write(str(str_amb(bar[3]))+"\t")	# heterozygous (use column 4/5 and subroutine to get ambiguity)
 					elif vcfchunks[GT] == """./.""":
 #						print "missing"
 						struct_out.write("-9")				# Else write missing data
@@ -356,7 +356,7 @@ def structure(GT, GQ, filtered_vcf):
 			struct_out.write("\n")
 
 			## Write out fasta header with sample ID and population ID
-			struct_out.write(line.split("\t")[1]+"_"+line.split("\t")[2]+"_"+line.split("\t")[3])
+			struct_out.write(line.split("\t")[1]+"\t")
 			
 			for vline in open(filtered_vcf, "r"):
 				if not vline.strip().startswith("#"):
@@ -372,16 +372,16 @@ def structure(GT, GQ, filtered_vcf):
 #					print vcfchunks[GT]						
 					if vcfchunks[GT] == "0/0":				# homozygous reference (4th column)
 #						print "homozygous ref"
-						struct_out.write(str(str_amb(bar[3])))
+						struct_out.write(str(str_amb(bar[3]))+"\t")
 					elif vcfchunks[GT] == "1/1":
 #						print "homozygous alt"
-						struct_out.write(str(str_amb(bar[4])))			# homozygous alternative (5th column)
+						struct_out.write(str(str_amb(bar[4]))+"\t")			# homozygous alternative (5th column)
 					elif vcfchunks[GT] == "1/0":
 #                       print "heterozygous"
-						struct_out.write(str(str_amb(bar[3])))    # heterozygous (use column 4/5 and subroutine to get ambiguity) 
+						struct_out.write(str(str_amb(bar[3]))+"\t")    # heterozygous (use column 4/5 and subroutine to get ambiguity) 
 					elif vcfchunks[GT] == "0/1":
 #						print "heterozygous"
-						struct_out.write(str(str_amb(bar[4])))	# heterozygous (use column 4/5 and subroutine to get ambiguity)
+						struct_out.write(str(str_amb(bar[4]))+"\t")	# heterozygous (use column 4/5 and subroutine to get ambiguity)
 					elif vcfchunks[GT] == """./.""":
 #						print "missing"
 						struct_out.write("-9")				# Else write missing data
