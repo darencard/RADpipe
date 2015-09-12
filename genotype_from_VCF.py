@@ -349,7 +349,7 @@ def structure(GT, GQ, filtered_vcf):
 						struct_out.write(str(str_amb(bar[3]))+"\t")	# heterozygous (use column 4/5 and subroutine to get ambiguity)
 					elif vcfchunks[GT] == """./.""":
 #						print "missing"
-						struct_out.write("-9")				# Else write missing data
+						struct_out.write("-9\t")				# Else write missing data
 					else:
 						print "Error! Unknown genotype!"
 
@@ -384,7 +384,7 @@ def structure(GT, GQ, filtered_vcf):
 						struct_out.write(str(str_amb(bar[4]))+"\t")	# heterozygous (use column 4/5 and subroutine to get ambiguity)
 					elif vcfchunks[GT] == """./.""":
 #						print "missing"
-						struct_out.write("-9")				# Else write missing data
+						struct_out.write("-9\t")				# Else write missing data
 					else:
 						print "Error! Unknown genotype!"
 			
