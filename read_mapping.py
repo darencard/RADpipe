@@ -82,8 +82,9 @@ def make_SE_dict(name):
 	ext = options.ext
 	nameS1 = str(root)+".S1."+str(ext)									# Set S1 to sample.S1.ext
 	nameS2 = str(root)+".S2."+str(ext)									# Set S2 to sample.S2.ext
+	nameBroken = str(root)+".broken."+str(ext)
 	if nameS1 not in SE_dict.keys():									# If S1 not in dictionary, add it and S2
-		SE_dict[nameS1] = nameS2
+		SE_dict[nameS1] = [nameS2, nameBroken]
 	cat_SE(SE_dict)														# Concatenate S1 and S2 read files
 #	print SE_dict
 	return SE_dict														# Return SE_dict for future use
@@ -99,9 +100,9 @@ def cat_SE(SE_dict):
 		foo = key.split(".")											# split by '.'
 		file = foo[0]+".SE."+options.ext								# output file = sample.SE.ext
 		value = SE_dict[key]											# look up S2 value
-# command = $ cat sample.S1.ext sample.S2.ext > sample.SE.ext (may error if no S2)
-		print "cat ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./"+options.directory+"/"+file
-		os.system("cat ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value+" > ./"+options.directory+"/"+file)
+# command = $ cat sample.S1.ext sample.S2.ext sample.broken.ext > sample.SE.ext (may error if no S2 or broken)
+		print "cat ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value[0]+" ./+options.directory+"/"+value[1]+" > ./"+options.directory+"/"+file
+		os.system("cat ./"+options.directory+"/"+key+" ./"+options.directory+"/"+value[0]+" ./+options.directory+"/"+value[1]+" > ./"+options.directory+"/"+file)
 
 
 #################################################

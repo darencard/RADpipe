@@ -186,10 +186,13 @@ def PE_sample_rename(r1nm):
 		parsep2_rename = "mv ./parsed/"+str(r1nm)+"/sample_"+bar[3]+"-"+bar[4]+".2.fq ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".P2.fq"
 		remp1_rename = "mv ./parsed/"+str(r1nm)+"/sample_"+bar[3]+"-"+bar[4]+".rem.1.fq ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".rem.P1.fq"
 		remp2_rename = "mv ./parsed/"+str(r1nm)+"/sample_"+bar[3]+"-"+bar[4]+".rem.2.fq ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".rem.P2.fq"
+		combine_broken = "cat ./parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".rem.P1.fq /parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".rem.P2.fq > /parsed/"+str(r1nm)+"/"+bar[0]+"_"+bar[3]+"-"+bar[4]+".rem.cat.fq"
 		os.system(parsep1_rename)
 		os.system(parsep2_rename)
 		os.system(remp1_rename)
 		os.system(remp2_rename)
+		os.system(combine_broken)
+		
 ### Place restriction site trimming routine here ###
 
 def SE_sample_rename(r1nm):
@@ -210,8 +213,10 @@ def PE_quality_trim(r1nm):
         		bar = foo.split()
 			handle = bar[0]+"_"+bar[3]+"-"+bar[4]
 			threads = options.threads
-			PEclean = "trimmomatic-0.32.jar PE -threads "+threads+" -trimlog ./cleaned/"+handle+".qtrim.log ./parsed/"+str(r1nm)+"/"+handle+".P1.fq ./parsed/"+str(r1nm)+"/"+handle+".P2.fq ./cleaned/"+handle+".P1.qtrim ./cleaned/"+handle+".S1.qtrim ./cleaned/"+handle+".P2.qtrim ./cleaned/"+handle+".S2.qtrim LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:36 TOPHRED33 2>&1 | tee ./cleaned/"+handle+".qtrim.summary.log"
+			PEclean = "trimmomatic-0.35.jar PE -threads "+threads+" -trimlog ./cleaned/"+handle+"_paired.qtrim.log ./parsed/"+str(r1nm)+"/"+handle+".P1.fq ./parsed/"+str(r1nm)+"/"+handle+".P2.fq ./cleaned/"+handle+".P1.qtrim ./cleaned/"+handle+".S1.qtrim ./cleaned/"+handle+".P2.qtrim ./cleaned/"+handle+".S2.qtrim LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:36 TOPHRED33 2>&1 | tee ./cleaned/"+handle+"_paired.qtrim.summary.log"
+			broken_clean = "trimmomatic-0.35.jar SE -threads "+threads+" -trimlog ./cleaned/"+handle+"_broken.qtrim.log ./parsed/"+str(r1nm)+"/"+handle+".rem.cat.fq ./cleaned/"+handle+".broken.qtrim LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:36 TOPHRED33 2>&1 | tee ./cleaned/"+handle+".broken.qtrim.summary.log"
 			os.system(str(PEclean))
+			os.system(str(broken_clean))
 			os.system("sed -i 's/\_1$/\ 1/g' ./cleaned/"+handle+".P1.qtrim")
 			os.system("sed -i 's/\_2$/\ 2/g' ./cleaned/"+handle+".P2.qtrim")
 			os.system("sed -i 's/\_1$/\ 1/g' ./cleaned/"+handle+".S1.qtrim")
@@ -224,7 +229,7 @@ def SE_quality_trim(r1nm):
         		bar = foo.split()
             		handle = bar[0]+"_"+bar[3]
             		threads = options.threads
-            		SEclean = "trimmomatic-0.32.jar SE -threads "+threads+" -trimlog ./cleaned/"+handle+".qtrim.log ./parsed/"+str(r1nm)+"/"+handle+".S1.fq ./cleaned/"+handle+".S1.qtrim LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:36 TOPHRED33 2>&1 | tee ./cleaned/"+handle+".qtrim.summary.log"
+            		SEclean = "trimmomatic-0.35.jar SE -threads "+threads+" -trimlog ./cleaned/"+handle+".qtrim.log ./parsed/"+str(r1nm)+"/"+handle+".S1.fq ./cleaned/"+handle+".S1.qtrim LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:36 TOPHRED33 2>&1 | tee ./cleaned/"+handle+".qtrim.summary.log"
 			os.system(str(SEclean))
 			os.system("sed -i 's/\_1$/\ 1/g' ./cleaned/"+handle+".S1.qtrim")
 			os.system("sed -i 's/\_2$/\ 2/g' ./cleaned/"+handle+".S2.qtrim")
