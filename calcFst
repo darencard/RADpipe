@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+
+# calcFst
+#
+# Version 1.0 (25 October, 2016)
+# License: GNU GPLv2
+# To report bugs or errors, please contact Daren Card (dcard@uta.edu).
+# This script is provided as-is, with no support and no guarantee of
+# proper or desirable functioning.
+
+# Script that calculates pairise Fst and Dxy between two
+# populations from a VCF file.
+#
+# User must specify a comma-delimited list of sample IDs
+# for the two populations (must correspond to IDs in VCF),
+# the minimum number of sampled alleles per population (if
+# less alleles were sampled, population is considered missing),
+# and a VCF file.
+#
+# This script was created using BCFtools v. 1.3.1, but should work
+# with any version > 1. BCFtools must be stored in path as 'bcftools'.
+# The VCF file must have the tags AN and AC in the INFO field.
+#
+# Output is a tab-delimited text file written to STDOUT, with
+# the following columns:
+# 1. chromosome/scaffold
+# 2. variant position
+# 3. reference genome allele
+# 4. alternative allele
+# 5. number of sampled alleles in population 1
+# 6. reference allele frequency in population 1
+# 7. alternative allele frequency in population 1
+# 8. number of sampled alleles in population 2
+# 9. reference allele frequency in population 2
+# 10. alternative allele frequency in population 2
+# 11. Fst (NA indicates one or both populations has too much missing data)
+# 12. Dxy (NA indicates one or both populations has too much missing data)
+#
+# Strict Usage:
+# calcFst <pop1_list> <pop2_list> <pop1_n> <pop2_n> <variants.vcf>
+#
+# Example: Two populations with two samples (4 alleles) each,
+# where sites with less than 2 sampled alleles (50%) in each 
+# population are considered missing.
+# calcFst sample1,sample2 sample3,sample4 2 2 variants.vcf.gz
+
+paste \
+<(bcftools view -s $1 $5 | \
+	bcftools query -f '%CHROM\t%POS\t%REF\t%ALT\t%AN\t%AC\n' - | \
+	awk -v OFS="\t" \
+		'{ if ($5==0) \
+			print $1,$2,$3,$4,$5,$5,$6; \
+		else \
+			print $1,$2,$3,$4,$5,$6/$5,1-($6/$5) }') \
+<(bcftools view -s $2 $5 | \
+	bcftools query -f '%CHROM\t%POS\t%REF\t%ALT\t%AN\t%AC\n' - | \
+        awk -v OFS="\t" \
+                '{ if ($5==0) \
+                        print $1,$2,$3,$4,$5,$5,$6; \
+                else \
+                        print $1,$2,$3,$4,$5,$6/$5,1-($6/$5) }') | \
+awk -v OFS="\t" -v x=$3 -v y=$4 \
+'{ if ($5<x && $12<y) \
+	print $1,$2,$3,$4,$5,$6,$7,$12,$13,$14,"NA"; \
+else if ($5>=x && $12>=y) { \
+	num1=($5*$12)/($5+$12); \
+	num2=1/($5+$12-2); \
+	num3=($5*$6*$7)+($12*$13*$14); \
+	den1 = num1; \
+	den2=($6-$13)**2; \
+	den3=(2*num1)-1; \
+	den4=num2; \
+	den5=num3; \
+	numerator=2*num1*num2*num3; \
+	denominator=(den1*den2)+(den3*den4*den5); \
+	if ($6-$13==0) \
+		print $1,$2,$3,$4,$5,$6,$7,$12,$13,$14,0; \
+	else \
+		print $1,$2,$3,$4,$5,$6,$7,$12,$13,$14,(1-(numerator/denominator)); } \
+else if ($5>=x && $12<y) \
+	print $1,$2,$3,$4,$5,$6,$7,$12,$13,$14,"NA"; \
+else if ($5<x && $12>y) \
+	print $1,$2,$3,$4,$5,$6,$7,$12,$13,$14,"NA" }' |
+awk -v OFS="\t" -v x=$3 -v y=$4 \
+'{ if ($5<x && $8<y) \
+	print $0,"NA"; \
+else if ($5>=x && $8>=y) \
+	print $0,(($6*$10)+($7*$9)); \
+else if ($5>=x && $8<y) \
+	print $0,"NA"; \
+else if ($5<x && $8>=y) \
+	print $0,"NA"; }'
