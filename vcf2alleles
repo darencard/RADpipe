@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+
+# vcf2alleles
+#
+# Version 1.0 (16 May, 2017)
+# License: GNU GPLv2
+# To report bugs or errors, please contact Daren Card (dcard@uta.edu).
+# This script is provided as-is, with no support and no guarantee of
+# proper or desirable functioning.
+
+# Script that exports locus sequence alignments (.alleles) with appropraite
+# ambiguity codes at heterozygous sites from a VCF file with variants using
+# a BED file of regions.
+#
+# User must specify the tabix-indexed VCF file of variants, a BED
+# file containing the coordinates for regions that that represent
+# genetic loci, and a FASTA file of the reference genome.
+#
+# This script was created using SAMtoolsBCFtools v. 1.4.1, but should work
+# with any version > 1. SAMtools must be stored in the path as 'samtools'
+# and BCFtools as 'bcftools'. The VCF file must follow standard formatting.
+# It also uses bioawk to format the output.
+
+#
+# Output is a tab-delimited text file written to STDOUT, with
+# the following columns:
+# 1. sequence identifier in format <<sample>>_<<region>> with a > prefix
+# 2. the resulting sequence with appropriate ambiguity codes
+#
+# Strict Usage:
+# vcf2alleles <regions.bed> <variants.vcf> <genome.fasta>
+
+process () {
+  local bed="${1}"
+  local vcf="${2}"
+  local genome="${3}"
+  > ${bed}.alleles
+  cat ${bed} | \
+    while read locus; \
+      do \
+      query=`echo ${locus} | awk '{ print $1":"$2"-"$3 }'`; \
+      echo ${query} >&2; \
+      bcftools query -l ${vcf} | \
+        while read sample; \
+          do \
+          bcftools view -s ${sample} -r ${query} ${vcf} | \
+          bcftools filter -e 'FMT/GT="." && TYPE!="snp"' - | bgzip > ${bed}.vcf.gz; \
+          tabix -f ${bed}.vcf.gz; \
+          bcftools view -H ${bed}.vcf.gz > ${bed}.nohead.vcf; \
+          if [ -s ${bed}.nohead.vcf ]; then \
+            samtools faidx ${genome} ${query} | \
+            bcftools consensus -i ${bed}.vcf.gz | \
+            bioawk -v head="${sample}_${query}" -v OFS="\t" -c fastx '{ print ">"head, $seq }' \
+            >> ${bed}.alleles; \
+          fi; \
+        done; \
+    echo "//" >> ${bed}.alleles; \
+  done
+}
+
+rm -f /tmp/vcf2alleles*
+
+total_lines=$(cat ${2} | wc -l)
+num_files=${1}
+((lines_per_file = (total_lines + num_files - 1) / num_files))
+
+split --additional-suffix=.txt --lines=${lines_per_file} ${2} /tmp/vcf2alleles_
+
+count=0
+for chunk in /tmp/vcf2alleles_*.txt
+  do
+  count=$(($count+1))
+  process ${chunk} ${3} ${4} &
+  pids[${count}]=$!
+done
+
+for pid in ${pids[*]}
+  do
+  wait $pid
+done
+
+cat /tmp/*.alleles
+
+rm -f /tmp/vcf2alleles*
