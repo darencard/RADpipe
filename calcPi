@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# calcFst
+# calcHet
 #
 # Version 1.0 (25 October, 2016)
 # License: GNU GPLv2
@@ -8,12 +8,15 @@
 # This script is provided as-is, with no support and no guarantee of
 # proper or desirable functioning.
 
-# Script that calculates pairise Fst and Dxy between two
-# populations from a VCF file.
+# Script that calculates pairise the population genetic statistic
+# Pi from a VCF file. This measure represents an approximation based
+# only on variant sites (i.e., not standardized by locus length). Users
+# may wish to take the average of this measure across reasonable windows
+# and can divide by window size to get a more traditional measure of Pi.
 #
 # User must specify a comma-delimited list of sample IDs
-# for the two populations (must correspond to IDs in VCF),
-# the minimum number of sampled alleles per population (if
+# for the population (must correspond to IDs in VCF),
+# the minimum number of sampled alleles in the population (if
 # less alleles were sampled, population is considered missing),
 # and a VCF file.
 #
@@ -27,22 +30,18 @@
 # 2. variant position
 # 3. reference genome allele
 # 4. alternative allele
-# 5. number of sampled alleles in population 1
-# 6. reference allele frequency in population 1
-# 7. alternative allele frequency in population 1
-# 8. number of sampled alleles in population 2
-# 9. reference allele frequency in population 2
-# 10. alternative allele frequency in population 2
-# 11. Fst (NA indicates one or both populations has too much missing data)
-# 12. Dxy (NA indicates one or both populations has too much missing data)
+# 5. number of sampled alleles in population
+# 6. reference allele frequency in population
+# 7. alternative allele frequency in population
+# 8. Pi (NA indicates population has too much missing data)
 #
 # Strict Usage:
-# calcFst <pop1_list> <pop2_list> <pop1_n> <pop2_n> <variants.vcf>
+# calcFst <pop_list> <pop_n> <variants.vcf>
 #
-# Example: Two populations with two samples (4 alleles) each,
-# where sites with less than 2 sampled alleles (50%) in each 
+# Example: A populations with two samples (4 alleles),
+# where sites with less than 2 sampled alleles (50%) in the 
 # population are considered missing.
-# calcFst sample1,sample2 sample3,sample4 2 2 variants.vcf.gz
+# calcHet sample1,sample2 2 variants.vcf.gz
 
 bcftools view -s $1 $3 | \
 	bcftools query -f '%CHROM\t%POS\t%REF\t%ALT\t%AN\t%AC\n' - | \
